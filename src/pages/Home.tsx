@@ -3,7 +3,7 @@ import Hero from '../components/landingPage/Hero';
 
 export default function Home() {
   return (
-    <div className="min-h-screen theme-bg-secondary">
+    <div className="page-container">
       <Header />
       <Hero />
     </div>

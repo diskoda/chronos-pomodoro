@@ -17,13 +17,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-secondary);
   color: var(--text-primary);
+  
+  /* Background image como fundo principal */
+  background-image: url('./assets/images/backgrounds/background.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
-/* Garante que a aplicação ocupe toda a altura */
+/* Garante que a aplicação ocupe toda a altura e mantenha o background */
 #root {
   min-height: 100vh;
+  background: transparent;
 }
 
 /* Personalização de scrollbar para browsers WebKit */
@@ -48,4 +55,69 @@ body {
 html[data-theme="dark"] {
   scrollbar-width: thin;
   scrollbar-color: var(--border-secondary) var(--bg-tertiary);
+}
+
+/* Garantir que todas as páginas principais mantenham o background global */
+.page-container {
+  min-height: 100vh;
+  background: transparent;
+  position: relative;
+}
+
+/* Background específico para página de login */
+.login-background {
+  background: var(--bg-secondary);
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--brand-accent) 0%, transparent 70%),
+    radial-gradient(circle at 75% 75%, var(--brand-accent) 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, var(--brand-accent) 0%, transparent 60%);
+  background-size: 800px 800px, 800px 800px, 600px 600px;
+  background-position: 0% 0%, 100% 100%, 50% 50%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Background para o dashboard - sem overlay */
+.dashboard-background {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--brand-accent) 0%, transparent 70%),
+    radial-gradient(circle at 75% 75%, var(--brand-accent) 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, var(--brand-accent) 0%, transparent 60%);
+  background-size: 800px 800px, 800px 800px, 600px 600px;
+  background-position: 0% 0%, 100% 100%, 50% 50%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Glassmorphism effect for Hero section */
+.hero-glass-effect {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Text gradient effect */
+.text-gradient {
+  background: linear-gradient(135deg, #fb7185, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom shadow for hover effect */
+.hover\:shadow-3xl:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.3);
+}
+
+/* Custom subtle scale and rotation for smoother hover */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+.hover\:rotate-0\.5:hover {
+  transform: rotate(0.5deg) scale(1.02);
 }

@@ -11,7 +11,7 @@ export default function Dashboard() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen theme-bg-secondary">
+    <div className="dashboard-background">
       <DashboardHeader />
 
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300 ${

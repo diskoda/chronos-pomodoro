@@ -118,7 +118,7 @@ export default function QuestionsBank() {
   };
 
   return (
-    <div className="min-h-screen theme-bg-secondary">
+    <div className="page-container theme-bg-secondary">
       <QuestionsHeader />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

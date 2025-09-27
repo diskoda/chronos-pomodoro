@@ -20,7 +20,7 @@
   /* Brand Colors */
   --brand-primary: #2563eb;
   --brand-secondary: #1d4ed8;
-  --brand-accent: #dbeafe;
+  --brand-accent: rgba(37, 99, 235, 0.2);
   
   /* Status Colors */
   --success: #059669;
@@ -66,7 +66,7 @@
   /* Brand Colors */
   --brand-primary: #3b82f6;
   --brand-secondary: #2563eb;
-  --brand-accent: #1e3a8a;
+  --brand-accent: rgba(59, 130, 246, 0.25);
   
   /* Status Colors */
   --success: #10b981;
