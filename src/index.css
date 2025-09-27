@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/themes.css";
 
 /* Reset básico e estilos globais */
 * {
@@ -16,6 +17,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 /* Garante que a aplicação ocupe toda a altura */
@@ -29,14 +32,20 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9; /* slate-100 */
+  background: var(--bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* slate-300 */
+  background: var(--border-secondary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* slate-400 */
+  background: var(--text-tertiary);
+}
+
+/* Dark mode scrollbar para Firefox */
+html[data-theme="dark"] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-secondary) var(--bg-tertiary);
 }

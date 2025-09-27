@@ -6,7 +6,7 @@ export default function LoginHeader() {
     <div className="text-center">
       <Link
         to="/"
-        className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 transition-colors"
+        className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-6 transition-colors"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Voltar ao início
@@ -18,11 +18,11 @@ export default function LoginHeader() {
         </div>
       </div>
       
-      <h2 className="text-3xl font-bold text-gray-900">
-        Entrar no Chronos
+      <h2 className="text-3xl font-bold theme-text-primary">
+        Entrar no PénaPED
       </h2>
-      <p className="mt-2 text-gray-600">
-        Acesse sua conta e continue sua jornada de produtividade
+      <p className="mt-2 theme-text-secondary">
+        Acesse sua conta e continue sua jornada de estudos pediátricos
       </p>
     </div>
   );
