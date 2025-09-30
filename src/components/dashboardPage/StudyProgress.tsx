@@ -8,41 +8,31 @@ export default function StudyProgress() {
         <div className="space-y-6">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium theme-text-primary">Pediatria Geral</span>
-              <span className="text-sm theme-text-secondary">85%</span>
+              <span className="text-sm font-medium theme-text-primary">Casos Clínicos</span>
+              <span className="text-sm theme-text-secondary">78%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{width: '85%'}}></div>
+              <div className="bg-blue-600 h-2 rounded-full" style={{width: '78%'}}></div>
             </div>
           </div>
           
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium theme-text-primary">Emergências Pediátricas</span>
-              <span className="text-sm theme-text-secondary">72%</span>
-            </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div className="bg-green-600 h-2 rounded-full" style={{width: '72%'}}></div>
-            </div>
-          </div>
-          
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium theme-text-primary">Neonatologia</span>
+              <span className="text-sm font-medium theme-text-primary">Banco de Questões</span>
               <span className="text-sm theme-text-secondary">65%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div className="bg-yellow-600 h-2 rounded-full" style={{width: '65%'}}></div>
+              <div className="bg-green-600 h-2 rounded-full" style={{width: '65%'}}></div>
             </div>
           </div>
           
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium theme-text-primary">Cardiologia Pediátrica</span>
-              <span className="text-sm theme-text-secondary">45%</span>
+              <span className="text-sm font-medium theme-text-primary">Flashcards</span>
+              <span className="text-sm theme-text-secondary">52%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div className="bg-red-600 h-2 rounded-full" style={{width: '45%'}}></div>
+              <div className="bg-purple-600 h-2 rounded-full" style={{width: '52%'}}></div>
             </div>
           </div>
         </div>

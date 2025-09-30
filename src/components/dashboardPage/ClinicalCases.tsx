@@ -14,13 +14,13 @@ export default function ClinicalCases() {
                 <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h3 className="font-medium theme-text-primary">Caso #157: Febre em lactente de 3 meses</h3>
-                <p className="text-sm theme-text-secondary">Emergência Pediátrica • Concluído</p>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">Caso #157: Febre em lactente de 3 meses</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Emergência Pediátrica • Concluído</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm font-medium text-green-600 dark:text-green-400">95 pontos</p>
-              <p className="text-xs theme-text-tertiary">Há 2 horas</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Há 2 horas</p>
             </div>
           </div>
         </div>
@@ -32,13 +32,13 @@ export default function ClinicalCases() {
                 <Play className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <h3 className="font-medium theme-text-primary">Caso #158: Dispneia em recém-nascido</h3>
-                <p className="text-sm theme-text-secondary">Neonatologia • Em progresso</p>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">Caso #158: Dispneia em recém-nascido</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Neonatologia • Em progresso</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm font-medium text-blue-600 dark:text-blue-400">50% completo</p>
-              <p className="text-xs theme-text-tertiary">Iniciado hoje</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Iniciado hoje</p>
             </div>
           </div>
         </div>
@@ -50,13 +50,13 @@ export default function ClinicalCases() {
                 <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h3 className="font-medium theme-text-primary">Caso #156: Sopro cardíaco em criança de 5 anos</h3>
-                <p className="text-sm theme-text-secondary">Cardiologia Pediátrica • Pendente</p>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">Caso #156: Sopro cardíaco em criança de 5 anos</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Cardiologia Pediátrica • Pendente</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium theme-text-secondary">Não iniciado</p>
-              <p className="text-xs theme-text-tertiary">Disponível</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Não iniciado</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Disponível</p>
             </div>
           </div>
         </div>

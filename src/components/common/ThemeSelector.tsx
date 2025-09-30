@@ -9,13 +9,13 @@ export default function ThemeSelector() {
       {/* Toggle Button */}
       <button
         onClick={toggleTheme}
-        className="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+        className="flex items-center justify-center w-10 h-10 rounded-lg theme-card border theme-border hover:theme-hover transition-all duration-200 shadow-sm hover:shadow-md"
         title={`Alternar para tema ${theme === 'light' ? 'escuro' : 'claro'}`}
       >
         {theme === 'light' ? (
-          <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          <Moon className="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
         ) : (
-          <Sun className="h-5 w-5 text-yellow-500" />
+          <Sun className="h-5 w-5 text-yellow-400 hover:text-yellow-300 transition-colors" />
         )}
       </button>
     </div>

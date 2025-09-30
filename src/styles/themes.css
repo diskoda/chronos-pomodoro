@@ -5,6 +5,7 @@
   --bg-secondary: #f9fafb;
   --bg-tertiary: #f3f4f6;
   --bg-accent: #f0f9ff;
+  --bg-hover: #f3f4f6;
   
   /* Text Colors */
   --text-primary: #111827;
@@ -51,6 +52,7 @@
   --bg-secondary: #1f2937;
   --bg-tertiary: #374151;
   --bg-accent: #1e3a8a;
+  --bg-hover: #374151;
   
   /* Text Colors */
   --text-primary: #f9fafb;
@@ -173,4 +175,13 @@
 .theme-input:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px var(--brand-accent);
+}
+
+.theme-hover:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Special theme hover for buttons and interactive elements */
+.theme-hover-accent:hover {
+  background-color: var(--bg-accent);
 }

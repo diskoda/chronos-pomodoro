@@ -22,16 +22,16 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            <a href="#features" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
               Recursos
             </a>
-            <a href="#pricing" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            <a href="#pricing" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
               Preços
             </a>
-            <a href="#about" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            <a href="#about" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
               Sobre
             </a>
-            <a href="#contact" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+            <a href="#contact" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
               Contato
             </a>
           </nav>
@@ -52,7 +52,7 @@ export default function Header() {
             <ThemeSelector />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="theme-text-secondary hover:theme-text-primary transition-colors"
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -67,22 +67,22 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden border-t theme-border py-4">
             <div className="flex flex-col space-y-4">
-              <a href="#features" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+              <a href="#features" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
                 Recursos
               </a>
-              <a href="#pricing" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+              <a href="#pricing" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
                 Preços
               </a>
-              <a href="#about" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+              <a href="#about" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
                 Sobre
               </a>
-              <a href="#contact" className="theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+              <a href="#contact" className="theme-text-secondary hover:theme-text-primary font-medium transition-colors">
                 Contato
               </a>
               <div className="pt-4 border-t theme-border">
                 <Link 
                   to="/login"
-                  className="w-full text-left theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors mb-2 block"
+                  className="w-full text-left theme-text-secondary hover:theme-text-primary font-medium transition-colors mb-2 block"
                 >
                   Login
                 </Link>

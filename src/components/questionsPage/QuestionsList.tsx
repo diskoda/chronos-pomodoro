@@ -1,15 +1,6 @@
 import { CheckCircle, Clock, Play, RotateCcw, BookOpen } from 'lucide-react';
-
-interface Question {
-  id: number;
-  title: string;
-  category: string;
-  difficulty: 'Fácil' | 'Médio' | 'Difícil';
-  completed: boolean;
-  correctRate: number;
-  timeEstimate: number;
-  tags: string[];
-}
+import { useNavigate } from 'react-router-dom';
+import type { Question } from '../../data/types/Question';
 
 interface QuestionsListProps {
   filteredQuestions: Question[];
@@ -17,6 +8,22 @@ interface QuestionsListProps {
 }
 
 export default function QuestionsList({ filteredQuestions, getDifficultyColor }: QuestionsListProps) {
+  const navigate = useNavigate();
+
+  const handleSolveQuestion = (questionId: number) => {
+    navigate(`/question/${questionId}`);
+  };
+
+  const handleRedoQuestion = (questionId: number) => {
+    navigate(`/question/${questionId}`);
+  };
+
+  const getCategoryDisplay = (category: string | string[]) => {
+    if (Array.isArray(category)) {
+      return category.join(' • ');
+    }
+    return category;
+  };
   return (
     <div className="theme-card rounded-lg">
       <div className="p-6 border-b theme-border">
@@ -27,9 +34,9 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
         </div>
       </div>
 
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="divide-y theme-border">
         {filteredQuestions.map((question) => (
-          <div key={question.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <div key={question.id} className="p-6 hover:theme-bg-secondary transition-colors">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
@@ -42,7 +49,7 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
                 </div>
 
                 <div className="flex items-center space-x-4 mb-3">
-                  <span className="text-sm theme-text-secondary">{question.category}</span>
+                  <span className="text-sm theme-text-secondary">{getCategoryDisplay(question.category)}</span>
                   <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(question.difficulty)}`}>
                     {question.difficulty}
                   </span>
@@ -56,7 +63,7 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
                   {question.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="text-xs bg-gray-100 dark:bg-gray-700 theme-text-secondary px-2 py-1 rounded"
+                      className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded font-medium"
                     >
                       {tag}
                     </span>
@@ -72,12 +79,18 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
 
               <div className="flex items-center space-x-2 ml-4">
                 {question.completed ? (
-                  <button className="flex items-center space-x-2 theme-bg-secondary theme-text-primary px-4 py-2 rounded-lg font-medium hover:theme-bg-tertiary transition-colors">
+                  <button 
+                    onClick={() => handleRedoQuestion(question.id)}
+                    className="flex items-center space-x-2 theme-bg-secondary theme-text-primary px-4 py-2 rounded-lg font-medium hover:theme-bg-tertiary transition-colors"
+                  >
                     <RotateCcw className="h-4 w-4" />
                     <span>Refazer</span>
                   </button>
                 ) : (
-                  <button className="flex items-center space-x-2 theme-button-primary px-4 py-2 rounded-lg font-medium">
+                  <button 
+                    onClick={() => handleSolveQuestion(question.id)}
+                    className="flex items-center space-x-2 theme-button-primary px-4 py-2 rounded-lg font-medium"
+                  >
                     <Play className="h-4 w-4" />
                     <span>Resolver</span>
                   </button>

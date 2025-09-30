@@ -7,8 +7,11 @@ interface QuestionsFiltersProps {
   setSelectedCategory: (category: string) => void;
   selectedDifficulty: string;
   setSelectedDifficulty: (difficulty: string) => void;
+  selectedExam: string;
+  setSelectedExam: (exam: string) => void;
   categories: string[];
   difficulties: string[];
+  exams: string[];
 }
 
 export default function QuestionsFilters({
@@ -18,13 +21,17 @@ export default function QuestionsFilters({
   setSelectedCategory,
   selectedDifficulty,
   setSelectedDifficulty,
+  selectedExam,
+  setSelectedExam,
   categories,
-  difficulties
+  difficulties,
+  exams
 }: QuestionsFiltersProps) {
   const handleResetFilters = () => {
     setSearchTerm('');
     setSelectedCategory('Todas');
     setSelectedDifficulty('Todas');
+    setSelectedExam('Todas');
   };
 
   return (
@@ -78,6 +85,22 @@ export default function QuestionsFilters({
           >
             {difficulties.map(difficulty => (
               <option key={difficulty} value={difficulty}>{difficulty}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Exam Filter */}
+        <div>
+          <label className="block text-sm font-medium theme-text-primary mb-2">
+            Provas
+          </label>
+          <select
+            value={selectedExam}
+            onChange={(e) => setSelectedExam(e.target.value)}
+            className="theme-input w-full px-3 py-2 rounded-lg"
+          >
+            {exams.map(exam => (
+              <option key={exam} value={exam}>{exam}</option>
             ))}
           </select>
         </div>

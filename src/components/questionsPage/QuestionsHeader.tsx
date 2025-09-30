@@ -9,12 +9,12 @@ export default function QuestionsHeader() {
           <div className="flex items-center space-x-4">
             <Link 
               to="/dashboard"
-              className="flex items-center theme-text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="flex items-center theme-text-secondary hover:theme-text-primary transition-colors"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
               Dashboard
             </Link>
-            <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+            <div className="h-6 w-px theme-border" />
             <div className="flex items-center space-x-2">
               <div className="bg-blue-600 rounded-lg p-2">
                 <Heart className="h-5 w-5 text-white" />

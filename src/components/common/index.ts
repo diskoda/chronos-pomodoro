@@ -1,0 +1,9 @@
+// Common components - reusable across the application
+export { default as DifficultyBadge } from './DifficultyBadge';
+export { default as QuestionTags } from './QuestionTags';
+export { default as QuestionInfo } from './QuestionInfo';
+export { default as BackButton } from './BackButton';
+export { default as PageHeader } from './PageHeader';
+export { default as StatusBadge } from './StatusBadge';
+export { default as PageHeaderWithBack } from './PageHeaderWithBack';
+export { default as TopicTags } from './TopicTags';

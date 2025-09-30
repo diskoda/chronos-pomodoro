@@ -3,100 +3,38 @@ import QuestionsHeader from '../components/questionsPage/QuestionsHeader';
 import QuestionsStats from '../components/questionsPage/QuestionsStats';
 import QuestionsFilters from '../components/questionsPage/QuestionsFilters';
 import QuestionsList from '../components/questionsPage/QuestionsList';
-
-interface Question {
-  id: number;
-  title: string;
-  category: string;
-  difficulty: 'Fácil' | 'Médio' | 'Difícil';
-  completed: boolean;
-  correctRate: number;
-  timeEstimate: number;
-  tags: string[];
-}
+import { 
+  allQuestions,
+  availableCategories,
+  availableDifficulties, 
+  availableExams
+} from '../data/questions';
 
 export default function QuestionsBank() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [selectedDifficulty, setSelectedDifficulty] = useState('Todas');
+  const [selectedExam, setSelectedExam] = useState('Todas');
 
-  const questions: Question[] = [
-    {
-      id: 1,
-      title: "Febre em lactente de 2 meses - Abordagem inicial",
-      category: "Emergência Pediátrica",
-      difficulty: "Difícil",
-      completed: true,
-      correctRate: 85,
-      timeEstimate: 5,
-      tags: ["Febre", "Lactente", "Emergência"]
-    },
-    {
-      id: 2,
-      title: "Vacinação em prematuros - Esquema especial",
-      category: "Pediatria Geral",
-      difficulty: "Médio",
-      completed: false,
-      correctRate: 0,
-      timeEstimate: 3,
-      tags: ["Vacinação", "Prematuro", "Imunização"]
-    },
-    {
-      id: 3,
-      title: "Cardiopatias congênitas cianóticas - Diagnóstico diferencial",
-      category: "Cardiologia Pediátrica",
-      difficulty: "Difícil",
-      completed: false,
-      correctRate: 0,
-      timeEstimate: 8,
-      tags: ["Cardiopatia", "Cianose", "Congênito"]
-    },
-    {
-      id: 4,
-      title: "Crescimento e desenvolvimento - Marcos do desenvolvimento",
-      category: "Pediatria Geral",
-      difficulty: "Fácil",
-      completed: true,
-      correctRate: 92,
-      timeEstimate: 4,
-      tags: ["Crescimento", "Desenvolvimento", "Marcos"]
-    },
-    {
-      id: 5,
-      title: "Síndrome do desconforto respiratório - RN prematuro",
-      category: "Neonatologia",
-      difficulty: "Difícil",
-      completed: false,
-      correctRate: 0,
-      timeEstimate: 6,
-      tags: ["SDR", "Prematuro", "Respiratório"]
-    },
-    {
-      id: 6,
-      title: "Diarréia aguda em crianças - Manejo clínico",
-      category: "Emergência Pediátrica",
-      difficulty: "Médio",
-      completed: true,
-      correctRate: 78,
-      timeEstimate: 4,
-      tags: ["Diarréia", "Desidratação", "Emergência"]
-    }
-  ];
-
-  const categories = [
-    "Todas", "Pediatria Geral", "Emergência Pediátrica", 
-    "Neonatologia", "Cardiologia Pediátrica"
-  ];
-
-  const difficulties = ["Todas", "Fácil", "Médio", "Difícil"];
+  // Importa todas as questões do sistema centralizado
+  const questions = allQuestions;
+  const categories = availableCategories;
+  const difficulties = availableDifficulties;
+  const exams = availableExams;
 
   const filteredQuestions = questions.filter(question => {
     const matchesSearch = question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          question.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'Todas' || question.category === selectedCategory;
-    const matchesDifficulty = selectedDifficulty === 'Todas' || question.difficulty === selectedDifficulty;
     
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    const matchesCategory = selectedCategory === 'Todas' || 
+      (Array.isArray(question.category) 
+        ? question.category.includes(selectedCategory)
+        : question.category === selectedCategory);
+    
+    const matchesDifficulty = selectedDifficulty === 'Todas' || question.difficulty === selectedDifficulty;
+    const matchesExam = selectedExam === 'Todas' || question.exam === selectedExam;
+    
+    return matchesSearch && matchesCategory && matchesDifficulty && matchesExam;
   });
 
   const stats = {
@@ -118,7 +56,7 @@ export default function QuestionsBank() {
   };
 
   return (
-    <div className="page-container theme-bg-secondary">
+    <div className="dashboard-background">
       <QuestionsHeader />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -134,8 +72,11 @@ export default function QuestionsBank() {
               setSelectedCategory={setSelectedCategory}
               selectedDifficulty={selectedDifficulty}
               setSelectedDifficulty={setSelectedDifficulty}
+              selectedExam={selectedExam}
+              setSelectedExam={setSelectedExam}
               categories={categories}
               difficulties={difficulties}
+              exams={exams}
             />
           </div>
 
