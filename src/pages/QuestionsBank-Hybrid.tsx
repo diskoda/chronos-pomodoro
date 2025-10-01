@@ -24,26 +24,20 @@ export default function QuestionsBank() {
 
   // Determinar qual fonte de dados usar
   const { questions, categories, difficulties, exams, isUsingFirebase } = useMemo(() => {
-    if (useFirebase && !error && firebaseQuestions && firebaseQuestions.length > 0) {
+    if (useFirebase && !error && firebaseQuestions.length > 0) {
       // Usar dados do Firebase
       const categoriesSet = new Set<string>();
       const difficultiesSet = new Set<string>();
       const examsSet = new Set<string>();
 
       firebaseQuestions.forEach(question => {
-        if (question && question.category) {
-          if (Array.isArray(question.category)) {
-            question.category.forEach(cat => categoriesSet.add(cat));
-          } else {
-            categoriesSet.add(question.category);
-          }
+        if (Array.isArray(question.category)) {
+          question.category.forEach(cat => categoriesSet.add(cat));
+        } else {
+          categoriesSet.add(question.category);
         }
-        if (question && question.difficulty) {
-          difficultiesSet.add(question.difficulty);
-        }
-        if (question && question.exam) {
-          examsSet.add(question.exam);
-        }
+        difficultiesSet.add(question.difficulty);
+        examsSet.add(question.exam);
       });
 
       return {
@@ -56,50 +50,41 @@ export default function QuestionsBank() {
     } else {
       // Fallback para dados locais
       return {
-        questions: allQuestions || [],
-        categories: availableCategories || ['Todas'],
-        difficulties: availableDifficulties || ['Todas'],
-        exams: availableExams || ['Todas'],
+        questions: allQuestions,
+        categories: availableCategories,
+        difficulties: availableDifficulties,
+        exams: availableExams,
         isUsingFirebase: false
       };
     }
   }, [useFirebase, firebaseQuestions, error]);
 
   const filteredQuestions = useMemo(() => {
-    // Garantir que questions é sempre um array
-    const questionsArray = questions || [];
-    
-    return questionsArray.filter(question => {
-      if (!question) return false;
-      
+    return questions.filter(question => {
       const matchesSearch = !searchTerm || 
-        (question.title && question.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (question.tags && Array.isArray(question.tags) && question.tags.some(tag => 
-          tag && tag.toLowerCase().includes(searchTerm.toLowerCase())
-        ));
+        question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        question.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
       
       const matchesCategory = selectedCategory === 'Todas' || 
-        (question.category && (Array.isArray(question.category) 
+        (Array.isArray(question.category) 
           ? question.category.includes(selectedCategory)
-          : question.category === selectedCategory));
+          : question.category === selectedCategory);
       
       const matchesDifficulty = selectedDifficulty === 'Todas' || 
-        (question.difficulty && question.difficulty === selectedDifficulty);
+        question.difficulty === selectedDifficulty;
       
       const matchesExam = selectedExam === 'Todas' || 
-        (question.exam && question.exam === selectedExam);
+        question.exam === selectedExam;
       
       return matchesSearch && matchesCategory && matchesDifficulty && matchesExam;
     });
   }, [questions, searchTerm, selectedCategory, selectedDifficulty, selectedExam]);
 
   const stats = useMemo(() => {
-    // Garantir que questions é sempre um array
-    const questionsArray = questions || [];
-    const total = questionsArray.length;
-    const completed = questionsArray.filter(q => q && q.completed).length;
+    const total = questions.length;
+    const completed = questions.filter(q => q.completed).length;
     const avgCorrectRate = completed > 0 
-      ? Math.round(questionsArray.filter(q => q && q.completed).reduce((sum, q) => sum + (q.correctRate || 0), 0) / completed)
+      ? Math.round(questions.filter(q => q.completed).reduce((sum, q) => sum + q.correctRate, 0) / completed)
       : 0;
 
     return { total, completed, avgCorrectRate };

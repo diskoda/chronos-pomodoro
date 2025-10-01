@@ -24,4 +24,19 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+// Configuração para desenvolvimento
+export const FIREBASE_CONFIG = {
+  // Habilita/desabilita uso do Firebase (para desenvolvimento)
+  USE_FIREBASE: true,
+  
+  // Habilita logs detalhados
+  ENABLE_LOGGING: true,
+  
+  // Timeout para operações (ms)
+  OPERATION_TIMEOUT: 10000,
+  
+  // Fallback para dados locais se Firebase falhar
+  USE_LOCAL_FALLBACK: true
+};
+
 export default app;

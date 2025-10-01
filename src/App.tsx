@@ -11,6 +11,7 @@ import ClinicalCases from './pages/ClinicalCases';
 import SpecialtyCases from './pages/SpecialtyCases';
 import QuestionsBank from './pages/QuestionsBank';
 import QuestionSolver from './pages/QuestionSolver';
+import QuestionsAdmin from './pages/QuestionsAdmin';
 import XPSystemExample from './examples/XPSystemExample';
 import './styles/themes.css';
 
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/clinical-cases/specialties" element={<SpecialtyCases />} />
           <Route path="/questions" element={<QuestionsBank />} />
           <Route path="/question/:id" element={<QuestionSolver />} />
+          <Route path="/admin/questions" element={<QuestionsAdmin />} />
           <Route path="/xp-system" element={<XPSystemExample />} />
         </Routes>
       </Router>

@@ -10,6 +10,9 @@ interface QuestionsListProps {
 export default function QuestionsList({ filteredQuestions, getDifficultyColor }: QuestionsListProps) {
   const navigate = useNavigate();
 
+  // Garantir que filteredQuestions é sempre um array
+  const questions = filteredQuestions || [];
+
   const handleSolveQuestion = (questionId: number) => {
     navigate(`/question/${questionId}`);
   };
@@ -24,18 +27,19 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
     }
     return category;
   };
+
   return (
     <div className="theme-card rounded-lg">
       <div className="p-6 border-b theme-border">
         <div className="flex justify-between items-center">
           <h3 className="font-semibold theme-text-primary">
-            Questões ({filteredQuestions.length})
+            Questões ({questions.length})
           </h3>
         </div>
       </div>
 
       <div className="divide-y theme-border">
-        {filteredQuestions.map((question) => (
+        {questions.map((question) => (
           <div key={question.id} className="p-6 hover:theme-bg-secondary transition-colors">
             <div className="flex items-start justify-between">
               <div className="flex-1">
@@ -60,9 +64,9 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
                 </div>
 
                 <div className="flex items-center space-x-2 mb-3">
-                  {question.tags.map((tag, index) => (
+                  {(question.tags || []).map((tag, index) => (
                     <span
-                      key={index}
+                      key={`${question.id}-tag-${index}`}
                       className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded font-medium"
                     >
                       {tag}
@@ -101,7 +105,7 @@ export default function QuestionsList({ filteredQuestions, getDifficultyColor }:
         ))}
       </div>
 
-      {filteredQuestions.length === 0 && (
+      {questions.length === 0 && (
         <div className="p-12 text-center">
           <BookOpen className="h-12 w-12 theme-text-tertiary mx-auto mb-4" />
           <h3 className="text-lg font-medium theme-text-primary mb-2">

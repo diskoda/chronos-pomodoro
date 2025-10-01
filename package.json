@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate-questions": "node scripts/migrate-questions.js",
+    "verify-migration": "node -e \"import('./src/utils/questionMigration.js').then(m => m.verifyMigration())\"",
+    "stats-migration": "node -e \"import('./src/utils/questionMigration.js').then(m => m.getComparisonStats())\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",

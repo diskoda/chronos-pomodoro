@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import type { Question } from '../data/types/Question';
-import { getQuestionById } from '../data/questions';
+import { useQuestion } from '../hooks/useQuestions';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
@@ -14,13 +13,9 @@ export default function QuestionSolver() {
   const navigate = useNavigate();
   const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [question, setQuestion] = useState<Question | null>(null);
-
-  useEffect(() => {
-    const questionId = parseInt(id || '0');
-    const foundQuestion = getQuestionById(questionId);
-    setQuestion(foundQuestion || null);
-  }, [id]);
+  
+  // Usar o hook Firebase para buscar a questão
+  const { question, loading, error } = useQuestion(id || null);
 
   const handleAlternativeSelect = (alternative: string) => {
     if (!isSubmitted) {
@@ -38,6 +33,34 @@ export default function QuestionSolver() {
   const handleBack = () => {
     navigate('/study');
   };
+
+  // Estados de loading e erro
+  if (loading) {
+    return (
+      <div className="dashboard-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center justify-center min-h-96">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="theme-text-secondary">Carregando questão...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <QuestionNotFound 
+        onBack={handleBack}
+        message={error}
+        buttonText="Voltar aos modos de estudo"
+      />
+    );
+  }
 
   // Estado de questão não encontrada
   if (!question) {
