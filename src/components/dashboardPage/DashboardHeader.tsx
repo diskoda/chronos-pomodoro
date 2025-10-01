@@ -1,5 +1,6 @@
-import { Calendar, User } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import ThemeSelector from '../common/ThemeSelector';
+import UserMenu from '../common/UserMenu';
 import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function DashboardHeader() {
@@ -21,10 +22,7 @@ export default function DashboardHeader() {
               <span>Hoje, 27 Set 2025</span>
             </div>
             <ThemeSelector />
-            <div className="flex items-center space-x-2 theme-bg-secondary rounded-lg px-3 py-2">
-              <User className="h-5 w-5 theme-text-secondary" />
-              <span className="text-sm font-medium theme-text-primary">Dr. Samuel</span>
-            </div>
+            <UserMenu />
           </div>
         </div>
       </div>

@@ -7,3 +7,6 @@ export { default as PageHeader } from './PageHeader';
 export { default as StatusBadge } from './StatusBadge';
 export { default as PageHeaderWithBack } from './PageHeaderWithBack';
 export { default as TopicTags } from './TopicTags';
+export { default as UserMenu } from './UserMenu';
+export { default as LogoutButton } from './LogoutButton';
+export { default as ProtectedRoute } from './ProtectedRoute';

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import LoginLayout from '../components/loginPage/LoginLayout';
 import LoginHeader from '../components/loginPage/LoginHeader';
 import LoginForm from '../components/loginPage/LoginForm';
@@ -8,28 +9,66 @@ import SocialLogin from '../components/loginPage/SocialLogin';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, loginWithGoogle } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulação de login bem-sucedido
-    console.log('Login attempt:', { email, password });
     
-    // Redireciona para o dashboard após login
-    navigate('/dashboard');
+    if (!email || !password) {
+      setError('Por favor, preencha todos os campos');
+      return;
+    }
+
+    try {
+      setError('');
+      setLoading(true);
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError('Falha no login. Verifique suas credenciais.');
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await loginWithGoogle();
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError('Falha no login com Google.');
+      console.error('Google login error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <LoginLayout>
       <LoginHeader />
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          {error}
+        </div>
+      )}
       <LoginForm 
         email={email}
         setEmail={setEmail}
         password={password}
         setPassword={setPassword}
         handleSubmit={handleSubmit}
+        loading={loading}
       />
-      <SocialLogin />
+      <SocialLogin 
+        onGoogleLogin={handleGoogleLogin}
+        loading={loading}
+      />
     </LoginLayout>
   );
 }

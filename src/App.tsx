@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ModeSelection from './pages/ModeSelection';
 import ClinicalCaseSelection from './pages/ClinicalCaseSelection';
@@ -10,6 +11,7 @@ import ClinicalCases from './pages/ClinicalCases';
 import SpecialtyCases from './pages/SpecialtyCases';
 import QuestionsBank from './pages/QuestionsBank';
 import QuestionSolver from './pages/QuestionSolver';
+import XPSystemExample from './examples/XPSystemExample';
 import './styles/themes.css';
 
 export default function App() {
@@ -19,6 +21,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/study" element={<ModeSelection />} />
           <Route path="/clinical-cases" element={<ClinicalCaseSelection />} />
@@ -27,6 +30,7 @@ export default function App() {
           <Route path="/clinical-cases/specialties" element={<SpecialtyCases />} />
           <Route path="/questions" element={<QuestionsBank />} />
           <Route path="/question/:id" element={<QuestionSolver />} />
+          <Route path="/xp-system" element={<XPSystemExample />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface LoginFormProps {
   email: string;
@@ -7,9 +8,10 @@ interface LoginFormProps {
   password: string;
   setPassword: (password: string) => void;
   handleSubmit: (e: React.FormEvent) => void;
+  loading?: boolean;
 }
 
-export default function LoginForm({ email, setEmail, password, setPassword, handleSubmit }: LoginFormProps) {
+export default function LoginForm({ email, setEmail, password, setPassword, handleSubmit, loading = false }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -84,18 +86,19 @@ export default function LoginForm({ email, setEmail, password, setPassword, hand
       <div>
         <button
           type="submit"
-          className="theme-button-primary group relative w-full flex justify-center py-3 px-4 text-sm font-medium rounded-lg transition-colors"
+          disabled={loading}
+          className="theme-button-primary group relative w-full flex justify-center py-3 px-4 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Entrar
+          {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </div>
 
       <div className="text-center">
         <p className="text-sm theme-text-secondary">
           Não tem uma conta?{' '}
-          <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+          <Link to="/register" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
             Cadastre-se gratuitamente
-          </a>
+          </Link>
         </p>
       </div>
     </form>

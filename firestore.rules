@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Função para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se o usuário é o dono do recurso
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Função para verificar se o documento pertence ao usuário autenticado
+    function isDocumentOwner() {
+      return request.auth.uid == resource.data.userId;
+    }
+
+    // === COLEÇÕES DO SISTEMA XP ===
+    
+    // Coleção de teste (temporária para desenvolvimento)
+    match /system_test/{testId} {
+      allow read, write: if true; // Permite acesso público apenas para testes
+    }
+    
+    // Atividades de XP - cada usuário pode ler/escrever apenas suas próprias atividades
+    match /xp_activities/{activityId} {
+      allow read, write: if isAuthenticated() && isDocumentOwner();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.userId &&
+        // Validar campos obrigatórios
+        request.resource.data.keys().hasAll(['userId', 'type', 'xpGained', 'createdAt']) &&
+        // Validar tipos de dados
+        request.resource.data.userId is string &&
+        request.resource.data.type is string &&
+        request.resource.data.xpGained is number &&
+        request.resource.data.xpGained >= 0 &&
+        request.resource.data.xpGained <= 1000; // Limite máximo de XP por atividade
+    }
+    
+    // Níveis dos usuários - cada usuário pode ler/escrever apenas seu próprio nível
+    match /user_levels/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      allow create: if isAuthenticated() && 
+        isOwner(userId) &&
+        // Validar campos obrigatórios
+        request.resource.data.keys().hasAll(['userId', 'currentLevel', 'currentXP', 'totalXP']) &&
+        // Validar tipos e limites
+        request.resource.data.currentLevel is number &&
+        request.resource.data.currentLevel >= 1 &&
+        request.resource.data.currentLevel <= 50 &&
+        request.resource.data.currentXP is number &&
+        request.resource.data.currentXP >= 0 &&
+        request.resource.data.totalXP is number &&
+        request.resource.data.totalXP >= 0;
+    }
+    
+    // Conquistas dos usuários - cada usuário pode ler/escrever apenas suas próprias conquistas
+    match /user_achievements/{achievementId} {
+      allow read, write: if isAuthenticated() && isDocumentOwner();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.userId &&
+        // Validar campos obrigatórios
+        request.resource.data.keys().hasAll(['userId', 'achievementId', 'unlockedAt']) &&
+        // Validar tipos
+        request.resource.data.userId is string &&
+        request.resource.data.achievementId is string &&
+        request.resource.data.unlockedAt is timestamp;
+    }
+    
+    // Estatísticas dos usuários (opcional - para analytics)
+    match /user_stats/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // === COLEÇÕES EXISTENTES (se houver) ===
+    
+    // Usuários - perfil básico
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      allow create: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Questões - todos podem ler, apenas admins podem escrever
+    match /questions/{questionId} {
+      allow read: if isAuthenticated();
+      // allow write: if isAuthenticated() && isAdmin(); // Descomente se tiver sistema de admin
+    }
+    
+    // Casos clínicos - todos podem ler, apenas admins podem escrever
+    match /clinical_cases/{caseId} {
+      allow read: if isAuthenticated();
+      // allow write: if isAuthenticated() && isAdmin(); // Descomente se tiver sistema de admin
+    }
+    
+    // Respostas dos usuários às questões
+    match /user_answers/{answerId} {
+      allow read, write: if isAuthenticated() && isDocumentOwner();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Sessions de estudo
+    match /study_sessions/{sessionId} {
+      allow read, write: if isAuthenticated() && isDocumentOwner();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.userId;
+    }
+
+    // === REGRAS GLOBAIS ===
+    
+    // Bloquear acesso a qualquer outra coleção não especificada
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
