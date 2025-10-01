@@ -1,5 +1,6 @@
-import { Clock, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function LoginHeader() {
   return (
@@ -13,9 +14,11 @@ export default function LoginHeader() {
       </Link>
       
       <div className="flex justify-center mb-6">
-        <div className="bg-blue-600 rounded-lg p-3">
-          <Clock className="h-8 w-8 text-white" />
-        </div>
+        <img 
+          src={logoPenaped} 
+          alt="PéNaPED Logo" 
+          className="h-45 w-auto"
+        />
       </div>
       
       <h2 className="text-3xl font-bold theme-text-primary">

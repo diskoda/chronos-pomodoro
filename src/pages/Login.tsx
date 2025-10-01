@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import LoginLayout from '../components/loginPage/LoginLayout';
 import LoginHeader from '../components/loginPage/LoginHeader';
 import LoginForm from '../components/loginPage/LoginForm';
-import SocialLogin from '../components/loginPage/SocialLogin';
+import UpdatesSlider from '../components/loginPage/UpdatesSlider';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,22 +35,8 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      setError('');
-      setLoading(true);
-      await loginWithGoogle();
-      navigate('/dashboard');
-    } catch (error: any) {
-      setError('Falha no login com Google.');
-      console.error('Google login error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <LoginLayout>
+    <LoginLayout updatesSlider={<UpdatesSlider />}>
       <LoginHeader />
       {error && (
         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -63,10 +49,6 @@ export default function Login() {
         password={password}
         setPassword={setPassword}
         handleSubmit={handleSubmit}
-        loading={loading}
-      />
-      <SocialLogin 
-        onGoogleLogin={handleGoogleLogin}
         loading={loading}
       />
     </LoginLayout>

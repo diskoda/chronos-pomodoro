@@ -4,9 +4,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { 
   RegisterLayout, 
   RegisterHeader, 
-  RegisterForm, 
-  SocialRegister 
+  RegisterForm
 } from '../components/registerPage';
+import UpdatesSlider from '../components/loginPage/UpdatesSlider';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { register, loginWithGoogle } = useAuth();
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,20 +59,6 @@ export default function Register() {
     }
   };
 
-  const handleGoogleRegister = async () => {
-    try {
-      setError('');
-      setLoading(true);
-      await loginWithGoogle();
-      navigate('/dashboard');
-    } catch (error: any) {
-      setError('Falha no registro com Google.');
-      console.error('Google register error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const updateFormData = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -81,7 +67,7 @@ export default function Register() {
   };
 
   return (
-    <RegisterLayout>
+    <RegisterLayout updatesSlider={<UpdatesSlider />}>
       <RegisterHeader />
       {error && (
         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -92,10 +78,6 @@ export default function Register() {
         formData={formData}
         updateFormData={updateFormData}
         handleSubmit={handleSubmit}
-        loading={loading}
-      />
-      <SocialRegister 
-        onGoogleRegister={handleGoogleRegister}
         loading={loading}
       />
       <div className="text-center mt-6">

@@ -12,7 +12,7 @@ export default function DashboardHeader() {
             <img 
               src={logoPenaped} 
               alt="PéNaPED Logo" 
-              className="h-10 w-auto"
+              className="h-45 w-auto"
             />
           </div>
           

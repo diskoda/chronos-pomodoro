@@ -1,5 +1,6 @@
-import { ArrowLeft, Heart } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function QuestionsHeader() {
   return (
@@ -16,10 +17,12 @@ export default function QuestionsHeader() {
             </Link>
             <div className="h-6 w-px theme-border" />
             <div className="flex items-center space-x-2">
-              <div className="bg-blue-600 rounded-lg p-2">
-                <Heart className="h-5 w-5 text-white" />
-              </div>
-              <h1 className="text-xl font-bold theme-text-primary">Banco de Questões PénaPED</h1>
+              <img 
+                src={logoPenaped} 
+                alt="PéNaPED Logo" 
+                className="h-45 w-auto"
+              />
+              <h1 className="text-xl font-bold theme-text-primary">Banco de Questões</h1>
             </div>
           </div>
         </div>

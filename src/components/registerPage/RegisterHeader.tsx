@@ -6,7 +6,7 @@ export default function RegisterHeader() {
       <img 
         src={logoPenaped} 
         alt="PéNaPED Logo" 
-        className="mx-auto h-16 w-auto mb-4"
+        className="mx-auto h-45 w-auto mb-4"
       />
       <h2 className="text-3xl font-bold theme-text-primary">
         Criar Conta
