@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Book, Lightbulb, AlertTriangle, Stethoscope, GraduationCap, Target } from 'lucide-react';
 import { useExplanationSearch, useExplanationCategories } from '../../hooks/useExplanations';
-import TextExplanation from '../common/TextExplanation';
+import TextExplanation from './TextExplanation';
 
 interface ExplanationManagerProps {
   className?: string;
@@ -239,13 +239,13 @@ export const ExplanationManager: React.FC<ExplanationManagerProps> = ({ classNam
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Conceito educacional:</p>
               <div className="bg-white dark:bg-gray-800 p-3 rounded border">
-                A <TextExplanation explanationId="gamificacao-educacao" theme="educational">gamificação</TextExplanation> pode aumentar significativamente o engajamento dos estudantes.
+                A <TextExplanation explanationId="gamificacao-educacao" theme="medical">gamificação</TextExplanation> pode aumentar significativamente o engajamento dos estudantes.
               </div>
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Aviso importante:</p>
               <div className="bg-white dark:bg-gray-800 p-3 rounded border">
-                Verifique sempre as <TextExplanation explanationId="contraindicacao" variant="both">contraindicações</TextExplanation> antes de prescrever.
+                Verifique sempre as <TextExplanation explanationId="contraindicacao" variant="hover">contraindicações</TextExplanation> antes de prescrever.
               </div>
             </div>
           </div>

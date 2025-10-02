@@ -12,8 +12,7 @@ export { default as LogoutButton } from './LogoutButton';
 export { default as ProtectedRoute } from './ProtectedRoute';
 
 // TextExplanation System
-export { TextExplanation as default } from './TextExplanation';
-export { TextExplanation } from './TextExplanation';
+// export { default as TextExplanation } from './TextExplanation';
 export { ExplanationManager } from './ExplanationManager';
 export { SmartTextProcessor } from './SmartTextProcessor';
 

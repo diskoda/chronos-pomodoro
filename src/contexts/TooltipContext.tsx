@@ -25,10 +25,14 @@ export const TooltipProvider: React.FC<TooltipProviderProps> = ({ children }) =>
   const [activeTooltipId, setActiveTooltipId] = useState<string | null>(null);
 
   const setActiveTooltip = (id: string | null) => {
+    // Garantir que sempre funcione, mesmo com múltiplas chamadas
     setActiveTooltipId(id);
   };
 
   const isTooltipActive = (id: string) => {
+    // Se não há tooltip ativo, permitir qualquer um
+    if (!activeTooltipId) return true;
+    // Se há tooltip ativo, só permitir se for o mesmo ID
     return activeTooltipId === id;
   };
 

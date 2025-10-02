@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Info, X, ExternalLink } from 'lucide-react';
-import { useTooltip } from '../../contexts/TooltipContext';
+// Removendo TooltipContext - funcionará sem contexto global
 
 export interface TextExplanationProps {
   children: React.ReactNode;
@@ -209,8 +209,34 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
   const hoverTimeoutRef = useRef<number | null>(null);
   const hideTimeoutRef = useRef<number | null>(null);
 
-  const { setActiveTooltip, isTooltipActive } = useTooltip();
+  // Solução simples sem TooltipContext
   const tooltipId = `tooltip-${explanationId}-${Math.random().toString(36).substr(2, 9)}`;
+  
+  // Controle singleton simples usando eventos DOM
+  const hideOtherTooltips = () => {
+    // Esconder todos os outros tooltips
+    const allTooltips = document.querySelectorAll('[data-tooltip]');
+    allTooltips.forEach((tooltip) => {
+      if (tooltip.getAttribute('data-tooltip') !== tooltipId) {
+        const tooltipElement = tooltip as HTMLElement;
+        tooltipElement.style.display = 'none';
+      }
+    });
+  };
+
+  const showThisTooltip = () => {
+    hideOtherTooltips();
+    setIsVisible(true);
+  };
+
+  // Funções simplificadas
+  const setActiveTooltip = (_id: string | null) => {
+    // Implementação usando DOM events
+  };
+  
+  const isTooltipActive = (_id: string) => {
+    return isVisible;
+  };
 
   // Buscar explicação
   const explanation = getExplanation(explanationId);
@@ -305,7 +331,7 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
       hoverTimeoutRef.current = setTimeout(() => {
         const position = calculatePosition(e.clientX, e.clientY);
         setTooltipPosition(position);
-        setIsVisible(true);
+        showThisTooltip();
         setActiveTooltip(tooltipId);
       }, delay);
     }
@@ -409,9 +435,11 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
       <span
         ref={elementRef}
         className={`
-          relative inline-block cursor-help transition-all duration-200
-          ${variant === 'hover' ? 'hover:bg-blue-50 hover:text-blue-700' : ''}
-          ${variant === 'click' ? 'text-blue-600 hover:text-blue-800' : ''}
+          relative inline-block cursor-help transition-all duration-200 font-medium
+          text-blue-600 hover:text-blue-800 
+          border-b border-dashed border-blue-400 hover:border-blue-600
+          hover:bg-blue-50 rounded-sm px-0.5
+          ${variant === 'click' ? 'bg-blue-50' : ''}
           ${className}
         `}
         onMouseEnter={handleMouseEnter}
@@ -429,6 +457,7 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
       {shouldShowTooltip && (
         <div
           ref={tooltipRef}
+          data-tooltip={tooltipId}
           className={`
             fixed z-[9999] p-4 rounded-lg shadow-2xl border max-w-sm
             transform transition-all duration-300 ease-out

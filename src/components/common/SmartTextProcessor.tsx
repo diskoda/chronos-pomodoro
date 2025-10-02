@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextExplanation } from './TextExplanation';
+import TextExplanation from '../../components/common/TextExplanation';
 import { explanationsDatabase } from '../../data/explanations';
 
 interface TermMap {
@@ -12,8 +12,8 @@ interface TermMap {
 interface SmartTextProcessorProps {
   children: string | React.ReactNode;
   className?: string;
-  theme?: 'light' | 'dark' | 'medical' | 'educational';
-  variant?: 'hover' | 'click' | 'both';
+  theme?: 'light' | 'dark' | 'medical';
+  variant?: 'hover' | 'click';
   customTerms?: TermMap[];
   enableAutoDetection?: boolean;
 }
@@ -21,7 +21,11 @@ interface SmartTextProcessorProps {
 // Mapeamento de termos para IDs de explicação
 const defaultTermMappings: TermMap[] = [
   // Termos médicos básicos
-  { term: 'asma', explanationId: 'asma', wholeWord: true },
+  { term: 'asma', explanationId: 'asma', wholeWord: false },
+  { term: 'broncoespasmo', explanationId: 'broncoespasmo', wholeWord: false },
+  { term: 'tabagismo', explanationId: 'tabagismo', wholeWord: false },
+  { term: 'tabagista', explanationId: 'tabagismo', wholeWord: false },
+  { term: 'UBS', explanationId: 'ubs', wholeWord: false },
   { term: 'anamnese', explanationId: 'anamnese', wholeWord: true },
   { term: 'diagnóstico diferencial', explanationId: 'diagnostico-diferencial' },
   { term: 'exame físico', explanationId: 'exame-fisico' },
@@ -49,6 +53,7 @@ const defaultTermMappings: TermMap[] = [
   // Termos específicos que podem aparecer em questões
   { term: 'broncoespasmo', explanationId: 'broncoespasmo', wholeWord: true },
   { term: 'tabagismo', explanationId: 'tabagismo', wholeWord: true },
+  { term: 'tabagista', explanationId: 'tabagismo', wholeWord: true },
   { term: 'UBS', explanationId: 'ubs', wholeWord: true },
   { term: 'entrevista motivacional', explanationId: 'entrevista-motivacional' },
 ];
