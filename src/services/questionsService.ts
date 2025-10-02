@@ -16,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { Question } from '../data/types/Question';
+import { allQuestions } from '../data/questions';
 
 // Coleção de questões no Firestore
 const QUESTIONS_COLLECTION = 'questions';
@@ -53,13 +54,21 @@ class QuestionsService {
       const questionsRef = collection(db, QUESTIONS_COLLECTION);
       const snapshot = await getDocs(questionsRef);
       
-      return snapshot.docs.map(doc => ({
+      const firebaseQuestions = snapshot.docs.map(doc => ({
         id: parseInt(doc.id) || 0,
         ...doc.data()
       })) as Question[];
+
+      // Se não há questões no Firebase, usar questões locais
+      if (firebaseQuestions.length === 0) {
+        console.log('📋 Usando questões locais como fallback');
+        return allQuestions;
+      }
+
+      return firebaseQuestions;
     } catch (error) {
-      console.error('Erro ao buscar questões:', error);
-      throw new Error('Falha ao carregar questões');
+      console.error('Erro ao buscar questões do Firebase, usando questões locais:', error);
+      return allQuestions;
     }
   }
 
@@ -147,10 +156,25 @@ class QuestionsService {
         } as Question;
       }
       
+      // Se não encontrou no Firebase, buscar nas questões locais
+      const localQuestion = allQuestions.find(q => q.id === parseInt(id.toString()));
+      if (localQuestion) {
+        console.log(`📋 Usando questão local ${id} como fallback`);
+        return localQuestion;
+      }
+      
       return null;
     } catch (error) {
-      console.error('Erro ao buscar questão por ID:', error);
-      throw new Error('Falha ao carregar questão');
+      console.error('Erro ao buscar questão por ID no Firebase, tentando questões locais:', error);
+      
+      // Em caso de erro, buscar nas questões locais
+      const localQuestion = allQuestions.find(q => q.id === parseInt(id.toString()));
+      if (localQuestion) {
+        console.log(`📋 Usando questão local ${id} como fallback após erro`);
+        return localQuestion;
+      }
+      
+      return null;
     }
   }
 

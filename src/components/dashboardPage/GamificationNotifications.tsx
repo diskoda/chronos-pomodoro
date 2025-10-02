@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Trophy, Star, Zap, Crown, Target, BookOpen } from 'lucide-react';
 
 interface GamificationNotification {
@@ -11,17 +11,66 @@ interface GamificationNotification {
   bgColor: string;
   xpReward?: number;
   timestamp: Date;
+  shown?: boolean;
 }
+
+const NOTIFICATIONS_STORAGE_KEY = 'gamification_notifications_shown';
 
 export default function GamificationNotifications() {
   const [notifications, setNotifications] = useState<GamificationNotification[]>([]);
   const [visibleNotifications, setVisibleNotifications] = useState<GamificationNotification[]>([]);
+  const hasInitialized = useRef(false);
+  const timeoutsRef = useRef<number[]>([]);
 
-  // Simular notificações de exemplo
+  // Função para verificar se uma notificação já foi mostrada
+  const getShownNotifications = (): string[] => {
+    try {
+      const stored = localStorage.getItem(NOTIFICATIONS_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Erro ao ler notificações mostradas:', error);
+      return [];
+    }
+  };
+
+  // Função para marcar notificação como mostrada
+  const markNotificationAsShown = (notificationId: string) => {
+    try {
+      const shown = getShownNotifications();
+      if (!shown.includes(notificationId)) {
+        shown.push(notificationId);
+        localStorage.setItem(NOTIFICATIONS_STORAGE_KEY, JSON.stringify(shown));
+      }
+    } catch (error) {
+      console.error('Erro ao salvar notificação mostrada:', error);
+    }
+  };
+
+  // Função para resetar notificações (útil para desenvolvimento)
+  const resetShownNotifications = () => {
+    localStorage.removeItem(NOTIFICATIONS_STORAGE_KEY);
+  };
+
+  // Função para limpar todos os timeouts
+  const clearAllTimeouts = () => {
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current = [];
+  };
+
+  // Simulação de notificações baseadas em conquistas reais
   useEffect(() => {
+    // Proteger contra execução dupla do React StrictMode
+    if (hasInitialized.current) {
+      return;
+    }
+    hasInitialized.current = true;
+
+    const shownNotifications = getShownNotifications();
+    
+    // Simular notificações de exemplo (apenas se não foram mostradas)
     const mockNotifications: GamificationNotification[] = [
       {
-        id: '1',
+        id: 'level_12_achievement',
         type: 'levelUp',
         title: 'Nível Aumentado!',
         description: 'Parabéns! Você alcançou o nível 12!',
@@ -32,7 +81,7 @@ export default function GamificationNotifications() {
         timestamp: new Date()
       },
       {
-        id: '2',
+        id: 'dedicated_student_badge',
         type: 'badge',
         title: 'Nova Conquista!',
         description: 'Você desbloqueou "Estudante Dedicado"',
@@ -43,7 +92,7 @@ export default function GamificationNotifications() {
         timestamp: new Date(Date.now() - 30000)
       },
       {
-        id: '3',
+        id: 'streak_7_days',
         type: 'streak',
         title: 'Sequência Mantida!',
         description: '7 dias consecutivos de estudo! 🔥',
@@ -55,19 +104,46 @@ export default function GamificationNotifications() {
       }
     ];
 
-    // Simular chegada de notificações com delay
-    mockNotifications.forEach((notification, index) => {
-      setTimeout(() => {
+    // Filtrar apenas notificações que não foram mostradas
+    const newNotifications = mockNotifications.filter(
+      notification => !shownNotifications.includes(notification.id)
+    );
+
+    if (newNotifications.length === 0) {
+      return; // Não há notificações novas para mostrar
+    }
+
+    // Adicionar notificações novas com delay
+    newNotifications.forEach((notification, index) => {
+      const timeout = setTimeout(() => {
         setNotifications(prev => [...prev, notification]);
         setVisibleNotifications(prev => [...prev, notification]);
         
-        // Auto-remove após 5 segundos
-        setTimeout(() => {
+        // Marcar como mostrada imediatamente
+        markNotificationAsShown(notification.id);
+        
+        // Auto-remove após 8 segundos
+        const autoRemoveTimeout = setTimeout(() => {
           setVisibleNotifications(prev => prev.filter(n => n.id !== notification.id));
-        }, 5000);
+        }, 8000);
+        
+        timeoutsRef.current.push(autoRemoveTimeout);
       }, index * 2000);
+      
+      timeoutsRef.current.push(timeout);
     });
-  }, []);
+
+    // Adicionar função de debug no console (apenas em desenvolvimento)
+    if (import.meta.env.DEV) {
+      (window as any).resetNotifications = resetShownNotifications;
+      console.log('🔔 Debug: Use resetNotifications() no console para resetar notificações');
+    }
+
+    // Cleanup function
+    return () => {
+      clearAllTimeouts();
+    };
+  }, []); // Dependências vazias são OK agora pois controlamos com localStorage e hasInitialized
 
   const dismissNotification = (id: string) => {
     setVisibleNotifications(prev => prev.filter(n => n.id !== id));
@@ -151,6 +227,21 @@ export default function GamificationNotifications() {
         <div className="text-center">
           <button className="text-sm theme-text-secondary hover:theme-text-primary transition-colors">
             Ver todas as notificações ({notifications.length})
+          </button>
+        </div>
+      )}
+
+      {/* Debug Button (apenas em desenvolvimento) */}
+      {import.meta.env.DEV && (
+        <div className="text-center">
+          <button 
+            onClick={() => {
+              resetShownNotifications();
+              window.location.reload();
+            }}
+            className="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-1 rounded hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+          >
+            🔄 Reset Notificações (Debug)
           </button>
         </div>
       )}

@@ -34,6 +34,81 @@ const defaultTermMappings: TermMap[] = [
   { term: 'interação medicamentosa', explanationId: 'interacao-medicamentosa' },
   { term: 'interações medicamentosas', explanationId: 'interacao-medicamentosa' },
   
+  // Doenças respiratórias
+  { term: 'pneumonia', explanationId: 'pneumonia', wholeWord: false },
+  { term: 'bronquiolite', explanationId: 'bronquiolite', wholeWord: false },
+  { term: 'pneumotórax', explanationId: 'pneumotorax', wholeWord: false },
+  { term: 'pneumotorax', explanationId: 'pneumotorax', wholeWord: false },
+  { term: 'VSR', explanationId: 'vsr', wholeWord: true },
+  { term: 'vírus sincicial respiratório', explanationId: 'vsr' },
+  
+  // Doenças infecciosas
+  { term: 'otite média', explanationId: 'otite-media' },
+  { term: 'otite', explanationId: 'otite-media', wholeWord: false },
+  { term: 'sífilis congênita', explanationId: 'sifilis-congenita' },
+  { term: 'sífilis', explanationId: 'sifilis-congenita', wholeWord: false },
+  
+  // Emergências endócrinas
+  { term: 'cetoacidose diabética', explanationId: 'cetoacidose-diabetica' },
+  { term: 'cetoacidose', explanationId: 'cetoacidose-diabetica', wholeWord: false },
+  { term: 'hipoglicemia', explanationId: 'hipoglicemia', wholeWord: false },
+  
+  // Cardiologia
+  { term: 'insuficiência cardíaca', explanationId: 'insuficiencia-cardiaca' },
+  { term: 'insuficiência', explanationId: 'insuficiencia-cardiaca', wholeWord: false },
+  
+  // Procedimentos
+  { term: 'reanimação neonatal', explanationId: 'reanimacao-neonatal' },
+  { term: 'reanimação', explanationId: 'reanimacao-neonatal', wholeWord: false },
+  { term: 'intubação orotraqueal', explanationId: 'intubacao-orotraqueal' },
+  { term: 'intubação', explanationId: 'intubacao-orotraqueal', wholeWord: false },
+  { term: 'ventilação não invasiva', explanationId: 'ventilacao-nao-invasiva' },
+  { term: 'VNI', explanationId: 'ventilacao-nao-invasiva', wholeWord: true },
+  { term: 'CPAP', explanationId: 'ventilacao-nao-invasiva', wholeWord: true },
+  { term: 'BiPAP', explanationId: 'ventilacao-nao-invasiva', wholeWord: true },
+  { term: 'cateter nasal de alto fluxo', explanationId: 'cateter-nasal-alto-fluxo' },
+  { term: 'alto fluxo', explanationId: 'cateter-nasal-alto-fluxo' },
+  { term: 'isolamento respiratório', explanationId: 'isolamento-respiratorio' },
+  
+  // Exames
+  { term: 'radiografia de tórax', explanationId: 'radiografia-torax' },
+  { term: 'radiografia', explanationId: 'radiografia-torax', wholeWord: false },
+  { term: 'RX de tórax', explanationId: 'radiografia-torax' },
+  { term: 'gasometria arterial', explanationId: 'gasometria' },
+  { term: 'gasometria', explanationId: 'gasometria', wholeWord: false },
+  { term: 'hemograma completo', explanationId: 'hemograma' },
+  { term: 'hemograma', explanationId: 'hemograma', wholeWord: false },
+  
+  // Sinais e sintomas
+  { term: 'tiragem', explanationId: 'tiragem', wholeWord: false },
+  { term: 'cianose', explanationId: 'cianose', wholeWord: false },
+  { term: 'desidratação', explanationId: 'desidratacao', wholeWord: false },
+  { term: 'febre', explanationId: 'febre', wholeWord: false },
+  { term: 'tosse', explanationId: 'tosse', wholeWord: false },
+  { term: 'dispneia', explanationId: 'dispneia', wholeWord: false },
+  { term: 'falta de ar', explanationId: 'dispneia' },
+  { term: 'saturação de oxigênio', explanationId: 'saturacao-oxigenio' },
+  { term: 'saturação', explanationId: 'saturacao-oxigenio', wholeWord: false },
+  { term: 'SpO2', explanationId: 'saturacao-oxigenio', wholeWord: true },
+  { term: 'frequência respiratória', explanationId: 'frequencia-respiratoria' },
+  { term: 'irpm', explanationId: 'frequencia-respiratoria', wholeWord: true },
+  
+  // Medicamentos
+  { term: 'antibiótico', explanationId: 'antibiotico', wholeWord: false },
+  { term: 'antibióticos', explanationId: 'antibiotico', wholeWord: false },
+  { term: 'amoxicilina', explanationId: 'amoxicilina', wholeWord: false },
+  { term: 'analgésico', explanationId: 'analgesico', wholeWord: false },
+  { term: 'analgésicos', explanationId: 'analgesico', wholeWord: false },
+  { term: 'paracetamol', explanationId: 'analgesico', wholeWord: false },
+  
+  // Dermatologia
+  { term: 'molusco contagioso', explanationId: 'molusco-contagioso' },
+  { term: 'molusco', explanationId: 'molusco-contagioso', wholeWord: false },
+  
+  // Saúde pública
+  { term: 'cascata do cuidado', explanationId: 'cascata-cuidado' },
+  { term: 'cascata', explanationId: 'cascata-cuidado', wholeWord: false },
+  
   // Especialidades
   { term: 'pediatria', explanationId: 'pediatria', wholeWord: true },
   { term: 'cardiologia', explanationId: 'cardiologia', wholeWord: true },
@@ -49,13 +124,49 @@ const defaultTermMappings: TermMap[] = [
   { term: 'repetição espaçada', explanationId: 'repeticao-espacada' },
   { term: 'técnica pomodoro', explanationId: 'tecnica-pomodoro' },
   { term: 'medicina baseada em evidências', explanationId: 'medicina-baseada-evidencias' },
-  
-  // Termos específicos que podem aparecer em questões
-  { term: 'broncoespasmo', explanationId: 'broncoespasmo', wholeWord: true },
-  { term: 'tabagismo', explanationId: 'tabagismo', wholeWord: true },
-  { term: 'tabagista', explanationId: 'tabagismo', wholeWord: true },
-  { term: 'UBS', explanationId: 'ubs', wholeWord: true },
   { term: 'entrevista motivacional', explanationId: 'entrevista-motivacional' },
+
+  // Novos termos médicos adicionados
+  { term: 'hígido', explanationId: 'higido', wholeWord: false },
+  { term: 'pronto-socorro', explanationId: 'pronto-socorro', wholeWord: false },
+  { term: 'pronto socorro', explanationId: 'pronto-socorro', wholeWord: false },
+  { term: 'diarreia aguda', explanationId: 'diarreia-aguda', wholeWord: false },
+  { term: 'diarreia', explanationId: 'diarreia-aguda', wholeWord: false },
+  { term: 'acesso venoso periférico', explanationId: 'acesso-venoso-periferico' },
+  { term: 'acesso venoso', explanationId: 'acesso-venoso-periferico', wholeWord: false },
+  { term: 'jelco', explanationId: 'acesso-venoso-periferico', wholeWord: false },
+  { term: 'hidratação endovenosa', explanationId: 'hidratacao-endovenosa' },
+  { term: 'hidratação EV', explanationId: 'hidratacao-endovenosa' },
+  { term: 'EV', explanationId: 'hidratacao-endovenosa', wholeWord: true },
+  { term: 'estabilização inicial', explanationId: 'estabilizacao-inicial' },
+  { term: 'estabilização', explanationId: 'estabilizacao-inicial', wholeWord: false },
+  { term: 'hidratação', explanationId: 'hidratacao', wholeWord: false },
+  { term: 'perdas', explanationId: 'perdas', wholeWord: false },
+  { term: 'perdas hidroeletrolíticas', explanationId: 'perdas' },
+  { term: 'via oral', explanationId: 'via-oral', wholeWord: false },
+  { term: 'VO', explanationId: 'via-oral', wholeWord: true },
+  { term: 'exames laboratoriais', explanationId: 'exames-laboratoriais' },
+  { term: 'laboratório', explanationId: 'exames-laboratoriais', wholeWord: false },
+  { term: 'traçado eletrocardiográfico', explanationId: 'tracado-eletrocardiografico' },
+  { term: 'ECG', explanationId: 'tracado-eletrocardiografico', wholeWord: true },
+  { term: 'eletrocardiograma', explanationId: 'tracado-eletrocardiografico', wholeWord: false },
+  { term: 'pH', explanationId: 'ph', wholeWord: true },
+  { term: 'pO₂', explanationId: 'po2', wholeWord: true },
+  { term: 'pO2', explanationId: 'po2', wholeWord: true },
+  { term: 'pCO₂', explanationId: 'pco2', wholeWord: true },
+  { term: 'pCO2', explanationId: 'pco2', wholeWord: true },
+  { term: 'HCO₃⁻', explanationId: 'hco3', wholeWord: true },
+  { term: 'HCO3', explanationId: 'hco3', wholeWord: true },
+  { term: 'bicarbonato', explanationId: 'hco3', wholeWord: false },
+  { term: 'SatO₂', explanationId: 'sato2', wholeWord: true },
+  { term: 'SatO2', explanationId: 'sato2', wholeWord: true },
+  { term: 'potássio', explanationId: 'potassio', wholeWord: false },
+  { term: 'K+', explanationId: 'potassio', wholeWord: true },
+  { term: 'sódio', explanationId: 'sodio', wholeWord: false },
+  { term: 'Na+', explanationId: 'sodio', wholeWord: true },
+  { term: 'hipocalemia', explanationId: 'hipocalemia', wholeWord: false },
+  { term: 'prescrições', explanationId: 'prescricoes', wholeWord: false },
+  { term: 'prescrição', explanationId: 'prescricoes', wholeWord: false }
 ];
 
 export const SmartTextProcessor: React.FC<SmartTextProcessorProps> = ({
@@ -100,6 +211,7 @@ export const SmartTextProcessor: React.FC<SmartTextProcessorProps> = ({
         }
 
         const matches = Array.from(part.matchAll(regex));
+        
         if (matches.length === 0) {
           return [part];
         }

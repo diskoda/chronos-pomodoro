@@ -386,6 +386,327 @@ export const explanationsDatabase: Record<string, Explanation> = {
     ],
     keywords: ['entrevista motivacional', 'mudança comportamental', 'motivação'],
     difficulty: 'intermediate'
+  },
+
+  // Novos termos médicos solicitados
+  'higido': {
+    id: 'higido',
+    type: 'medical',
+    title: 'Hígido',
+    content: 'Estado de saúde normal, sem alterações patológicas. Termo utilizado para descrever pacientes saudáveis ou órgãos/sistemas sem anormalidades.',
+    icon: '✅',
+    category: 'Terminologia Médica',
+    examples: [
+      'Paciente hígido sem comorbidades',
+      'Abdome hígido ao exame físico',
+      'Sistema cardiovascular hígido'
+    ],
+    keywords: ['hígido', 'saudável', 'normal', 'sem alterações'],
+    difficulty: 'basic'
+  },
+
+  'pronto-socorro': {
+    id: 'pronto-socorro',
+    type: 'medical',
+    title: 'Pronto-Socorro',
+    content: 'Unidade de atendimento médico de urgência e emergência, responsável pelo primeiro atendimento a pacientes em situações críticas.',
+    icon: '🚨',
+    category: 'Atendimento de Emergência',
+    examples: [
+      'Atendimento de trauma',
+      'Emergências clínicas',
+      'Triagem de pacientes'
+    ],
+    keywords: ['pronto-socorro', 'emergência', 'urgência', 'atendimento'],
+    difficulty: 'basic'
+  },
+
+  'diarreia-aguda': {
+    id: 'diarreia-aguda',
+    type: 'medical',
+    title: 'Diarreia Aguda',
+    content: 'Evacuações líquidas ou semi-líquidas frequentes (≥3 vezes/dia) com duração menor que 14 dias. Pode causar desidratação e desequilíbrio eletrolítico.',
+    icon: '💧',
+    category: 'Gastroenterologia',
+    examples: [
+      'Gastroenterite infecciosa',
+      'Intoxicação alimentar',
+      'Diarreia osmótica'
+    ],
+    keywords: ['diarreia aguda', 'evacuações líquidas', 'desidratação'],
+    difficulty: 'intermediate'
+  },
+
+  'acesso-venoso-periferico': {
+    id: 'acesso-venoso-periferico',
+    type: 'medical',
+    title: 'Acesso Venoso Periférico',
+    content: 'Procedimento de punção de veia periférica para administração de medicamentos, fluidos ou coleta de sangue. Utiliza cateter sobre agulha.',
+    icon: '💉',
+    category: 'Procedimentos',
+    examples: [
+      'Jelco em veia do dorso da mão',
+      'Cateter em veia do antebraço',
+      'Acesso em veia jugular externa'
+    ],
+    keywords: ['acesso venoso', 'jelco', 'cateter', 'punção venosa'],
+    difficulty: 'intermediate'
+  },
+
+  'hidratacao-endovenosa': {
+    id: 'hidratacao-endovenosa',
+    type: 'medical',
+    title: 'Hidratação Endovenosa (EV)',
+    content: 'Administração de fluidos diretamente na corrente sanguínea através de acesso venoso, para correção de desidratação e desequilíbrios hidroeletrolíticos.',
+    icon: '💧',
+    category: 'Procedimentos',
+    examples: [
+      'Soro fisiológico 0,9%',
+      'Ringer lactato',
+      'Solução glicosada 5%'
+    ],
+    keywords: ['hidratação', 'endovenosa', 'EV', 'soro', 'fluidos'],
+    difficulty: 'intermediate'
+  },
+
+  'estabilizacao-inicial': {
+    id: 'estabilizacao-inicial',
+    type: 'important',
+    title: 'Estabilização Inicial',
+    content: 'Primeiras medidas de suporte vital para estabilizar paciente crítico, incluindo ABCDE (vias aéreas, respiração, circulação, déficit neurológico, exposição).',
+    icon: '🆘',
+    category: 'Atendimento de Emergência',
+    examples: [
+      'Controle de vias aéreas',
+      'Oxigenoterapia',
+      'Acesso vascular de urgência'
+    ],
+    keywords: ['estabilização', 'ABCDE', 'suporte vital', 'emergência'],
+    difficulty: 'advanced'
+  },
+
+  'hidratacao': {
+    id: 'hidratacao',
+    type: 'medical',
+    title: 'Hidratação',
+    content: 'Processo de reposição de fluidos corporais para manter equilíbrio hidroeletrolítico adequado. Pode ser oral, enteral ou parenteral.',
+    icon: '💧',
+    category: 'Terapêutica',
+    examples: [
+      'Hidratação oral com SRO',
+      'Hidratação venosa com cristaloides',
+      'Hidratação de manutenção'
+    ],
+    keywords: ['hidratação', 'fluidos', 'reposição', 'equilíbrio'],
+    difficulty: 'basic'
+  },
+
+  'perdas': {
+    id: 'perdas',
+    type: 'medical',
+    title: 'Perdas (Hidroeletrolíticas)',
+    content: 'Perdas anormais de água e eletrólitos através de vômitos, diarreia, sudorese excessiva, poliúria ou outras vias.',
+    icon: '📉',
+    category: 'Fisiologia',
+    examples: [
+      'Perdas por vômitos',
+      'Perdas diarreicas',
+      'Perdas insensíveis aumentadas'
+    ],
+    keywords: ['perdas', 'água', 'eletrólitos', 'desidratação'],
+    difficulty: 'intermediate'
+  },
+
+  'via-oral': {
+    id: 'via-oral',
+    type: 'medical',
+    title: 'Via Oral (VO)',
+    content: 'Administração de medicamentos ou fluidos pela boca. É a via preferencial quando o trato gastrointestinal está funcionante.',
+    icon: '👄',
+    category: 'Vias de Administração',
+    examples: [
+      'Medicamentos VO',
+      'Hidratação oral',
+      'Soro de reidratação oral (SRO)'
+    ],
+    keywords: ['via oral', 'VO', 'oral', 'boca'],
+    difficulty: 'basic'
+  },
+
+  'exames-laboratoriais': {
+    id: 'exames-laboratoriais',
+    type: 'medical',
+    title: 'Exames Laboratoriais',
+    content: 'Análises de amostras biológicas (sangue, urina, fezes) para diagnóstico, monitoramento e seguimento de condições médicas.',
+    icon: '🧪',
+    category: 'Exames Complementares',
+    examples: [
+      'Hemograma completo',
+      'Bioquímica sanguínea',
+      'Urina tipo I'
+    ],
+    keywords: ['exames laboratoriais', 'análises', 'sangue', 'laboratório'],
+    difficulty: 'basic'
+  },
+
+  'tracado-eletrocardiografico': {
+    id: 'tracado-eletrocardiografico',
+    type: 'medical',
+    title: 'Traçado Eletrocardiográfico',
+    content: 'Registro gráfico da atividade elétrica do coração obtido através do eletrocardiograma (ECG), mostrando ritmo, frequência e condução cardíaca.',
+    icon: '📈',
+    category: 'Exames Complementares',
+    examples: [
+      'ECG de 12 derivações',
+      'Análise do ritmo cardíaco',
+      'Detecção de arritmias'
+    ],
+    keywords: ['ECG', 'eletrocardiograma', 'traçado', 'coração'],
+    difficulty: 'intermediate'
+  },
+
+  'ph': {
+    id: 'ph',
+    type: 'medical',
+    title: 'pH Sanguíneo',
+    content: 'Medida da acidez ou alcalinidade do sangue. Valor normal: 7,35-7,45. Alterações indicam distúrbios ácido-básicos.',
+    icon: '🔬',
+    category: 'Gasometria',
+    examples: [
+      'pH < 7,35: acidemia',
+      'pH > 7,45: alcalemia',
+      'pH normal: 7,35-7,45'
+    ],
+    keywords: ['pH', 'acidez', 'gasometria', 'ácido-base'],
+    difficulty: 'intermediate'
+  },
+
+  'po2': {
+    id: 'po2',
+    type: 'medical',
+    title: 'pO₂ (Pressão Parcial de Oxigênio)',
+    content: 'Pressão exercida pelo oxigênio dissolvido no sangue arterial. Valor normal: 80-100 mmHg. Indica eficiência da oxigenação.',
+    icon: '🫁',
+    category: 'Gasometria',
+    examples: [
+      'pO₂ normal: 80-100 mmHg',
+      'Hipoxemia: pO₂ < 80 mmHg',
+      'Oxigenação adequada'
+    ],
+    keywords: ['pO2', 'oxigênio', 'gasometria', 'oxigenação'],
+    difficulty: 'intermediate'
+  },
+
+  'pco2': {
+    id: 'pco2',
+    type: 'medical',
+    title: 'pCO₂ (Pressão Parcial de CO₂)',
+    content: 'Pressão exercida pelo dióxido de carbono no sangue arterial. Valor normal: 35-45 mmHg. Reflete ventilação alveolar.',
+    icon: '💨',
+    category: 'Gasometria',
+    examples: [
+      'pCO₂ normal: 35-45 mmHg',
+      'Hipercapnia: pCO₂ > 45 mmHg',
+      'Hipocapnia: pCO₂ < 35 mmHg'
+    ],
+    keywords: ['pCO2', 'dióxido de carbono', 'gasometria', 'ventilação'],
+    difficulty: 'intermediate'
+  },
+
+  'hco3': {
+    id: 'hco3',
+    type: 'medical',
+    title: 'HCO₃⁻ (Bicarbonato)',
+    content: 'Principal tampão do sangue, responsável pelo equilíbrio ácido-básico. Valor normal: 22-26 mEq/L.',
+    icon: '⚖️',
+    category: 'Gasometria',
+    examples: [
+      'HCO₃⁻ normal: 22-26 mEq/L',
+      'Acidose metabólica: HCO₃⁻ baixo',
+      'Alcalose metabólica: HCO₃⁻ alto'
+    ],
+    keywords: ['bicarbonato', 'HCO3', 'tampão', 'ácido-base'],
+    difficulty: 'intermediate'
+  },
+
+  'sato2': {
+    id: 'sato2',
+    type: 'medical',
+    title: 'SatO₂ (Saturação de Oxigênio)',
+    content: 'Porcentagem de hemoglobina saturada com oxigênio. Valor normal: >95%. Pode ser medida por gasometria ou oximetria de pulso.',
+    icon: '📊',
+    category: 'Gasometria',
+    examples: [
+      'SatO₂ normal: >95%',
+      'Hipoxemia: SatO₂ <90%',
+      'Oximetria de pulso'
+    ],
+    keywords: ['saturação', 'oxigênio', 'SatO2', 'oximetria'],
+    difficulty: 'basic'
+  },
+
+  'potassio': {
+    id: 'potassio',
+    type: 'medical',
+    title: 'Potássio (K+)',
+    content: 'Eletrólito essencial para função neuromuscular e cardíaca. Valor normal: 3,5-5,0 mEq/L. Alterações podem causar arritmias.',
+    icon: '⚡',
+    category: 'Eletrólitos',
+    examples: [
+      'K+ normal: 3,5-5,0 mEq/L',
+      'Hipocalemia: K+ <3,5 mEq/L',
+      'Hipercalemia: K+ >5,0 mEq/L'
+    ],
+    keywords: ['potássio', 'K+', 'eletrólito', 'arritmia'],
+    difficulty: 'intermediate'
+  },
+
+  'sodio': {
+    id: 'sodio',
+    type: 'medical',
+    title: 'Sódio (Na+)',
+    content: 'Principal eletrólito extracelular, essencial para equilíbrio hídrico e função neurológica. Valor normal: 135-145 mEq/L.',
+    icon: '🧂',
+    category: 'Eletrólitos',
+    examples: [
+      'Na+ normal: 135-145 mEq/L',
+      'Hiponatremia: Na+ <135 mEq/L',
+      'Hipernatremia: Na+ >145 mEq/L'
+    ],
+    keywords: ['sódio', 'Na+', 'eletrólito', 'equilíbrio hídrico'],
+    difficulty: 'intermediate'
+  },
+
+  'hipocalemia': {
+    id: 'hipocalemia',
+    type: 'important',
+    title: 'Hipocalemia',
+    content: 'Concentração baixa de potássio no sangue (<3,5 mEq/L). Pode causar fraqueza muscular, arritmias e paralisia flácida.',
+    icon: '⚠️',
+    category: 'Distúrbios Eletrolíticos',
+    examples: [
+      'Fraqueza muscular',
+      'Arritmias cardíacas',
+      'Íleo paralítico'
+    ],
+    keywords: ['hipocalemia', 'potássio baixo', 'fraqueza', 'arritmia'],
+    difficulty: 'intermediate'
+  },
+
+  'prescricoes': {
+    id: 'prescricoes',
+    type: 'medical',
+    title: 'Prescrições Médicas',
+    content: 'Orientações escritas do médico sobre medicamentos, exames, dieta e cuidados a serem seguidos pelo paciente ou equipe de enfermagem.',
+    icon: '📝',
+    category: 'Prática Médica',
+    examples: [
+      'Prescrição de medicamentos',
+      'Orientações dietéticas',
+      'Solicitação de exames'
+    ],
+    keywords: ['prescrições', 'medicamentos', 'orientações', 'receita'],
+    difficulty: 'basic'
   }
 };
 

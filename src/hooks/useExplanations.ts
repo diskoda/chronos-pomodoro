@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Explanation } from '../data/explanations';
 import { 
   getExplanation, 
@@ -8,6 +8,104 @@ import {
   getAvailableCategories,
   getExplanationsStats
 } from '../data/explanations';
+import { 
+  loadExplanationsFromFirebase, 
+  clearExplanationsCache,
+  searchExplanationsInCache 
+} from '../services/explanationsService';
+
+// Hook principal para gerenciar explicações (Firebase + Local)
+export const useExplanations = () => {
+  const [explanations, setExplanations] = useState<Record<string, Explanation>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [useFirebase, setUseFirebase] = useState(true);
+  const [isReady, setIsReady] = useState(false);
+
+  // Carregar explicações (Firebase ou Local)
+  const loadExplanations = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      if (useFirebase) {
+        console.log('🔄 Tentando carregar do Firebase...');
+        const firebaseExplanations = await loadExplanationsFromFirebase();
+        setExplanations(firebaseExplanations);
+        console.log('✅ Explicações carregadas do Firebase');
+      } else {
+        console.log('🔄 Carregando explicações locais...');
+        const { explanationsDatabase } = await import('../data/explanations');
+        setExplanations(explanationsDatabase);
+        console.log('✅ Explicações locais carregadas');
+      }
+      
+      setIsReady(true);
+      
+    } catch (err) {
+      console.error('❌ Erro ao carregar explicações:', err);
+      setError(err instanceof Error ? err.message : 'Erro desconhecido');
+      
+      // Fallback automático para local se Firebase falhar
+      if (useFirebase) {
+        console.log('🔄 Fallback para explicações locais...');
+        try {
+          const { explanationsDatabase } = await import('../data/explanations');
+          setExplanations(explanationsDatabase);
+          setUseFirebase(false);
+          setIsReady(true);
+          setError(null);
+        } catch (fallbackErr) {
+          console.error('❌ Erro no fallback:', fallbackErr);
+        }
+      }
+      
+    } finally {
+      setLoading(false);
+    }
+  }, [useFirebase]);
+
+  // Refresh manual
+  const refreshExplanations = useCallback(async () => {
+    if (useFirebase) {
+      clearExplanationsCache();
+    }
+    await loadExplanations();
+  }, [loadExplanations, useFirebase]);
+
+  // Obter explicação específica
+  const getExplanationById = useCallback((id: string): Explanation | null => {
+    return explanations[id] || null;
+  }, [explanations]);
+
+  // Buscar explicações
+  const searchExplanationsLocal = useCallback((query: string): Explanation[] => {
+    if (!query.trim()) return [];
+    
+    if (useFirebase && Object.keys(explanations).length > 0) {
+      return searchExplanationsInCache(query);
+    } else {
+      return searchExplanations(query);
+    }
+  }, [explanations, useFirebase]);
+
+  // Carregar ao montar
+  useEffect(() => {
+    loadExplanations();
+  }, [loadExplanations]);
+
+  return {
+    explanations,
+    loading,
+    error,
+    isReady,
+    useFirebase,
+    setUseFirebase,
+    getExplanation: getExplanationById,
+    searchExplanations: searchExplanationsLocal,
+    refreshExplanations
+  };
+};
 
 // Hook para uma explicação específica
 export const useExplanation = (id: string) => {
