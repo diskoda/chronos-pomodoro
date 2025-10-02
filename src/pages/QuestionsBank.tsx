@@ -3,6 +3,7 @@ import QuestionsHeader from '../components/questionsPage/QuestionsHeader';
 import QuestionsStats from '../components/questionsPage/QuestionsStats';
 import QuestionsFilters from '../components/questionsPage/QuestionsFilters';
 import QuestionsList from '../components/questionsPage/QuestionsList';
+import AttemptsStats from '../components/questionsPage/AttemptsStats';
 import { useQuestions } from '../hooks/useQuestions';
 import { FIREBASE_CONFIG } from '../config/firebase';
 import { 
@@ -160,6 +161,9 @@ export default function QuestionsBank() {
         </div>
 
         <QuestionsStats stats={stats} />
+        
+        {/* Estatísticas das tentativas */}
+        <AttemptsStats />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}

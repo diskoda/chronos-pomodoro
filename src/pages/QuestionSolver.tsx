@@ -1,59 +1,37 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuestion } from '../hooks/useQuestions';
+import { useQuestionAttempt } from '../hooks/useQuestionAttempts';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
 import QuestionAlternatives from '../components/questionSolver/QuestionAlternatives';
 import QuestionActions from '../components/questionSolver/QuestionActions';
 import QuestionNotFound from '../components/questionSolver/QuestionNotFound';
-import { QuestionBegin, QuestionExplanation, QuestionAnalysis } from '../components/questionFlow';
-import { getQuestionFlowData } from '../data/questionFlowData';
+import { FlowProvider, useQuestionFlow, QuestionFlowManager, FlowProgressIndicator } from '../components/questionFlow';
+import { getQuestionFlowData } from '../data/enhancedQuestionFlowData';
+
+// ==========================================
+// COMPONENTE PRINCIPAL COM SISTEMA COMPONENTIZADO
+// ==========================================
 
 export default function QuestionSolver() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  // Estados do fluxo do Dr. Skoda
-  const [flowStage, setFlowStage] = useState<'begin' | 'question' | 'explanation' | 'analysis'>('begin');
+  const questionId = parseInt(id || '0');
   
   // Usar o hook Firebase para buscar a questão
   const { question, loading, error } = useQuestion(id || null);
   
   // Buscar dados do fluxo da questão
-  const questionId = parseInt(id || '0');
   const flowData = getQuestionFlowData(questionId);
-
-  const handleAlternativeSelect = (alternative: string) => {
-    if (!isSubmitted && flowStage === 'question') {
-      setSelectedAlternative(alternative);
-    }
-  };
-
-  const handleSubmit = () => {
-    if (selectedAlternative && flowStage === 'question') {
-      setIsSubmitted(true);
-      setFlowStage('explanation');
-    }
-  };
 
   const handleBack = () => {
     navigate('/study');
   };
 
-  // Handlers do fluxo Dr. Skoda
-  const handleBeginContinue = () => {
-    setFlowStage('question');
-  };
-
-  const handleExplanationContinue = () => {
-    setFlowStage('analysis');
-  };
-
-  const handleAnalysisFinish = () => {
-    navigate('/study');
+  const handleFlowFinish = () => {
+    navigate('/questions');
   };
 
   // Estados de loading e erro
@@ -95,53 +73,99 @@ export default function QuestionSolver() {
     );
   }
 
+  // Se não há dados de fluxo, usar interface simples
+  if (!flowData) {
+    return (
+      <SimpleQuestionInterface 
+        question={question}
+        onBack={handleBack}
+      />
+    );
+  }
+
+  // Interface integrada com Dr. Skoda
+  return (
+    <FlowProvider questionData={flowData}>
+      <IntegratedQuestionInterface 
+        question={question}
+        onBack={handleBack}
+        onFlowFinish={handleFlowFinish}
+      />
+    </FlowProvider>
+  );
+}
+
+// ==========================================
+// INTERFACE INTEGRADA COM DR. SKODA
+// ==========================================
+
+interface IntegratedQuestionInterfaceProps {
+  question: any;
+  onBack: () => void;
+  onFlowFinish: () => void;
+}
+
+function IntegratedQuestionInterface({ 
+  question, 
+  onBack, 
+  onFlowFinish 
+}: IntegratedQuestionInterfaceProps) {
+  const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const { 
+    currentStage, 
+    selectAlternative,
+    goToStage,
+    selectedAlternative: contextSelectedAlternative,
+    isCorrect
+  } = useQuestionFlow();
+
+  // Hook para gerenciar tentativas
+  const { createAttempt } = useQuestionAttempt(parseInt(question.id));
+
+  const handleAlternativeSelect = (alternative: string) => {
+    if (!isSubmitted && currentStage === 'question') {
+      setSelectedAlternative(alternative);
+      selectAlternative(alternative);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (selectedAlternative && currentStage === 'question') {
+      setIsSubmitted(true);
+      goToStage('explanation');
+    }
+  };
+
+  // Função para salvar resultado e finalizar
+  const handleFlowFinishWithSave = () => {
+    // Usar a alternativa do contexto ou a local como fallback
+    const finalSelectedAlternative = contextSelectedAlternative || selectedAlternative;
+    
+    if (finalSelectedAlternative) {
+      // Salvar resultado da tentativa
+      createAttempt(finalSelectedAlternative, isCorrect);
+    }
+
+    // Chamar callback de finalização (redirecionamento)
+    onFlowFinish();
+  };
+
   return (
     <div className="dashboard-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
-          (flowStage === 'begin' || flowStage === 'explanation' || flowStage === 'analysis') 
-            ? 'pointer-events-none' 
+          (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis') 
+            ? 'pointer-events-none opacity-50' 
             : ''
         }`}>
           
-          {/* Indicador de Progresso do Fluxo */}
-          <div className="mb-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-blue-200 dark:border-blue-700">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Progresso do Fluxo</span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Etapa {flowStage === 'begin' ? '1' : flowStage === 'question' ? '2' : flowStage === 'explanation' ? '3' : '4'} de 4
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500" 
-                  style={{
-                    width: flowStage === 'begin' ? '25%' : 
-                           flowStage === 'question' ? '50%' : 
-                           flowStage === 'explanation' ? '75%' : '100%'
-                  }}
-                ></div>
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-                <span className={flowStage === 'begin' ? 'font-semibold text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'}>
-                  {flowStage === 'begin' ? '📝' : '✅'} Introdução
-                </span>
-                <span className={flowStage === 'question' ? 'font-semibold text-blue-600 dark:text-blue-400' : (flowStage === 'explanation' || flowStage === 'analysis') ? 'text-green-600 dark:text-green-400' : ''}>
-                  {flowStage === 'question' ? '📝' : (flowStage === 'explanation' || flowStage === 'analysis') ? '✅' : '💭'} Resolução
-                </span>
-                <span className={flowStage === 'explanation' ? 'font-semibold text-blue-600 dark:text-blue-400' : flowStage === 'analysis' ? 'text-green-600 dark:text-green-400' : ''}>
-                  {flowStage === 'explanation' ? '📝' : flowStage === 'analysis' ? '✅' : '💡'} Explicação
-                </span>
-                <span className={flowStage === 'analysis' ? 'font-semibold text-blue-600 dark:text-blue-400' : ''}>
-                  {flowStage === 'analysis' ? '📝' : '🔍'} Análise
-                </span>
-              </div>
-            </div>
-          </div>
+          {/* Indicador de Progresso do Fluxo - Componente Dedicado */}
+          <FlowProgressIndicator className="mb-6" showDetails={true} />
           
           <QuestionSolverHeader 
-            onBack={handleBack}
+            onBack={onBack}
             backButtonText="Voltar"
           />
 
@@ -188,19 +212,19 @@ export default function QuestionSolver() {
             </div>
           )}
 
-          {(flowStage === 'question' || flowStage === 'explanation' || flowStage === 'analysis') && (
+          {(currentStage === 'question' || currentStage === 'explanation' || currentStage === 'analysis') && (
             <div className="text-center">
               <QuestionActions
                 isSubmitted={isSubmitted}
                 selectedAlternative={selectedAlternative}
                 onSubmit={handleSubmit}
-                onFinish={handleBack}
+                onFinish={onBack}
                 submitButtonText={selectedAlternative ? "🚀 Confirmar Resposta" : "Selecione uma alternativa"}
                 finishButtonText="Finalizar"
                 feedbackMessage="Resposta enviada!"
               />
               
-              {selectedAlternative && !isSubmitted && flowStage === 'question' && (
+              {selectedAlternative && !isSubmitted && currentStage === 'question' && (
                 <div className="mt-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
                     <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center justify-center">
@@ -215,29 +239,105 @@ export default function QuestionSolver() {
 
         </div>
 
-        {/* Dr. Skoda Flow Dialogs - Renderizados por cima da questão */}
-        {flowStage === 'begin' && flowData && (
-          <QuestionBegin
-            contextText={flowData.contextText}
-            onContinue={handleBeginContinue}
-          />
-        )}
+        {/* Dr. Skoda Flow Manager - Sistema Componentizado */}
+        <QuestionFlowManager onFinish={handleFlowFinishWithSave} />
 
-        {flowStage === 'explanation' && flowData && (
-          <QuestionExplanation
-            explanationText={flowData.explanationText}
-            onContinue={handleExplanationContinue}
-          />
-        )}
+      </div>
+    </div>
+  );
+}
 
-        {flowStage === 'analysis' && flowData && selectedAlternative && (
-          <QuestionAnalysis
-            alternatives={flowData.alternativesAnalysis}
-            selectedAlternative={selectedAlternative}
-            onFinish={handleAnalysisFinish}
-          />
-        )}
+// ==========================================
+// INTERFACE SIMPLES SEM DR. SKODA (FALLBACK)
+// ==========================================
 
+interface SimpleQuestionInterfaceProps {
+  question: any;
+  onBack: () => void;
+}
+
+function SimpleQuestionInterface({ question, onBack }: SimpleQuestionInterfaceProps) {
+  const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleAlternativeSelect = (alternative: string) => {
+    if (!isSubmitted) {
+      setSelectedAlternative(alternative);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (selectedAlternative) {
+      setIsSubmitted(true);
+    }
+  };
+
+  return (
+    <div className="dashboard-background min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-4xl mx-auto">
+          
+          <QuestionSolverHeader 
+            onBack={onBack}
+            backButtonText="Voltar"
+          />
+
+          <QuestionInfo 
+            question={question}
+            showTags={true}
+            showTimeEstimate={true}
+            className="mb-6"
+          />
+
+          {question.statement && (
+            <div className="mb-6">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-700">
+                <QuestionStatement 
+                  statement={question.statement}
+                  className=""
+                />
+              </div>
+            </div>
+          )}
+
+          {question.alternatives && (
+            <div className="mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">
+                    <span className="mr-2">🎯</span>
+                    Escolha a melhor alternativa:
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Analise cada opção cuidadosamente antes de decidir
+                  </p>
+                </div>
+                <div className="p-6">
+                  <QuestionAlternatives
+                    alternatives={question.alternatives}
+                    selectedAlternative={selectedAlternative}
+                    onSelect={handleAlternativeSelect}
+                    isSubmitted={isSubmitted}
+                    className=""
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="text-center">
+            <QuestionActions
+              isSubmitted={isSubmitted}
+              selectedAlternative={selectedAlternative}
+              onSubmit={handleSubmit}
+              onFinish={onBack}
+              submitButtonText={selectedAlternative ? "🚀 Confirmar Resposta" : "Selecione uma alternativa"}
+              finishButtonText="Finalizar"
+              feedbackMessage="Resposta enviada!"
+            />
+          </div>
+
+        </div>
       </div>
     </div>
   );
