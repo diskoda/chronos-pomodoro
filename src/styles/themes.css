@@ -78,6 +78,38 @@
   }
 }
 
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes rainbow-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .dr-skoda-dialog {
   animation: slideIn 0.5s ease-out;
 }
@@ -88,6 +120,44 @@
 
 .speaking-indicator {
   animation: pulse 2s infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-rainbow-border {
+  animation: rainbow-border 3s ease infinite;
+  background-size: 400% 400%;
+}
+
+/* Custom Scrollbar para Dr. Skoda Dialog */
+.dr-skoda-dialog ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dr-skoda-dialog ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.dr-skoda-dialog ::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #3b82f6, #6366f1);
+  border-radius: 4px;
+}
+
+.dr-skoda-dialog ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #2563eb, #5855f7);
+}
+
+/* Para Firefox */
+.dr-skoda-dialog {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 rgba(0, 0, 0, 0.1);
 }
 
 :root[data-theme="dark"] {

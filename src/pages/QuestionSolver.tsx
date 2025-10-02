@@ -98,51 +98,47 @@ export default function QuestionSolver() {
   return (
     <div className="dashboard-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
+          (flowStage === 'begin' || flowStage === 'explanation' || flowStage === 'analysis') 
+            ? 'pointer-events-none' 
+            : ''
+        }`}>
           
           {/* Indicador de Progresso do Fluxo */}
-          {flowStage === 'question' && (
-            <div className="mb-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-blue-200 dark:border-blue-700">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Progresso do Fluxo</span>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Etapa 2 de 4</span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500" style={{width: '50%'}}></div>
-                </div>
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  <span>✅ Introdução</span>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">📝 Resolução</span>
-                  <span>💡 Explicação</span>
-                  <span>🔍 Análise</span>
-                </div>
+          <div className="mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-blue-200 dark:border-blue-700">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Progresso do Fluxo</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Etapa {flowStage === 'begin' ? '1' : flowStage === 'question' ? '2' : flowStage === 'explanation' ? '3' : '4'} de 4
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500" 
+                  style={{
+                    width: flowStage === 'begin' ? '25%' : 
+                           flowStage === 'question' ? '50%' : 
+                           flowStage === 'explanation' ? '75%' : '100%'
+                  }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <span className={flowStage === 'begin' ? 'font-semibold text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'}>
+                  {flowStage === 'begin' ? '📝' : '✅'} Introdução
+                </span>
+                <span className={flowStage === 'question' ? 'font-semibold text-blue-600 dark:text-blue-400' : (flowStage === 'explanation' || flowStage === 'analysis') ? 'text-green-600 dark:text-green-400' : ''}>
+                  {flowStage === 'question' ? '📝' : (flowStage === 'explanation' || flowStage === 'analysis') ? '✅' : '💭'} Resolução
+                </span>
+                <span className={flowStage === 'explanation' ? 'font-semibold text-blue-600 dark:text-blue-400' : flowStage === 'analysis' ? 'text-green-600 dark:text-green-400' : ''}>
+                  {flowStage === 'explanation' ? '📝' : flowStage === 'analysis' ? '✅' : '💡'} Explicação
+                </span>
+                <span className={flowStage === 'analysis' ? 'font-semibold text-blue-600 dark:text-blue-400' : ''}>
+                  {flowStage === 'analysis' ? '📝' : '🔍'} Análise
+                </span>
               </div>
             </div>
-          )}
-
-          {/* Dr. Skoda Flow Dialogs */}
-          {flowStage === 'begin' && flowData && (
-            <QuestionBegin
-              contextText={flowData.contextText}
-              onContinue={handleBeginContinue}
-            />
-          )}
-
-          {flowStage === 'explanation' && flowData && (
-            <QuestionExplanation
-              explanationText={flowData.explanationText}
-              onContinue={handleExplanationContinue}
-            />
-          )}
-
-          {flowStage === 'analysis' && flowData && selectedAlternative && (
-            <QuestionAnalysis
-              alternatives={flowData.alternativesAnalysis}
-              selectedAlternative={selectedAlternative}
-              onFinish={handleAnalysisFinish}
-            />
-          )}
+          </div>
           
           <QuestionSolverHeader 
             onBack={handleBack}
@@ -167,7 +163,7 @@ export default function QuestionSolver() {
             </div>
           )}
 
-          {question.alternatives && flowStage === 'question' && (
+          {question.alternatives && (
             <div className="mb-6">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
@@ -192,7 +188,7 @@ export default function QuestionSolver() {
             </div>
           )}
 
-          {flowStage === 'question' && (
+          {(flowStage === 'question' || flowStage === 'explanation' || flowStage === 'analysis') && (
             <div className="text-center">
               <QuestionActions
                 isSubmitted={isSubmitted}
@@ -204,7 +200,7 @@ export default function QuestionSolver() {
                 feedbackMessage="Resposta enviada!"
               />
               
-              {selectedAlternative && !isSubmitted && (
+              {selectedAlternative && !isSubmitted && flowStage === 'question' && (
                 <div className="mt-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
                     <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center justify-center">
@@ -218,6 +214,30 @@ export default function QuestionSolver() {
           )}
 
         </div>
+
+        {/* Dr. Skoda Flow Dialogs - Renderizados por cima da questão */}
+        {flowStage === 'begin' && flowData && (
+          <QuestionBegin
+            contextText={flowData.contextText}
+            onContinue={handleBeginContinue}
+          />
+        )}
+
+        {flowStage === 'explanation' && flowData && (
+          <QuestionExplanation
+            explanationText={flowData.explanationText}
+            onContinue={handleExplanationContinue}
+          />
+        )}
+
+        {flowStage === 'analysis' && flowData && selectedAlternative && (
+          <QuestionAnalysis
+            alternatives={flowData.alternativesAnalysis}
+            selectedAlternative={selectedAlternative}
+            onFinish={handleAnalysisFinish}
+          />
+        )}
+
       </div>
     </div>
   );
