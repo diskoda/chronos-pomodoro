@@ -46,6 +46,50 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
+/* Dr. Skoda Dialog Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.dr-skoda-dialog {
+  animation: slideIn 0.5s ease-out;
+}
+
+.dr-skoda-content {
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.speaking-indicator {
+  animation: pulse 2s infinite;
+}
+
 :root[data-theme="dark"] {
   /* Background Colors */
   --bg-primary: #111827;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminExplanations } from '../components/admin/AdminExplanations';
 import { SmartTextProcessor } from '../components/common/SmartTextProcessor';
+import { ExplanationsDebug } from '../components/debug/ExplanationsDebug';
 
 export const AdminPage: React.FC = () => {
   return (
@@ -9,6 +10,9 @@ export const AdminPage: React.FC = () => {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Painel Administrativo - Explicações
         </h1>
+        
+        {/* Debug Component */}
+        <ExplanationsDebug />
         
         <AdminExplanations />
         

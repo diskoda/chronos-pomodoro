@@ -20,6 +20,7 @@ import TestTooltips from './pages/TestTooltips';
 import SimpleTooltipTest from './pages/SimpleTooltipTest';
 import TestAllQuestions from './pages/TestAllQuestions';
 import DebugTooltips from './pages/DebugTooltips';
+import TestFlowPage from './pages/TestFlowPage';
 import XPSystemExample from './examples/XPSystemExample';
 import './styles/themes.css';
 
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/test/simple" element={<SimpleTooltipTest />} />
             <Route path="/test/all-questions" element={<TestAllQuestions />} />
             <Route path="/test/debug" element={<DebugTooltips />} />
+            <Route path="/test/flow" element={<TestFlowPage />} />
             <Route path="/xp-system" element={<XPSystemExample />} />
           </Routes>
         </Router>

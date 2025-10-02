@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Plus, GitBranch, ShoppingBag, LogOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, GitBranch, ShoppingBag, LogOut, Brain } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface QuickActionsProps {
@@ -40,6 +40,22 @@ export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProp
               >
                 <Plus className="h-5 w-5" />
                 <span>Iniciar Estudos</span>
+              </Link>
+              
+              <Link 
+                to="/test/flow"
+                className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center space-x-3"
+              >
+                <Brain className="h-5 w-5" />
+                <span>🧪 Testar Fluxo Dr. Skoda</span>
+              </Link>
+              
+              <Link 
+                to="/question/1"
+                className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors flex items-center space-x-3"
+              >
+                <Brain className="h-5 w-5" />
+                <span>🚀 Questão 1 Direta</span>
               </Link>
               
               <button className="w-full theme-bg-secondary theme-text-primary py-3 px-4 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center space-x-3">
@@ -86,6 +102,22 @@ export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProp
               title="Iniciar Estudos"
             >
               <Plus className="h-5 w-5" />
+            </Link>
+            
+            <Link
+              to="/test/flow"
+              className="w-10 h-10 bg-green-600 text-white rounded-lg flex items-center justify-center hover:bg-green-700 transition-colors"
+              title="🧪 Testar Fluxo Dr. Skoda"
+            >
+              <Brain className="h-5 w-5" />
+            </Link>
+            
+            <Link
+              to="/question/1"
+              className="w-10 h-10 bg-orange-600 text-white rounded-lg flex items-center justify-center hover:bg-orange-700 transition-colors"
+              title="🚀 Questão 1 Direta"
+            >
+              <Brain className="h-5 w-5" />
             </Link>
             
             <button
