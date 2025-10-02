@@ -1,0 +1,35 @@
+/* Tooltip Anti-Flicker Styles */
+
+/* Para tooltips que aparecem apenas no hover, usar pointer-events: none 
+   para evitar que o tooltip intercepte eventos de mouse */
+.tooltip-hover-only {
+  pointer-events: none;
+}
+
+/* Para tooltips clicáveis, manter pointer-events normais */
+.tooltip-interactive {
+  pointer-events: auto;
+}
+
+/* Área de buffer invisível ao redor do elemento original para melhorar UX */
+.tooltip-trigger::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  z-index: 1;
+}
+
+/* Smooth transitions para evitar flicker */
+.tooltip-transition {
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Estados de hover mais robustos */
+.tooltip-container:hover .tooltip-content,
+.tooltip-content:hover {
+  opacity: 1;
+  visibility: visible;
+}

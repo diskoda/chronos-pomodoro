@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { SmartTextProcessor } from '../common/SmartTextProcessor';
 
 interface QuestionStatementProps {
   statement: string;
@@ -59,11 +60,13 @@ export default function QuestionStatement({ statement, className = "" }: Questio
         return null;
       }
       
-      // Se não é imagem, renderiza como texto normal
+      // Se não é imagem, renderiza como texto normal com processamento inteligente
       if (part && !part.match(/\[IMAGEM:/) && !part.includes('.png')) {
         return part.split('\n').map((paragraph, paragraphIndex) => (
           <p key={`${index}-${paragraphIndex}`} className={paragraphIndex > 0 ? 'mt-4' : ''}>
-            {paragraph}
+            <SmartTextProcessor theme="medical" variant="hover">
+              {paragraph}
+            </SmartTextProcessor>
           </p>
         ));
       }

@@ -1,3 +1,5 @@
+import { SmartTextProcessor } from '../common/SmartTextProcessor';
+
 interface AlternativeButtonProps {
   alternative: string;
   isSelected: boolean;
@@ -21,7 +23,11 @@ export default function AlternativeButton({
           : 'theme-border hover:theme-bg-secondary'
       } ${isDisabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
     >
-      <span className="theme-text-primary font-medium">{alternative}</span>
+      <span className="theme-text-primary font-medium">
+        <SmartTextProcessor theme="medical" variant="hover">
+          {alternative}
+        </SmartTextProcessor>
+      </span>
     </button>
   );
 }

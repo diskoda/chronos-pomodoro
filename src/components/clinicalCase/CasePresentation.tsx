@@ -1,5 +1,6 @@
 import { FileText, User, Clock, Target, Stethoscope, Activity, TestTube, Brain, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
+import { SmartTextProcessor } from '../common/SmartTextProcessor';
 
 // Definindo o tipo localmente para evitar problemas de importação
 interface CaseData {
@@ -124,7 +125,9 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
           <h3 className="text-lg font-semibold text-white">Queixa Principal</h3>
         </div>
         <p className="text-red-200 text-lg font-medium">
-          {caseData.content.presentation.chiefComplaint}
+          <SmartTextProcessor theme="medical" variant="hover">
+            {caseData.content.presentation.chiefComplaint}
+          </SmartTextProcessor>
         </p>
       </div>
 
@@ -138,7 +141,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
           {caseData.content.presentation.historyOfPresentIllness.map((item, index) => (
             <div key={index} className="flex items-start space-x-3">
               <div className="w-2 h-2 bg-amber-400 rounded-full mt-2 flex-shrink-0"></div>
-              <span className="text-gray-300 leading-relaxed">{item}</span>
+              <span className="text-gray-300 leading-relaxed">
+                <SmartTextProcessor theme="medical" variant="hover">
+                  {item}
+                </SmartTextProcessor>
+              </span>
             </div>
           ))}
         </div>
@@ -154,7 +161,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
           {caseData.content.presentation.pastMedicalHistory.map((item, index) => (
             <div key={index} className="flex items-start space-x-3">
               <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0"></div>
-              <span className="text-gray-300">{item}</span>
+              <span className="text-gray-300">
+                <SmartTextProcessor theme="medical" variant="hover">
+                  {item}
+                </SmartTextProcessor>
+              </span>
             </div>
           ))}
         </div>
@@ -170,7 +181,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
           {caseData.content.presentation.familyHistory.map((item, index) => (
             <div key={index} className="flex items-start space-x-3">
               <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
-              <span className="text-gray-300">{item}</span>
+              <span className="text-gray-300">
+                <SmartTextProcessor theme="medical" variant="hover">
+                  {item}
+                </SmartTextProcessor>
+              </span>
             </div>
           ))}
         </div>
@@ -186,7 +201,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
           {caseData.content.presentation.socialHistory.map((item, index) => (
             <div key={index} className="flex items-start space-x-3">
               <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
-              <span className="text-gray-300">{item}</span>
+              <span className="text-gray-300">
+                <SmartTextProcessor theme="medical" variant="hover">
+                  {item}
+                </SmartTextProcessor>
+              </span>
             </div>
           ))}
         </div>
@@ -210,7 +229,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
                    system === 'neurological' ? 'Neurológico' :
                    system === 'skin' ? 'Pele' : system}
                 </div>
-                <div className="text-gray-300">{description}</div>
+                <div className="text-gray-300">
+                  <SmartTextProcessor theme="medical" variant="hover">
+                    {description}
+                  </SmartTextProcessor>
+                </div>
               </div>
             ))}
           </div>
@@ -228,7 +251,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
             {caseData.content.presentation.physicalExam.generalState && (
               <div className="bg-gray-700/50 rounded-lg p-4">
                 <div className="text-pink-300 font-semibold mb-2">Estado geral</div>
-                <div className="text-gray-300">{caseData.content.presentation.physicalExam.generalState}</div>
+                <div className="text-gray-300">
+                  <SmartTextProcessor theme="medical" variant="hover">
+                    {caseData.content.presentation.physicalExam.generalState}
+                  </SmartTextProcessor>
+                </div>
               </div>
             )}
             
@@ -266,7 +293,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
                        system === 'neurological' ? 'Neurológico' :
                        system === 'skin' ? 'Pele' : system}
                     </div>
-                    <div className="text-gray-300">{typeof description === 'string' ? description : ''}</div>
+                    <div className="text-gray-300">
+                      <SmartTextProcessor theme="medical" variant="hover">
+                        {typeof description === 'string' ? description : ''}
+                      </SmartTextProcessor>
+                    </div>
                   </div>
                 ))}
             </div>
@@ -286,7 +317,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
               <div key={index} className="bg-emerald-500/10 rounded-lg p-3 border border-emerald-400/30">
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="text-emerald-200 text-sm leading-relaxed">{exam}</span>
+                  <span className="text-emerald-200 text-sm leading-relaxed">
+                    <SmartTextProcessor theme="medical" variant="hover">
+                      {exam}
+                    </SmartTextProcessor>
+                  </span>
                 </div>
               </div>
             ))}
@@ -305,7 +340,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
             {caseData.content.presentation.diagnosticHypotheses.map((hypothesis, index) => (
               <li key={index} className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-gray-300">{hypothesis}</span>
+                <span className="text-gray-300">
+                  <SmartTextProcessor theme="medical" variant="hover">
+                    {hypothesis}
+                  </SmartTextProcessor>
+                </span>
               </li>
             ))}
           </ul>
@@ -324,7 +363,11 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
               <div key={index} className="bg-teal-500/10 rounded-lg p-3 border border-teal-400/30">
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-teal-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="text-teal-200 text-sm leading-relaxed">{conduct}</span>
+                  <span className="text-teal-200 text-sm leading-relaxed">
+                    <SmartTextProcessor theme="medical" variant="hover">
+                      {conduct}
+                    </SmartTextProcessor>
+                  </span>
                 </div>
               </div>
             ))}
@@ -340,7 +383,9 @@ export function CasePresentation({ caseData, isCompleted = false, onComplete }: 
             <h3 className="text-lg font-semibold text-white">Evolução e Desfecho</h3>
           </div>
           <p className="text-green-200 leading-relaxed text-sm">
-            {caseData.content.presentation.evolution}
+            <SmartTextProcessor theme="medical" variant="hover">
+              {caseData.content.presentation.evolution}
+            </SmartTextProcessor>
           </p>
         </div>
       )}
