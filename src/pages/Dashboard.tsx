@@ -12,16 +12,18 @@ import RewardsSystem from '../components/dashboardPage/RewardsSystem';
 import Leaderboard from '../components/dashboardPage/Leaderboard';
 import GamificationNotifications from '../components/dashboardPage/GamificationNotifications';
 import LocalStorageMigration from '../components/migration/LocalStorageMigration';
+import QuickTest from '../components/QuickTest';
 
 export default function Dashboard() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'progress' | 'rewards' | 'social'>('overview');
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'progress' | 'rewards' | 'social' | 'test'>('overview');
 
   const tabOptions = [
     { id: 'overview' as const, name: 'Visão Geral', description: 'Stats e progresso' },
     { id: 'progress' as const, name: 'Progresso', description: 'Nível e metas' },
     { id: 'rewards' as const, name: 'Recompensas', description: 'Badges e conquistas' },
-    { id: 'social' as const, name: 'Social', description: 'Ranking e comunidade' }
+    { id: 'social' as const, name: 'Social', description: 'Ranking e comunidade' },
+    { id: 'test' as const, name: '🧪 Teste', description: 'Sistema Universal' }
   ];
 
   return (
@@ -113,6 +115,12 @@ export default function Dashboard() {
               <UserProfile />
               <Achievements />
             </div>
+          </div>
+        )}
+
+        {selectedTab === 'test' && (
+          <div className="space-y-8">
+            <QuickTest />
           </div>
         )}
       </div>

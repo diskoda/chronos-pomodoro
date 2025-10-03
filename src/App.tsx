@@ -11,7 +11,6 @@ import ClinicalCaseSelection from './pages/ClinicalCaseSelection';
 import BasicCases from './pages/BasicCases';
 import ClinicalCases from './pages/ClinicalCases';
 import SpecialtyCases from './pages/SpecialtyCases';
-import QuestionsBank from './pages/QuestionsBank';
 import QuestionSolver from './pages/QuestionSolver';
 import QuestionsAdmin from './pages/QuestionsAdmin';
 import { AdminPage } from './pages/AdminPage';
@@ -22,7 +21,18 @@ import TestAllQuestions from './pages/TestAllQuestions';
 import DebugTooltips from './pages/DebugTooltips';
 import TestFlowPage from './pages/TestFlowPage';
 import TestQuestion1 from './pages/TestQuestion1';
+import TestQuestion10 from './pages/TestQuestion10';
 import TestRedirect from './pages/TestRedirect';
+import TestPage from './pages/TestPage';
+import UniversalQuestionsBank from './pages/UniversalQuestionsBank';
+import { 
+  UniversalDrSkodaQuestion, 
+  UniversalSimpleQuestion, 
+  UniversalStudyQuestion, 
+  UniversalReviewQuestion, 
+  UniversalExamQuestion, 
+  UniversalFlexibleQuestion 
+} from './pages/UniversalQuestionPages';
 import XPSystemExample from './examples/XPSystemExample';
 import './styles/themes.css';
 
@@ -41,8 +51,17 @@ export default function App() {
             <Route path="/clinical-cases/basic" element={<BasicCases />} />
             <Route path="/clinical-cases/clinical" element={<ClinicalCases />} />
             <Route path="/clinical-cases/specialties" element={<SpecialtyCases />} />
-            <Route path="/questions" element={<QuestionsBank />} />
+            <Route path="/questions" element={<UniversalQuestionsBank />} />
             <Route path="/question/:id" element={<QuestionSolver />} />
+            
+            {/* Rotas Universais para Questões */}
+            <Route path="/question/dr-skoda/:id" element={<UniversalDrSkodaQuestion />} />
+            <Route path="/question/simple/:id" element={<UniversalSimpleQuestion />} />
+            <Route path="/question/study/:id" element={<UniversalStudyQuestion />} />
+            <Route path="/question/review/:id" element={<UniversalReviewQuestion />} />
+            <Route path="/question/:mode/:id" element={<UniversalFlexibleQuestion />} />
+            <Route path="/exam/question/:id" element={<UniversalExamQuestion />} />
+            
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/questions" element={<QuestionsAdmin />} />
             <Route path="/test/explanations" element={<ExplanationTest />} />
@@ -52,7 +71,9 @@ export default function App() {
             <Route path="/test/debug" element={<DebugTooltips />} />
             <Route path="/test/flow" element={<TestFlowPage />} />
             <Route path="/test/question1" element={<TestQuestion1 />} />
+            <Route path="/test/question10" element={<TestQuestion10 />} />
             <Route path="/test/redirect" element={<TestRedirect />} />
+            <Route path="/test/universal" element={<TestPage />} />
             <Route path="/xp-system" element={<XPSystemExample />} />
           </Routes>
         </Router>

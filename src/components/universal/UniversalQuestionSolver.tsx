@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuestion } from '../../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../../hooks/useUserQuestionAttempts';
-import { getQuestionFlowData } from '../../data/enhancedQuestionFlowData';
+import { flowDataManager } from '../../data/universalFlowDataManager';
 import { FlowProvider, QuestionFlowManager, FlowProgressIndicator } from '../questionFlow';
 import QuestionSolverHeader from '../questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../common/QuestionInfo';
@@ -78,7 +78,7 @@ export default function UniversalQuestionSolver({
   
   // Hooks de dados
   const { question, loading, error } = useQuestion(questionId.toString());
-  const flowData = getQuestionFlowData(questionId);
+  const flowData = flowDataManager.getFlowData(questionId);
   
   // Handlers padrão
   const handleBack = useCallback(() => {
