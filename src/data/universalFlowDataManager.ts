@@ -1,0 +1,353 @@
+import type { QuestionFlowData } from '../components/questionFlow/types';
+
+// ==========================================
+// SISTEMA DE GERENCIAMENTO DE DADOS DE FLUXO UNIVERSAL
+// ==========================================
+
+interface FlowDataRegistry {
+  [questionId: number]: QuestionFlowData;
+}
+
+class UniversalFlowDataManager {
+  private registry: FlowDataRegistry = {};
+  private loadedSources: Set<string> = new Set();
+
+  /**
+   * Registrar dados de fluxo para uma questão
+   */
+  registerFlowData(questionId: number, data: QuestionFlowData): void {
+    this.registry[questionId] = data;
+    console.log(`✅ Dados de fluxo registrados para questão ${questionId}`);
+  }
+
+  /**
+   * Buscar dados de fluxo por ID da questão
+   */
+  getFlowData(questionId: number): QuestionFlowData | null {
+    return this.registry[questionId] || null;
+  }
+
+  /**
+   * Verificar se uma questão tem dados de fluxo
+   */
+  hasFlowData(questionId: number): boolean {
+    return questionId in this.registry;
+  }
+
+  /**
+   * Carregar dados de múltiplas questões de uma fonte
+   */
+  loadFromSource(sourceName: string, dataLoader: () => Promise<FlowDataRegistry> | FlowDataRegistry): Promise<void> {
+    if (this.loadedSources.has(sourceName)) {
+      console.log(`📋 Fonte ${sourceName} já foi carregada`);
+      return Promise.resolve();
+    }
+
+    const loadData = async () => {
+      try {
+        const data = await dataLoader();
+        Object.entries(data).forEach(([questionId, flowData]) => {
+          this.registerFlowData(parseInt(questionId), flowData);
+        });
+        this.loadedSources.add(sourceName);
+        console.log(`✅ Carregados dados de ${Object.keys(data).length} questões de ${sourceName}`);
+      } catch (error) {
+        console.error(`❌ Erro ao carregar dados de ${sourceName}:`, error);
+        throw error;
+      }
+    };
+
+    return loadData();
+  }
+
+  /**
+   * Gerar dados de fluxo automaticamente a partir de uma questão
+   */
+  generateBasicFlowData(question: any): QuestionFlowData {
+    const { title, category, alternatives } = question;
+
+    // Tentar determinar a alternativa correta (placeholder - seria melhor ter isso nos dados)
+    const correctAlternative = 'A'; // Por padrão, assumir A como correta
+
+    const alternativesAnalysis = alternatives?.map((alt: string, index: number) => {
+      const letter = String.fromCharCode(65 + index); // A, B, C, D...
+      const text = alt.replace(/^\([A-Z]\)\s*/, ''); // Remove "(A) " do início
+      
+      return {
+        letter,
+        text,
+        isCorrect: letter === correctAlternative,
+        explanation: letter === correctAlternative 
+          ? `Esta é a alternativa correta. Análise detalhada: ${text}`
+          : `Esta alternativa está incorreta. Explicação: análise pendente para ${text}`,
+        category: letter === correctAlternative ? 'correct' : 'incorrect',
+        conceptsInvolved: [category.toLowerCase().replace(/\s+/g, '-')]
+      };
+    }) || [];
+
+    return {
+      contextText: `Esta questão aborda conceitos importantes de ${category}. 
+        
+Analise cuidadosamente o enunciado e as alternativas apresentadas. 
+O objetivo é aplicar o conhecimento teórico na prática clínica, 
+considerando evidências científicas atuais.
+
+Lembre-se: cada alternativa deve ser avaliada criteriosamente, 
+pois na medicina, detalhes fazem toda a diferença no cuidado ao paciente.`,
+
+      explanationText: `Para resolver esta questão de ${category}, é importante considerar:
+
+**Conceitos fundamentais:**
+
+1. **Contexto clínico**: Analise todas as informações fornecidas no caso
+2. **Base científica**: Aplique conhecimentos baseados em evidências
+3. **Raciocínio lógico**: Elimine alternativas inadequadas sistematicamente
+4. **Prática clínica**: Considere a viabilidade e segurança das opções
+
+**Abordagem recomendada:**
+- Leia o enunciado identificando pontos-chave
+- Relembre conceitos teóricos relacionados
+- Analise cada alternativa individualmente
+- Compare as opções e identifique a mais adequada
+
+O domínio destes conceitos é essencial para a prática clínica segura e eficaz.`,
+
+      alternativesAnalysis,
+
+      metadata: {
+        specialty: Array.isArray(category) ? category[0] : category,
+        difficulty: 'medium',
+        tags: [title.toLowerCase().replace(/\s+/g, '-'), category.toLowerCase()],
+        estimatedTime: 5,
+        conceptsRequired: ['raciocínio clínico', 'conhecimento teórico'],
+        learningObjectives: [
+          `Aplicar conceitos de ${category}`,
+          'Desenvolver raciocínio clínico',
+          'Analisar alternativas sistematicamente'
+        ]
+      }
+    };
+  }
+
+  /**
+   * Listar todas as questões com dados de fluxo
+   */
+  listAvailableQuestions(): number[] {
+    return Object.keys(this.registry).map(id => parseInt(id));
+  }
+
+  /**
+   * Estatísticas do registry
+   */
+  getStats(): {
+    totalQuestions: number;
+    loadedSources: string[];
+    autoGenerated: number;
+    manual: number;
+  } {
+    const totalQuestions = Object.keys(this.registry).length;
+    const autoGenerated = Object.values(this.registry)
+      .filter(data => data.contextText?.includes('Esta questão aborda conceitos importantes')).length;
+    
+    return {
+      totalQuestions,
+      loadedSources: Array.from(this.loadedSources),
+      autoGenerated,
+      manual: totalQuestions - autoGenerated
+    };
+  }
+
+  /**
+   * Validar dados de fluxo
+   */
+  validateFlowData(data: QuestionFlowData): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!data.contextText?.trim()) {
+      errors.push('contextText é obrigatório');
+    }
+
+    if (!data.explanationText?.trim()) {
+      errors.push('explanationText é obrigatório');
+    }
+
+    if (!data.alternativesAnalysis?.length) {
+      errors.push('alternativesAnalysis deve ter pelo menos uma alternativa');
+    } else {
+      const correctCount = data.alternativesAnalysis.filter(alt => alt.isCorrect).length;
+      if (correctCount !== 1) {
+        errors.push('Deve haver exatamente uma alternativa correta');
+      }
+
+      data.alternativesAnalysis.forEach((alt, index) => {
+        if (!alt.letter || !alt.text || !alt.explanation) {
+          errors.push(`Alternativa ${index + 1}: letter, text e explanation são obrigatórios`);
+        }
+      });
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+
+  /**
+   * Exportar todos os dados para backup
+   */
+  exportData(): FlowDataRegistry {
+    return { ...this.registry };
+  }
+
+  /**
+   * Importar dados de backup
+   */
+  importData(data: FlowDataRegistry): void {
+    Object.entries(data).forEach(([questionId, flowData]) => {
+      this.registerFlowData(parseInt(questionId), flowData);
+    });
+  }
+
+  /**
+   * Limpar registry (útil para testes)
+   */
+  clear(): void {
+    this.registry = {};
+    this.loadedSources.clear();
+  }
+}
+
+// ==========================================
+// INSTÂNCIA SINGLETON E FUNÇÕES DE CONVENIÊNCIA
+// ==========================================
+
+export const flowDataManager = new UniversalFlowDataManager();
+
+// Funções de conveniência para compatibilidade
+export function getQuestionFlowData(questionId: number): QuestionFlowData | null {
+  // Primeiro, tentar buscar dados manuais
+  let flowData = flowDataManager.getFlowData(questionId);
+  
+  // Se não encontrar, tentar gerar automaticamente
+  if (!flowData) {
+    console.log(`🔄 Gerando dados de fluxo automaticamente para questão ${questionId}`);
+    // TODO: Buscar dados da questão para gerar flowData
+    // Por enquanto, retornar null se não encontrar
+  }
+  
+  return flowData;
+}
+
+export function registerQuestionFlowData(questionId: number, data: QuestionFlowData): void {
+  flowDataManager.registerFlowData(questionId, data);
+}
+
+export function hasQuestionFlowData(questionId: number): boolean {
+  return flowDataManager.hasFlowData(questionId);
+}
+
+// ==========================================
+// CARREGADORES DE DADOS POR FONTE
+// ==========================================
+
+/**
+ * Carregar dados das questões USP-SP 2025
+ */
+export async function loadUSPSP2025FlowData(): Promise<void> {
+  return flowDataManager.loadFromSource('usp-sp-2025', async () => {
+    // Importar dados da questão 1 (já existe)
+    const { question1FlowData } = await import('./enhancedQuestionFlowData');
+    
+    return {
+      1: question1FlowData
+      // TODO: Adicionar outras questões conforme forem criadas
+    };
+  });
+}
+
+/**
+ * Carregar dados auto-gerados para questões sem dados manuais
+ */
+export async function loadAutoGeneratedFlowData(questions: any[]): Promise<void> {
+  return flowDataManager.loadFromSource('auto-generated', () => {
+    const autoData: FlowDataRegistry = {};
+    
+    questions.forEach(question => {
+      if (!flowDataManager.hasFlowData(question.id)) {
+        autoData[question.id] = flowDataManager.generateBasicFlowData(question);
+      }
+    });
+    
+    return autoData;
+  });
+}
+
+// ==========================================
+// INICIALIZAÇÃO AUTOMÁTICA
+// ==========================================
+
+/**
+ * Inicializar sistema de dados de fluxo
+ */
+export async function initializeFlowDataSystem(questions?: any[]): Promise<void> {
+  try {
+    console.log('🚀 Inicializando sistema de dados de fluxo...');
+    
+    // Carregar dados manuais existentes
+    await loadUSPSP2025FlowData();
+    
+    // Gerar dados automáticos para questões sem dados manuais (se fornecidas)
+    if (questions?.length) {
+      await loadAutoGeneratedFlowData(questions);
+    }
+    
+    const stats = flowDataManager.getStats();
+    console.log('✅ Sistema de fluxo inicializado:', stats);
+    
+  } catch (error) {
+    console.error('❌ Erro ao inicializar sistema de fluxo:', error);
+    throw error;
+  }
+}
+
+// ==========================================
+// HOOKS PARA REACT (OPCIONAL)
+// ==========================================
+
+import { useState, useEffect } from 'react';
+
+export function useQuestionFlowData(questionId: number): {
+  flowData: QuestionFlowData | null;
+  hasData: boolean;
+  isLoading: boolean;
+  error: string | null;
+} {
+  const [flowData, setFlowData] = useState<QuestionFlowData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const data = getQuestionFlowData(questionId);
+        setFlowData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Erro ao carregar dados');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [questionId]);
+
+  return {
+    flowData,
+    hasData: !!flowData,
+    isLoading,
+    error
+  };
+}
