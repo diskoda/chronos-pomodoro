@@ -1,11 +1,22 @@
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ThemeSelector from '../common/ThemeSelector';
+import { useLoading } from '../../contexts/LoadingContext';
 import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { showLoading } = useLoading();
+  const navigate = useNavigate();
+  
+  const handleNavigateToLogin = (e: React.MouseEvent) => {
+    e.preventDefault();
+    showLoading('Carregando página de login...', 'branded');
+    setTimeout(() => {
+      navigate('/login');
+    }, 400);
+  };
 
   return (
     <header className="theme-bg-primary theme-shadow-sm sticky top-0 z-50">
@@ -39,12 +50,12 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeSelector />
-            <Link 
-              to="/login"
+            <button 
+              onClick={handleNavigateToLogin}
               className="theme-button-primary px-4 py-2 rounded-lg font-medium"
             >
               Login
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -80,12 +91,12 @@ export default function Header() {
                 Contato
               </a>
               <div className="pt-4 border-t theme-border">
-                <Link 
-                  to="/login"
+                <button 
+                  onClick={handleNavigateToLogin}
                   className="w-full text-left theme-text-secondary hover:theme-text-primary font-medium transition-colors mb-2 block"
                 >
                   Login
-                </Link>
+                </button>
                 <button className="w-full theme-button-primary px-4 py-2 rounded-lg font-medium">
                   Começar Grátis
                 </button>

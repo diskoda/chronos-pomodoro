@@ -166,6 +166,34 @@ export const MINIMAL_PRESET: QuestionConfigPreset = {
   }
 };
 
+/**
+ * Configuração para modo Simulado
+ */
+export const EXAM_MODE_PRESET: QuestionConfigPreset = {
+  name: 'Modo Simulado',
+  description: 'Experiência de prova sem Dr. Skoda',
+  
+  flowConfig: {
+    enabled: false,
+    autoStart: false,
+    skipBegin: true,
+    skipExplanation: true
+  },
+  
+  uiConfig: {
+    showProgress: true,
+    showTimeEstimate: true,
+    showTags: false,
+    className: 'exam-mode'
+  },
+  
+  integrationConfig: {
+    saveAttempts: true,
+    trackAnalytics: true,
+    enableFirebase: true
+  }
+};
+
 // ==========================================
 // REGISTRY DE PRESETS
 // ==========================================
@@ -175,7 +203,8 @@ export const PRESET_REGISTRY = {
   'simple': SIMPLE_QUESTION_PRESET,
   'study': STUDY_MODE_PRESET,
   'review': REVIEW_MODE_PRESET,
-  'minimal': MINIMAL_PRESET
+  'minimal': MINIMAL_PRESET,
+  'exam': EXAM_MODE_PRESET
 } as const;
 
 export type PresetKey = keyof typeof PRESET_REGISTRY;
@@ -310,6 +339,17 @@ export function minimalConfig(
   onFinish?: () => void
 ): UniversalQuestionSolverProps {
   return createQuestionConfig('minimal', questionId, { onBack, onFinish });
+}
+
+/**
+ * Configuração para modo Simulado
+ */
+export function examConfig(
+  questionId: number,
+  onBack?: () => void,
+  onFinish?: () => void
+): UniversalQuestionSolverProps {
+  return createQuestionConfig('exam', questionId, { onBack, onFinish });
 }
 
 // ==========================================

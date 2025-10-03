@@ -145,26 +145,17 @@ export default function UniversalQuestionsList({
 
       {/* Footer Compacto com estatísticas */}
       <div className="mt-6 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <div className="flex flex-wrap justify-center gap-4 text-xs theme-text-secondary">
-          <div className="flex items-center gap-1">
-            🧑‍⚕️ <span>Dr. Skoda: {questions.length}</span>
+        <div className="flex flex-wrap justify-center gap-6 text-xs theme-text-secondary">
+          <div className="flex items-center gap-2">
+            🧑‍⚕️ <span>Dr. Skoda: {questions.length} questões</span>
           </div>
-          <div className="flex items-center gap-1">
-            📚 <span>Estudo: {questions.length}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            ⚡ <span>Rápido: {questions.length}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            🔄 <span>Revisão: {questions.length}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            📊 <span>Simulado: {questions.length}</span>
+          <div className="flex items-center gap-2">
+            📊 <span>Simulado: {questions.length} questões</span>
           </div>
         </div>
         
         <div className="text-center mt-2 text-xs theme-text-secondary">
-          🎯 Sistema Universal ativo - 5 modos de estudo para cada questão
+          🎯 2 modos disponíveis - Dr. Skoda (padrão) e Simulado
         </div>
       </div>
     </div>

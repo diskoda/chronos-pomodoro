@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuestion } from '../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../hooks/useUserQuestionAttempts';
+import { usePageLoading } from '../hooks/usePageLoading';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
@@ -19,6 +20,9 @@ export default function QuestionSolver() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const questionId = parseInt(id || '0');
+  
+  // Hook que automaticamente esconde loading quando a página carrega
+  usePageLoading();
   
   // Usar o hook Firebase para buscar a questão
   const { question, loading, error } = useQuestion(id || null);

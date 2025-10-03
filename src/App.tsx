@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ExplanationsProvider } from './contexts/ExplanationsContext';
+import { LoadingProvider } from './contexts/LoadingContext';
 // Removendo TooltipProvider - não é mais necessário
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -27,11 +28,7 @@ import TestPage from './pages/TestPage';
 import UniversalQuestionsBank from './pages/UniversalQuestionsBank';
 import { 
   UniversalDrSkodaQuestion, 
-  UniversalSimpleQuestion, 
-  UniversalStudyQuestion, 
-  UniversalReviewQuestion, 
-  UniversalExamQuestion, 
-  UniversalFlexibleQuestion 
+  UniversalExamQuestion
 } from './pages/UniversalQuestionPages';
 import XPSystemExample from './examples/XPSystemExample';
 import './styles/themes.css';
@@ -40,29 +37,29 @@ export default function App() {
   return (
     <ThemeProvider>
       <ExplanationsProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/study" element={<ModeSelection />} />
-            <Route path="/clinical-cases" element={<ClinicalCaseSelection />} />
-            <Route path="/clinical-cases/basic" element={<BasicCases />} />
-            <Route path="/clinical-cases/clinical" element={<ClinicalCases />} />
-            <Route path="/clinical-cases/specialties" element={<SpecialtyCases />} />
-            <Route path="/questions" element={<UniversalQuestionsBank />} />
-            <Route path="/question/:id" element={<QuestionSolver />} />
-            
-            {/* Rotas Universais para Questões */}
-            <Route path="/question/dr-skoda/:id" element={<UniversalDrSkodaQuestion />} />
-            <Route path="/question/simple/:id" element={<UniversalSimpleQuestion />} />
-            <Route path="/question/study/:id" element={<UniversalStudyQuestion />} />
-            <Route path="/question/review/:id" element={<UniversalReviewQuestion />} />
-            <Route path="/question/:mode/:id" element={<UniversalFlexibleQuestion />} />
-            <Route path="/exam/question/:id" element={<UniversalExamQuestion />} />
-            
-            <Route path="/admin" element={<AdminPage />} />
+        <LoadingProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/study" element={<ModeSelection />} />
+              <Route path="/clinical-cases" element={<ClinicalCaseSelection />} />
+              <Route path="/clinical-cases/basic" element={<BasicCases />} />
+              <Route path="/clinical-cases/clinical" element={<ClinicalCases />} />
+              <Route path="/clinical-cases/specialties" element={<SpecialtyCases />} />
+              <Route path="/questions" element={<UniversalQuestionsBank />} />
+              <Route path="/question/:id" element={<QuestionSolver />} />
+              
+              {/* Rotas Simplificadas para Questões */}
+              <Route path="/question/dr-skoda/:id" element={<UniversalDrSkodaQuestion />} />
+              <Route path="/exam/question/:id" element={<UniversalExamQuestion />} />
+              
+              {/* Rota padrão para questão redireciona para Dr. Skoda */}
+              <Route path="/question/:id" element={<QuestionSolver />} />
+              
+              <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/questions" element={<QuestionsAdmin />} />
             <Route path="/test/explanations" element={<ExplanationTest />} />
             <Route path="/test/tooltips" element={<TestTooltips />} />
@@ -77,6 +74,7 @@ export default function App() {
             <Route path="/xp-system" element={<XPSystemExample />} />
           </Routes>
         </Router>
+        </LoadingProvider>
       </ExplanationsProvider>
     </ThemeProvider>
   );

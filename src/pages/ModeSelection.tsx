@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, FileText, Brain, Puzzle } from 'lucide-react';
 import { BackButton } from '../components/common';
 import { StudyModeGrid, StudyTip, type StudyModeOption } from '../components/modeSelection';
+import { useLoading } from '../contexts/LoadingContext';
 
 // Import mode images
 import clinicalImg from '../components/images/clinical_img.png';
@@ -12,6 +13,7 @@ import penaPedLogo from '../assets/images/logos/logo_penaped.png';
 
 export default function ModeSelection() {
   const navigate = useNavigate();
+  const { showLoading } = useLoading();
 
   const studyModes: StudyModeOption[] = [
     {
@@ -52,12 +54,18 @@ export default function ModeSelection() {
 
   const handleModeSelect = (mode: StudyModeOption) => {
     if (mode.isActive) {
-      navigate(mode.route);
+      showLoading(`Carregando ${mode.title}...`, 'branded');
+      setTimeout(() => {
+        navigate(mode.route);
+      }, 500);
     }
   };
 
   const handleBackToDashboard = () => {
-    navigate('/dashboard');
+    showLoading('Voltando ao Dashboard...', 'minimal');
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 300);
   };
 
   return (

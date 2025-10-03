@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Clock } from 'lucide-react';
 import type { Question } from '../../data/types/Question';
+import { useQuestionCooldown } from '../../hooks/useQuestionCooldown';
+import { useLoading } from '../../contexts/LoadingContext';
 
 interface UniversalQuestionCardProps {
   question: Question;
@@ -14,6 +17,174 @@ export default function UniversalQuestionCard({
   showActions = true,
   compact = false
 }: UniversalQuestionCardProps) {
+  
+  // Hooks de cooldown para ambos os modos
+  const drSkodaCooldown = useQuestionCooldown(question.id, 'dr-skoda');
+  const examCooldown = useQuestionCooldown(question.id, 'exam');
+  const { showLoading } = useLoading();
+  const navigate = useNavigate();
+  
+  // Função para obter a categoria de exibição mais específica
+  const getDisplayCategory = () => {
+    if (Array.isArray(question.category)) {
+      // Se há múltiplas categorias, priorizar especialidades específicas
+      const priorities = [
+        'Neonatologia',
+        'Cardiologia',
+        'Endocrinologia', 
+        'Pneumologia',
+        'Dermatologia',
+        'Infectologia',
+        'Neurologia',
+        'Cirurgia',
+        'Emergência',
+        'Otorrinolaringologia',
+        'Nefrologia',
+        'Gastroenterologia',
+        'Hematologia',
+        'Oftalmologia',
+        'Genética',
+        'Alergia e Imunologia',
+        'Controle de infecção',
+        'Saúde Pública'
+      ];
+      
+      // Encontrar a primeira categoria específica
+      for (const priority of priorities) {
+        const found = question.category.find(cat => cat.includes(priority));
+        if (found) return found;
+      }
+      
+      // Se não encontrar especialidade específica, usar a categoria não-Pediatria
+      const nonPediatric = question.category.find(cat => 
+        !cat.toLowerCase().includes('pediatria') && 
+        cat !== 'Pediatria Geral' && 
+        cat !== 'Pediatria'
+      );
+      if (nonPediatric) return nonPediatric;
+      
+      // Fallback para a primeira categoria
+      return question.category[0];
+    }
+    
+    // Se é string única, verificar se é muito genérica
+    if (question.category === 'Pediatria Geral' || question.category === 'Pediatria') {
+      // Tentar usar as tags para uma categorização mais específica
+      const categoryFromTags = getCategoryFromTags();
+      if (categoryFromTags) return categoryFromTags;
+    }
+    
+    return question.category;
+  };
+  
+  // Função para extrair categoria das tags quando categoria é muito genérica
+  const getCategoryFromTags = () => {
+    if (!question.tags || question.tags.length === 0) return null;
+    
+    const specialtyMappings: Record<string, string> = {
+      'Reanimação neonatal': 'Neonatologia',
+      'Neonatologia': 'Neonatologia',
+      'Teste de oximetria': 'Neonatologia',
+      'Triagem neonatal': 'Neonatologia',
+      'Cetoacidose diabética': 'Endocrinologia',
+      'Diabetes': 'Endocrinologia',
+      'Pneumotórax': 'Pneumologia',
+      'Bronquiolite': 'Pneumologia',
+      'Asma': 'Pneumologia',
+      'Doença neuromuscular': 'Neurologia',
+      'Molusco contagioso': 'Dermatologia',
+      'Onicomicose': 'Dermatologia',
+      'Otite média': 'Otorrinolaringologia',
+      'Isolamento': 'Infectologia',
+      'VSR': 'Infectologia',
+      'Parainfluenza': 'Infectologia',
+      'Influenza A': 'Infectologia',
+      'Sífilis congênita': 'Infectologia',
+      'Glaucoma congênito': 'Oftalmologia',
+      'Entrevista motivacional': 'Saúde Pública',
+      'Epidemiologia': 'Saúde Pública',
+      'Cascata do cuidado': 'Saúde Pública',
+      'Hidratação venosa': 'Nefrologia',
+      'Hipocalemia': 'Nefrologia',
+      'Diarreia aguda': 'Gastroenterologia',
+      'APLV': 'Alergia e Imunologia',
+      'Alergia alimentar': 'Alergia e Imunologia',
+      'Parada cardiorrespiratória': 'Cardiologia',
+      'Bradiarritmia': 'Cardiologia',
+      'Ducto arterioso': 'Cardiologia',
+      'Cardiopatia congênita': 'Cardiologia',
+      'PTI': 'Hematologia',
+      'Plaquetopenia': 'Hematologia',
+      'Erro inato do metabolismo': 'Genética'
+    };
+    
+    for (const tag of question.tags) {
+      if (specialtyMappings[tag]) {
+        return specialtyMappings[tag];
+      }
+    }
+    
+    return null;
+  };
+  
+  const displayCategory = getDisplayCategory();
+  
+  // Função para renderizar botão com status de cooldown
+  const renderActionButton = (
+    mode: 'dr-skoda' | 'exam',
+    label: string,
+    bgColor: string,
+    hoverColor: string,
+    cooldown: typeof drSkodaCooldown,
+    isCompact = false
+  ) => {
+    const route = mode === 'dr-skoda' ? `/question/dr-skoda/${question.id}` : `/exam/question/${question.id}`;
+    const sizeClasses = isCompact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2.5 text-sm';
+    
+    // Função para navegar com loading
+    const handleNavigation = (e: React.MouseEvent) => {
+      e.preventDefault();
+      showLoading(`Preparando questão ${question.id}...`, 'default');
+      
+      // Pequeno delay para mostrar o loading
+      setTimeout(() => {
+        navigate(route);
+      }, 300);
+    };
+    
+    if (cooldown.loading) {
+      return (
+        <div className={`flex items-center justify-center gap-2 ${bgColor} opacity-50 text-white ${sizeClasses} rounded font-medium cursor-not-allowed`}>
+          <Clock className="w-4 h-4 animate-spin" />
+          {label}
+        </div>
+      );
+    }
+    
+    if (!cooldown.canAttempt) {
+      return (
+        <div 
+          className={`flex items-center justify-center gap-2 bg-gray-400 text-white ${sizeClasses} rounded font-medium cursor-not-allowed relative group`}
+          title={`Aguarde ${cooldown.timeUntilAvailable} para tentar novamente`}
+        >
+          <Clock className="w-4 h-4" />
+          {label}
+          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            {cooldown.timeUntilAvailable}
+          </span>
+        </div>
+      );
+    }
+    
+    return (
+      <button
+        onClick={handleNavigation}
+        className={`flex items-center justify-center gap-2 ${bgColor} ${hoverColor} text-white ${sizeClasses} rounded font-medium transition-colors`}
+      >
+        {label}
+      </button>
+    );
+  };
   
   // Modo compacto para visualização em lista
   if (compact) {
@@ -34,13 +205,32 @@ export default function UniversalQuestionCard({
                   
                   <div className="flex items-center gap-2 mb-2 text-xs">
                     <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">
-                      {Array.isArray(question.category) ? question.category[0] : question.category}
+                      {displayCategory}
                     </span>
                     <span className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-0.5 rounded">
                       {question.difficulty || 'Médio'}
                     </span>
-                    <span className="text-gray-500 dark:text-gray-400">⏱️ ~5min</span>
+                    <span className="text-gray-500 dark:text-gray-400">⏱️ ~{question.timeEstimate}min</span>
                   </div>
+                  
+                  {/* Tags da questão */}
+                  {question.tags && question.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {question.tags.slice(0, 3).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {question.tags.length > 3 && (
+                        <span className="text-gray-500 dark:text-gray-400 text-xs">
+                          +{question.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   
                   {question.statement && (
                     <p className="theme-text-secondary text-xs line-clamp-1">
@@ -55,28 +245,23 @@ export default function UniversalQuestionCard({
             </div>
             
             {showActions && (
-              <div className="flex gap-1">
-                <Link
-                  to={`/question/dr-skoda/${question.id}`}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
-                  title="Dr. Skoda"
-                >
-                  🧑‍⚕️
-                </Link>
-                <Link
-                  to={`/question/study/${question.id}`}
-                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
-                  title="Estudar"
-                >
-                  📚
-                </Link>
-                <Link
-                  to={`/question/simple/${question.id}`}
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
-                  title="Rápido"
-                >
-                  ⚡
-                </Link>
+              <div className="flex gap-2">
+                {renderActionButton(
+                  'dr-skoda',
+                  'Dr. Skoda',
+                  'bg-blue-600',
+                  'hover:bg-blue-700',
+                  drSkodaCooldown,
+                  true
+                )}
+                {renderActionButton(
+                  'exam',
+                  'Simulado',
+                  'bg-purple-600',
+                  'hover:bg-purple-700',
+                  examCooldown,
+                  true
+                )}
               </div>
             )}
           </div>
@@ -97,7 +282,7 @@ export default function UniversalQuestionCard({
             
             <div className="flex items-center gap-2 text-xs">
               <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-xs font-medium">
-                {Array.isArray(question.category) ? question.category[0] : question.category}
+                {displayCategory}
               </span>
               
               <span className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded text-xs font-medium">
@@ -105,9 +290,28 @@ export default function UniversalQuestionCard({
               </span>
               
               <span className="text-gray-500 dark:text-gray-400 text-xs">
-                ⏱️ ~5min
+                ⏱️ ~{question.timeEstimate}min
               </span>
             </div>
+            
+            {/* Tags da questão */}
+            {question.tags && question.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {question.tags.slice(0, 4).map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded text-xs"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {question.tags.length > 4 && (
+                  <span className="text-gray-500 dark:text-gray-400 text-xs">
+                    +{question.tags.length - 4}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
           
           <div className="text-lg font-bold theme-text-secondary bg-gray-50 dark:bg-gray-700 px-2 py-1 rounded">
@@ -128,51 +332,27 @@ export default function UniversalQuestionCard({
         )}
       </div>
 
-      {/* Ações Otimizadas */}
+      {/* Ações Simplificadas */}
       {showActions && (
         <div className="px-4 pb-3">
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            {/* Botão Principal - Dr. Skoda */}
-            <Link
-              to={`/question/dr-skoda/${question.id}`}
-              className="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-xs font-medium transition-colors"
-            >
-              🧑‍⚕️ Dr. Skoda
-            </Link>
-
-            {/* Botão Estudo */}
-            <Link
-              to={`/question/study/${question.id}`}
-              className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-xs font-medium transition-colors"
-            >
-              📚 Estudar
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-3 gap-1">
-            {/* Botão Rápido */}
-            <Link
-              to={`/question/simple/${question.id}`}
-              className="flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-secondary px-2 py-1.5 rounded text-xs transition-colors"
-            >
-              ⚡ Rápido
-            </Link>
-
-            {/* Botão Revisão */}
-            <Link
-              to={`/question/review/${question.id}`}
-              className="flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-secondary px-2 py-1.5 rounded text-xs transition-colors"
-            >
-              🔄 Revisar
-            </Link>
+          <div className="grid grid-cols-2 gap-3">
+            {/* Botão Principal - Dr. Skoda (Padrão) */}
+            {renderActionButton(
+              'dr-skoda',
+              'Dr. Skoda',
+              'bg-blue-600',
+              'hover:bg-blue-700',
+              drSkodaCooldown
+            )}
 
             {/* Botão Simulado */}
-            <Link
-              to={`/exam/question/${question.id}`}
-              className="flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-secondary px-2 py-1.5 rounded text-xs transition-colors"
-            >
-              � Simulado
-            </Link>
+            {renderActionButton(
+              'exam',
+              'Simulado',
+              'bg-purple-600',
+              'hover:bg-purple-700',
+              examCooldown
+            )}
           </div>
         </div>
       )}
@@ -185,9 +365,7 @@ export default function UniversalQuestionCard({
           </div>
           
           <div className="flex gap-1">
-            <span title="Sistema universal ativo" className="text-green-500">✅</span>
-            <span title="Dr. Skoda configurado" className="text-blue-500">🧑‍⚕️</span>
-            <span title="Dados carregados" className="text-gray-500">📋</span>
+            <span title="Sistema universal ativo" className="text-green-500 text-xs">Sistema ativo</span>
           </div>
         </div>
       </div>

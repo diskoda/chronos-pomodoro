@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Plus, GitBranch, ShoppingBag, LogOut, Brain } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useLoading } from '../../contexts/LoadingContext';
 
 interface QuickActionsProps {
   isCollapsed: boolean;
@@ -7,6 +8,15 @@ interface QuickActionsProps {
 }
 
 export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProps) {
+  const navigate = useNavigate();
+  const { showLoading } = useLoading();
+
+  const handleNavigation = (path: string, message: string) => {
+    showLoading(message, 'minimal');
+    setTimeout(() => {
+      navigate(path);
+    }, 300);
+  };
   return (
     <div className={`fixed right-0 top-20 h-full theme-bg-primary theme-shadow-lg theme-border-secondary border-l transition-all duration-300 z-40 ${
       isCollapsed ? 'w-16' : 'w-80'
@@ -34,29 +44,29 @@ export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProp
             </div>
             
             <div className="space-y-3">
-              <Link 
-                to="/study"
+              <button 
+                onClick={() => handleNavigation('/study', 'Iniciando estudos...')}
                 className="w-full theme-button-primary py-3 px-4 rounded-lg font-medium flex items-center space-x-3"
               >
                 <Plus className="h-5 w-5" />
                 <span>Iniciar Estudos</span>
-              </Link>
+              </button>
               
-              <Link 
-                to="/test/flow"
+              <button 
+                onClick={() => handleNavigation('/test/flow', 'Carregando teste...')}
                 className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center space-x-3"
               >
                 <Brain className="h-5 w-5" />
                 <span>🧪 Testar Fluxo Dr. Skoda</span>
-              </Link>
+              </button>
               
-              <Link 
-                to="/question/1"
+              <button 
+                onClick={() => handleNavigation('/question/1', 'Carregando questão...')}
                 className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors flex items-center space-x-3"
               >
                 <Brain className="h-5 w-5" />
                 <span>🚀 Questão 1 Direta</span>
-              </Link>
+              </button>
               
               <button className="w-full theme-bg-secondary theme-text-primary py-3 px-4 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center space-x-3">
                 <GitBranch className="h-5 w-5" />
@@ -96,29 +106,29 @@ export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProp
         ) : (
           // Collapsed View
           <div className="flex flex-col items-center space-y-4 pt-4">
-            <Link
-              to="/study"
+            <button
+              onClick={() => handleNavigation('/study', 'Iniciando estudos...')}
               className="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
               title="Iniciar Estudos"
             >
               <Plus className="h-5 w-5" />
-            </Link>
+            </button>
             
-            <Link
-              to="/test/flow"
+            <button
+              onClick={() => handleNavigation('/test/flow', 'Carregando teste...')}
               className="w-10 h-10 bg-green-600 text-white rounded-lg flex items-center justify-center hover:bg-green-700 transition-colors"
               title="🧪 Testar Fluxo Dr. Skoda"
             >
               <Brain className="h-5 w-5" />
-            </Link>
+            </button>
             
-            <Link
-              to="/question/1"
+            <button
+              onClick={() => handleNavigation('/question/1', 'Carregando questão...')}
               className="w-10 h-10 bg-orange-600 text-white rounded-lg flex items-center justify-center hover:bg-orange-700 transition-colors"
               title="🚀 Questão 1 Direta"
             >
               <Brain className="h-5 w-5" />
-            </Link>
+            </button>
             
             <button
               className="w-10 h-10 theme-bg-secondary theme-text-primary rounded-lg flex items-center justify-center hover:theme-bg-tertiary transition-colors"

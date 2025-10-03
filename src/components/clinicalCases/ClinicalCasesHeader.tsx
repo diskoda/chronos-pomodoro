@@ -1,17 +1,26 @@
 import { ArrowLeft } from 'lucide-react';
 import logoPenaped from '../../assets/images/logos/logo_penaped.png';
+import { useLoading } from '../../contexts/LoadingContext';
 
 interface ClinicalCasesHeaderProps {
   onBack: () => void;
 }
 
 export default function ClinicalCasesHeader({ onBack }: ClinicalCasesHeaderProps) {
+  const { showLoading } = useLoading();
+
+  const handleBack = () => {
+    showLoading('Voltando ao Dashboard...', 'minimal');
+    setTimeout(() => {
+      onBack();
+    }, 300);
+  };
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border-b border-gray-600">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex items-center space-x-4">
           <button
-            onClick={onBack}
+            onClick={handleBack}
             className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />

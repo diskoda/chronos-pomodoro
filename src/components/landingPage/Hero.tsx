@@ -1,6 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+import { useLoading } from '../../contexts/LoadingContext';
 import DoctorSkoda from '../images/DoctorSkoda';
 
 export default function Hero() {
+  const { showLoading } = useLoading();
+  const navigate = useNavigate();
+  
+  const handleStartNow = () => {
+    showLoading('Iniciando sua jornada de estudos...', 'branded');
+    setTimeout(() => {
+      navigate('/login');
+    }, 500);
+  };
+  
+  const handleLearnMore = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <div className="relative py-6 max-h-screen overflow-hidden">
       {/* Glass layer with blur effect - full width */}
@@ -29,10 +47,16 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-3 pt-2 justify-center">
-              <button className="theme-button-primary px-6 py-3 rounded-lg font-medium text-base hover:scale-105 transition-all duration-200 flex items-center gap-2">
+              <button 
+                onClick={handleStartNow}
+                className="theme-button-primary px-6 py-3 rounded-lg font-medium text-base hover:scale-105 transition-all duration-200 flex items-center gap-2"
+              >
                 📚 Começar Agora!
               </button>
-              <button className="border border-white/30 text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-white/10 transition-all duration-200 flex items-center gap-2">
+              <button 
+                onClick={handleLearnMore}
+                className="border border-white/30 text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+              >
                 ▶️ Conhecer Mais
               </button>
             </div>

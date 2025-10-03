@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuestion } from '../../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../../hooks/useUserQuestionAttempts';
+import { useQuestionCooldown } from '../../hooks/useQuestionCooldown';
 import { flowDataManager } from '../../data/universalFlowDataManager';
 import { FlowProvider, QuestionFlowManager, FlowProgressIndicator } from '../questionFlow';
 import QuestionSolverHeader from '../questionSolver/QuestionSolverHeader';
@@ -10,6 +11,7 @@ import QuestionStatement from '../questionSolver/QuestionStatement';
 import QuestionAlternatives from '../questionSolver/QuestionAlternatives';
 import QuestionActions from '../questionSolver/QuestionActions';
 import QuestionNotFound from '../questionSolver/QuestionNotFound';
+import QuestionCooldownBlocker from './QuestionCooldownBlocker';
 import { useQuestionFlow } from '../questionFlow/FlowContext';
 
 // ==========================================
@@ -80,6 +82,19 @@ export default function UniversalQuestionSolver({
   const { question, loading, error } = useQuestion(questionId.toString());
   const flowData = flowDataManager.getFlowData(questionId);
   
+  // Determinar modo baseado na configuração de fluxo
+  const mode = flowConfig.enabled ? 'dr-skoda' : 'exam';
+  
+  // Hook de cooldown (24h)
+  const {
+    canAttempt,
+    timeUntilAvailable,
+    hoursRemaining,
+    minutesRemaining,
+    loading: cooldownLoading,
+    recordAttempt
+  } = useQuestionCooldown(questionId, mode);
+  
   // Handlers padrão
   const handleBack = useCallback(() => {
     if (onBack) {
@@ -98,7 +113,7 @@ export default function UniversalQuestionSolver({
   }, [onFinish, navigate, finishUrl]);
 
   // Estados de loading e erro
-  if (loading) {
+  if (loading || cooldownLoading) {
     return (
       <UniversalQuestionLoader 
         message="Carregando questão..."
@@ -111,6 +126,23 @@ export default function UniversalQuestionSolver({
     return (
       <UniversalQuestionError 
         error={error}
+        onBack={handleBack}
+        className={uiConfig.className}
+      />
+    );
+  }
+
+  // Verificar cooldown antes de exibir a questão
+  if (!canAttempt) {
+    return (
+      <QuestionCooldownBlocker
+        questionId={questionId}
+        mode={mode}
+        timeUntilAvailable={timeUntilAvailable}
+        hoursRemaining={hoursRemaining}
+        minutesRemaining={minutesRemaining}
+        nextAvailableDate={new Date(Date.now() + (hoursRemaining * 60 * 60 * 1000) + (minutesRemaining * 60 * 1000))}
+        lastAttemptDate={null} // Será obtido do cooldown service
         onBack={handleBack}
         className={uiConfig.className}
       />
@@ -138,6 +170,7 @@ export default function UniversalQuestionSolver({
           flowConfig={flowConfig}
           uiConfig={uiConfig}
           integrationConfig={integrationConfig}
+          recordAttempt={recordAttempt}
         />
       </FlowProvider>
     );
@@ -150,6 +183,7 @@ export default function UniversalQuestionSolver({
       onFinish={handleFinish}
       uiConfig={uiConfig}
       integrationConfig={integrationConfig}
+      recordAttempt={recordAttempt}
     />
   );
 }
@@ -165,6 +199,7 @@ interface IntegratedQuestionInterfaceProps {
   flowConfig: NonNullable<UniversalQuestionSolverProps['flowConfig']>;
   uiConfig: NonNullable<UniversalQuestionSolverProps['uiConfig']>;
   integrationConfig: NonNullable<UniversalQuestionSolverProps['integrationConfig']>;
+  recordAttempt: () => Promise<boolean>;
 }
 
 function IntegratedQuestionInterface({ 
@@ -173,7 +208,8 @@ function IntegratedQuestionInterface({
   onFinish,
   flowConfig,
   uiConfig,
-  integrationConfig
+  integrationConfig,
+  recordAttempt
 }: IntegratedQuestionInterfaceProps) {
   const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -218,6 +254,14 @@ function IntegratedQuestionInterface({
     if (finalSelectedAlternative && integrationConfig.saveAttempts) {
       // Salvar resultado da tentativa no Firebase
       await createAttempt(finalSelectedAlternative, isCorrect);
+    }
+
+    // Registrar cooldown de 24h
+    try {
+      await recordAttempt();
+      console.log('✅ Cooldown de 24h registrado para a questão', question.id);
+    } catch (error) {
+      console.error('❌ Erro ao registrar cooldown:', error);
     }
 
     // Analytics (se habilitado)
@@ -340,6 +384,7 @@ interface SimpleQuestionInterfaceProps {
   onFinish: () => void;
   uiConfig: NonNullable<UniversalQuestionSolverProps['uiConfig']>;
   integrationConfig: NonNullable<UniversalQuestionSolverProps['integrationConfig']>;
+  recordAttempt: () => Promise<boolean>;
 }
 
 function SimpleQuestionInterface({ 
@@ -347,7 +392,8 @@ function SimpleQuestionInterface({
   onBack, 
   onFinish,
   uiConfig,
-  integrationConfig
+  integrationConfig,
+  recordAttempt
 }: SimpleQuestionInterfaceProps) {
   const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -372,6 +418,14 @@ function SimpleQuestionInterface({
         const letter = selectedAlternative.match(/^\(([A-Z])\)/)?.[1] || 'A';
         // TODO: Determinar se está correto (sem Dr. Skoda, precisaríamos de outra fonte)
         await createAttempt(letter, false); // Por enquanto, sempre false
+      }
+
+      // Registrar cooldown de 24h
+      try {
+        await recordAttempt();
+        console.log('✅ Cooldown de 24h registrado para a questão', question.id);
+      } catch (error) {
+        console.error('❌ Erro ao registrar cooldown:', error);
       }
 
       // Analytics
