@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuestion } from '../hooks/useQuestions';
-import { useQuestionAttempt } from '../hooks/useQuestionAttempts';
+import { useUserQuestionAttempt } from '../hooks/useUserQuestionAttempts';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
@@ -121,13 +121,24 @@ function IntegratedQuestionInterface({
     isCorrect
   } = useQuestionFlow();
 
-  // Hook para gerenciar tentativas
-  const { createAttempt } = useQuestionAttempt(parseInt(question.id));
+  // Hook para gerenciar tentativas (Firebase)
+  const { createAttempt } = useUserQuestionAttempt(parseInt(question.id));
 
   const handleAlternativeSelect = (alternative: string) => {
     if (!isSubmitted && currentStage === 'question') {
       setSelectedAlternative(alternative);
-      selectAlternative(alternative);
+      
+      // Extrair apenas a letra da alternativa para o sistema Dr. Skoda
+      const letterMatch = alternative.match(/^\(([A-Z])\)/);
+      const letter = letterMatch ? letterMatch[1] : alternative;
+      
+      console.log('🔍 DEBUG - Alternative selection:', {
+        fullAlternative: alternative,
+        extractedLetter: letter,
+        regex: letterMatch
+      });
+      
+      selectAlternative(letter);
     }
   };
 
@@ -139,13 +150,13 @@ function IntegratedQuestionInterface({
   };
 
   // Função para salvar resultado e finalizar
-  const handleFlowFinishWithSave = () => {
+  const handleFlowFinishWithSave = async () => {
     // Usar a alternativa do contexto ou a local como fallback
     const finalSelectedAlternative = contextSelectedAlternative || selectedAlternative;
     
     if (finalSelectedAlternative) {
-      // Salvar resultado da tentativa
-      createAttempt(finalSelectedAlternative, isCorrect);
+      // Salvar resultado da tentativa no Firebase
+      await createAttempt(finalSelectedAlternative, isCorrect);
     }
 
     // Chamar callback de finalização (redirecionamento)

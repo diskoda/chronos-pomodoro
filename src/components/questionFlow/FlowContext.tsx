@@ -46,9 +46,29 @@ const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
       };
       
     case 'SELECT_ALTERNATIVE':
+      console.log('🔍 DEBUG - SELECT_ALTERNATIVE:', {
+        payload: action.payload,
+        questionData: state.questionData,
+        alternativesAnalysis: state.questionData?.alternativesAnalysis,
+        alternativesCount: state.questionData?.alternativesAnalysis?.length
+      });
+      
       const selectedAlt = state.questionData?.alternativesAnalysis.find(
-        alt => alt.letter === action.payload
+        alt => {
+          console.log('🔍 DEBUG - Comparing:', {
+            altLetter: alt.letter,
+            payload: action.payload,
+            matches: alt.letter === action.payload
+          });
+          return alt.letter === action.payload;
+        }
       );
+      
+      console.log('🔍 DEBUG - Selected alternative:', {
+        selectedAlt,
+        isCorrect: selectedAlt?.isCorrect || false
+      });
+      
       return {
         ...state,
         selectedAlternative: action.payload,
@@ -120,6 +140,11 @@ export function FlowProvider({ children, questionData }: FlowProviderProps) {
 
   // Inicializar dados da questão quando fornecidos
   if (questionData && !state.questionData) {
+    console.log('🔍 DEBUG - Initializing questionData:', {
+      questionData,
+      alternativesAnalysis: questionData.alternativesAnalysis,
+      alternativesCount: questionData.alternativesAnalysis?.length
+    });
     dispatch({ type: 'SET_QUESTION_DATA', payload: questionData });
   }
 

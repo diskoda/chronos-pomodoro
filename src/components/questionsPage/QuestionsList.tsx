@@ -1,6 +1,6 @@
 import { CheckCircle, Clock, Play, RotateCcw, BookOpen, XCircle, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useQuestionAttempts } from '../../hooks/useQuestionAttempts';
+import { useUserQuestionAttempts } from '../../hooks/useUserQuestionAttempts';
 import type { Question } from '../../data/types/Question';
 
 interface QuestionsListProps {
@@ -10,7 +10,48 @@ interface QuestionsListProps {
 
 export default function QuestionsList({ filteredQuestions, getDifficultyColor }: QuestionsListProps) {
   const navigate = useNavigate();
-  const { getQuestionSummary } = useQuestionAttempts();
+  const { attempts, loading: attemptsLoading } = useUserQuestionAttempts();
+  
+  // Criar função helper para obter resumo da questão
+  const getQuestionSummary = (questionId: number) => {
+    const questionAttempts = attempts.filter(attempt => attempt.questionId === questionId);
+    
+    if (questionAttempts.length === 0) {
+      return {
+        hasAttempted: false,
+        isCorrect: false,
+        lastAttemptDate: null,
+        lastAttempt: null
+      };
+    }
+
+    // Pegar a tentativa mais recente
+    const lastAttempt = questionAttempts[0]; // Array já vem ordenado por timestamp desc
+    
+    return {
+      hasAttempted: true,
+      isCorrect: lastAttempt.isCorrect,
+      lastAttemptDate: lastAttempt.timestamp.toDate(),
+      lastAttempt
+    };
+  };
+
+  // Loading state
+  if (attemptsLoading) {
+    return (
+      <div className="theme-card rounded-lg">
+        <div className="p-6 border-b theme-border">
+          <h3 className="font-semibold theme-text-primary">
+            Questões ({filteredQuestions.length})
+          </h3>
+        </div>
+        <div className="p-8 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="theme-text-secondary">Carregando progresso...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Garantir que filteredQuestions é sempre um array
   const questions = filteredQuestions || [];

@@ -11,6 +11,7 @@ import StreaksAndGoals from '../components/dashboardPage/StreaksAndGoals';
 import RewardsSystem from '../components/dashboardPage/RewardsSystem';
 import Leaderboard from '../components/dashboardPage/Leaderboard';
 import GamificationNotifications from '../components/dashboardPage/GamificationNotifications';
+import LocalStorageMigration from '../components/migration/LocalStorageMigration';
 
 export default function Dashboard() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -29,6 +30,9 @@ export default function Dashboard() {
       
       {/* Gamification Notifications */}
       <GamificationNotifications />
+      
+      {/* Migration Component */}
+      <LocalStorageMigration />
 
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300 ${
         isSidebarCollapsed ? 'mr-20' : 'mr-84'
