@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuestion } from '../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../hooks/useUserQuestionAttempts';
 import { usePageLoading } from '../hooks/usePageLoading';
+import { useMethodologyXP, useSpecificMethodologyXP } from '../hooks/useMethodologyXP';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
@@ -11,6 +12,48 @@ import QuestionActions from '../components/questionSolver/QuestionActions';
 import QuestionNotFound from '../components/questionSolver/QuestionNotFound';
 import { FlowProvider, useQuestionFlow, QuestionFlowManager, FlowProgressIndicator } from '../components/questionFlow';
 import { getQuestionFlowData } from '../data/enhancedQuestionFlowData';
+
+// Componente de notificação de level up
+interface LevelUpNotificationProps {
+  newLevel: number;
+  newTitle: string;
+  onClose: () => void;
+}
+
+function LevelUpNotification({ newLevel, newTitle, onClose }: LevelUpNotificationProps) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 5000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className="fixed top-4 right-4 z-50 animate-slide-in">
+      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-6 rounded-lg shadow-2xl max-w-sm">
+        <div className="flex items-center mb-3">
+          <div className="w-8 h-8 mr-3 bg-yellow-400 rounded-full flex items-center justify-center">
+            📚
+          </div>
+          <div>
+            <h3 className="font-bold text-lg">Level Up!</h3>
+            <p className="text-sm opacity-90">Questões</p>
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-3xl font-bold mb-1">Nível {newLevel}</div>
+          <div className="text-lg italic">{newTitle}</div>
+        </div>
+        
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-white/70 hover:text-white"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // ==========================================
 // COMPONENTE PRINCIPAL COM SISTEMA COMPONENTIZADO
@@ -24,6 +67,16 @@ export default function QuestionSolver() {
   // Hook que automaticamente esconde loading quando a página carrega
   usePageLoading();
   
+  // Hooks para XP por metodologia
+  const { recordQuestionActivity } = useMethodologyXP();
+  const { currentStreak } = useSpecificMethodologyXP('questions');
+  
+  // Estado para notificações de level up
+  const [levelUpNotification, setLevelUpNotification] = useState<{
+    newLevel: number;
+    newTitle: string;
+  } | null>(null);
+  
   // Usar o hook Firebase para buscar a questão
   const { question, loading, error } = useQuestion(id || null);
   
@@ -36,6 +89,42 @@ export default function QuestionSolver() {
 
   const handleFlowFinish = () => {
     navigate('/questions');
+  };
+
+  // Função para registrar atividade XP
+  const handleRecordXP = async (isCorrect: boolean, metadata: any = {}) => {
+    try {
+      const activityType = isCorrect ? 'question_correct' : 'question_incorrect';
+      
+      const result = await recordQuestionActivity(activityType, {
+        questionId: questionId.toString(),
+        difficulty: question?.difficulty || 'medium',
+        subject: 'Geral',
+        timeSpent: metadata.timeSpent || 0,
+        accuracy: isCorrect ? 100 : 0,
+        ...metadata
+      });
+      
+      // Mostrar notificação de level up se necessário
+      if (result?.leveledUp && result.newLevel) {
+        setLevelUpNotification({
+          newLevel: result.newLevel,
+          newTitle: `Nível ${result.newLevel}`
+        });
+      }
+      
+      // Registrar bonus de streak se aplicável
+      if (isCorrect && currentStreak > 0 && (currentStreak + 1) % 5 === 0) {
+        await recordQuestionActivity('question_streak', {
+          streakCount: currentStreak + 1
+        });
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Erro ao registrar XP:', error);
+      return null;
+    }
   };
 
   // Estados de loading e erro
@@ -80,22 +169,42 @@ export default function QuestionSolver() {
   // Se não há dados de fluxo, usar interface simples
   if (!flowData) {
     return (
-      <SimpleQuestionInterface 
-        question={question}
-        onBack={handleBack}
-      />
+      <>
+        <SimpleQuestionInterface 
+          question={question}
+          onBack={handleBack}
+          onRecordXP={handleRecordXP}
+        />
+        {levelUpNotification && (
+          <LevelUpNotification
+            newLevel={levelUpNotification.newLevel}
+            newTitle={levelUpNotification.newTitle}
+            onClose={() => setLevelUpNotification(null)}
+          />
+        )}
+      </>
     );
   }
 
   // Interface integrada com Dr. Skoda
   return (
-    <FlowProvider questionData={flowData}>
-      <IntegratedQuestionInterface 
-        question={question}
-        onBack={handleBack}
-        onFlowFinish={handleFlowFinish}
-      />
-    </FlowProvider>
+    <>
+      <FlowProvider questionData={flowData}>
+        <IntegratedQuestionInterface 
+          question={question}
+          onBack={handleBack}
+          onFlowFinish={handleFlowFinish}
+          onRecordXP={handleRecordXP}
+        />
+      </FlowProvider>
+      {levelUpNotification && (
+        <LevelUpNotification
+          newLevel={levelUpNotification.newLevel}
+          newTitle={levelUpNotification.newTitle}
+          onClose={() => setLevelUpNotification(null)}
+        />
+      )}
+    </>
   );
 }
 
@@ -107,15 +216,26 @@ interface IntegratedQuestionInterfaceProps {
   question: any;
   onBack: () => void;
   onFlowFinish: () => void;
+  onRecordXP: (isCorrect: boolean, metadata?: any) => Promise<any>;
 }
 
 function IntegratedQuestionInterface({ 
   question, 
   onBack, 
-  onFlowFinish 
+  onFlowFinish,
+  onRecordXP
 }: IntegratedQuestionInterfaceProps) {
   const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [startTime] = useState<Date>(new Date());
+  
+  // Dados de XP para questões
+  const { 
+    level: questionsLevel,
+    title: questionsTitle,
+    currentXP,
+    xpToNextLevel
+  } = useSpecificMethodologyXP('questions');
   
   const { 
     currentStage, 
@@ -159,6 +279,14 @@ function IntegratedQuestionInterface({
     const finalSelectedAlternative = contextSelectedAlternative || selectedAlternative;
     
     if (finalSelectedAlternative) {
+      // Calcular tempo gasto
+      const timeSpent = Math.floor((new Date().getTime() - startTime.getTime()) / 1000 / 60); // em minutos
+      
+      // Registrar XP antes de salvar tentativa
+      await onRecordXP(isCorrect, {
+        timeSpent: timeSpent
+      });
+      
       // Salvar resultado da tentativa no Firebase
       await createAttempt(finalSelectedAlternative, isCorrect);
     }
@@ -170,6 +298,38 @@ function IntegratedQuestionInterface({
   return (
     <div className="dashboard-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Barra de XP - Questões */}
+        <div className="max-w-4xl mx-auto mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  📚
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200">
+                    Questões - Nível {questionsLevel}
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{questionsTitle}</p>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                XP: {currentXP}/{xpToNextLevel}
+              </div>
+            </div>
+            
+            <div className="mt-3">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${Math.min((currentXP / xpToNextLevel) * 100, 100)}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
           (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis') 
             ? 'pointer-events-none opacity-50' 
@@ -269,11 +429,25 @@ function IntegratedQuestionInterface({
 interface SimpleQuestionInterfaceProps {
   question: any;
   onBack: () => void;
+  onRecordXP: (isCorrect: boolean, metadata?: any) => Promise<any>;
 }
 
-function SimpleQuestionInterface({ question, onBack }: SimpleQuestionInterfaceProps) {
+function SimpleQuestionInterface({ 
+  question, 
+  onBack,
+  onRecordXP
+}: SimpleQuestionInterfaceProps) {
   const [selectedAlternative, setSelectedAlternative] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [startTime] = useState<Date>(new Date());
+  
+  // Dados de XP para questões
+  const { 
+    level: questionsLevel,
+    title: questionsTitle,
+    currentXP,
+    xpToNextLevel
+  } = useSpecificMethodologyXP('questions');
 
   const handleAlternativeSelect = (alternative: string) => {
     if (!isSubmitted) {
@@ -281,15 +455,56 @@ function SimpleQuestionInterface({ question, onBack }: SimpleQuestionInterfacePr
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedAlternative) {
       setIsSubmitted(true);
+      
+      // Verificar se a resposta está correta (simulação básica)
+      const isCorrect = selectedAlternative.includes('(A)'); // Simulação - normalmente viria dos dados da questão
+      const timeSpent = Math.floor((new Date().getTime() - startTime.getTime()) / 1000 / 60);
+      
+      // Registrar XP
+      await onRecordXP(isCorrect, {
+        timeSpent: timeSpent
+      });
     }
   };
 
   return (
     <div className="dashboard-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Barra de XP - Questões */}
+        <div className="max-w-4xl mx-auto mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  📚
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200">
+                    Questões - Nível {questionsLevel}
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{questionsTitle}</p>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                XP: {currentXP}/{xpToNextLevel}
+              </div>
+            </div>
+            
+            <div className="mt-3">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${Math.min((currentXP / xpToNextLevel) * 100, 100)}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div className="max-w-4xl mx-auto">
           
           <QuestionSolverHeader 

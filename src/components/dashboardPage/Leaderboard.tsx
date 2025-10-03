@@ -1,93 +1,105 @@
-import { useState } from 'react';
-import { Crown, Trophy, Medal, Star, TrendingUp, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Crown, Trophy, Medal, Star, TrendingUp, User, Stethoscope, HelpCircle, BookOpen } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { MethodologyXPService } from '../../services/methodologyXPService';
+import type { StudyMethodology } from '../../types/xpMethodologies';
 
 interface LeaderboardUser {
   id: string;
   name: string;
   avatar?: string;
-  level: number;
-  xp: number;
+  overallLevel: number;
+  totalXP: number;
   weeklyXP: number;
-  specialty: string;
+  methodology?: StudyMethodology;
+  methodologyLevel?: number;
   rank: number;
   isCurrentUser: boolean;
 }
 
 export default function Leaderboard() {
-  const [selectedPeriod, setSelectedPeriod] = useState<'weekly' | 'monthly' | 'allTime'>('weekly');
+  const { currentUser } = useAuth();
+  const [selectedView, setSelectedView] = useState<'overall' | StudyMethodology>('overall');
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const leaderboardData: LeaderboardUser[] = [
-    {
-      id: '1',
-      name: 'Dr. Ana Costa',
-      level: 18,
-      xp: 4250,
-      weeklyXP: 850,
-      specialty: 'Cardiologia',
-      rank: 1,
-      isCurrentUser: false
-    },
-    {
-      id: '2',
-      name: 'Dr. Pedro Silva',
-      level: 16,
-      xp: 3890,
-      weeklyXP: 720,
-      specialty: 'Neurologia',
-      rank: 2,
-      isCurrentUser: false
-    },
-    {
-      id: '3',
-      name: 'Dr. Maria Santos',
-      level: 15,
-      xp: 3650,
-      weeklyXP: 680,
-      specialty: 'Emergência',
-      rank: 3,
-      isCurrentUser: false
-    },
-    {
-      id: '4',
-      name: 'Dr. João Oliveira',
-      level: 14,
-      xp: 3200,
-      weeklyXP: 620,
-      specialty: 'Ortopedia',
-      rank: 4,
-      isCurrentUser: false
-    },
-    {
-      id: '5',
-      name: 'Dr. Samuel Silva',
-      level: 12,
-      xp: 2350,
-      weeklyXP: 580,
-      specialty: 'Pediatria',
-      rank: 5,
-      isCurrentUser: true
-    },
-    {
-      id: '6',
-      name: 'Dr. Lucas Mendes',
-      level: 11,
-      xp: 2180,
-      weeklyXP: 450,
-      specialty: 'Psiquiatria',
-      rank: 6,
-      isCurrentUser: false
-    },
-    {
-      id: '7',
-      name: 'Dr. Fernanda Lima',
-      level: 10,
-      xp: 1950,
-      weeklyXP: 420,
-      specialty: 'Dermatologia',
-      rank: 7,
-      isCurrentUser: false
-    }
-  ];
+  useEffect(() => {
+    const loadLeaderboard = async () => {
+      if (!currentUser) return;
+      
+      try {
+        // Por enquanto, vamos criar dados mock baseados no usuário atual
+        // TODO: Implementar sistema real de leaderboard com todos os usuários
+        
+        const userOverallLevel = await MethodologyXPService.getUserOverallLevel(currentUser.uid);
+        
+        // Criar dados mock para demonstração
+        const mockUsers: LeaderboardUser[] = [
+          {
+            id: '1',
+            name: 'Dr. Ana Costa',
+            overallLevel: 18,
+            totalXP: 4250,
+            weeklyXP: 850,
+            rank: 1,
+            isCurrentUser: false
+          },
+          {
+            id: '2',
+            name: 'Dr. Pedro Silva',
+            overallLevel: 16,
+            totalXP: 3890,
+            weeklyXP: 720,
+            rank: 2,
+            isCurrentUser: false
+          },
+          {
+            id: currentUser.uid,
+            name: currentUser.displayName || 'Você',
+            overallLevel: userOverallLevel.overallLevel,
+            totalXP: userOverallLevel.totalXP,
+            weeklyXP: 580, // TODO: Calcular XP semanal real
+            rank: 3,
+            isCurrentUser: true
+          },
+          {
+            id: '4',
+            name: 'Dr. João Oliveira',
+            overallLevel: 14,
+            totalXP: 3200,
+            weeklyXP: 620,
+            rank: 4,
+            isCurrentUser: false
+          },
+          {
+            id: '5',
+            name: 'Dr. Lucas Mendes',
+            overallLevel: 11,
+            totalXP: 2180,
+            weeklyXP: 450,
+            rank: 5,
+            isCurrentUser: false
+          }
+        ];
+
+        // Ordenar por XP total
+        mockUsers.sort((a, b) => b.totalXP - a.totalXP);
+        
+        // Atualizar ranks
+        mockUsers.forEach((user, index) => {
+          user.rank = index + 1;
+        });
+
+        setLeaderboardData(mockUsers);
+      } catch (error) {
+        console.error('Erro ao carregar leaderboard:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadLeaderboard();
+  }, [currentUser]);
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -123,13 +135,69 @@ export default function Leaderboard() {
     }
   };
 
-  const periods = [
-    { id: 'weekly' as const, name: 'Semanal', description: 'Top da semana' },
-    { id: 'monthly' as const, name: 'Mensal', description: 'Top do mês' },
-    { id: 'allTime' as const, name: 'Geral', description: 'Hall da fama' }
+  const getMethodologyIcon = (methodology: StudyMethodology) => {
+    switch (methodology) {
+      case 'clinical_cases':
+        return <Stethoscope className="h-4 w-4" />;
+      case 'questions':
+        return <HelpCircle className="h-4 w-4" />;
+      case 'flashcards':
+        return <BookOpen className="h-4 w-4" />;
+    }
+  };
+
+  const getMethodologyColor = (methodology: StudyMethodology) => {
+    switch (methodology) {
+      case 'clinical_cases':
+        return 'text-purple-500 bg-purple-100 dark:bg-purple-900/30';
+      case 'questions':
+        return 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30';
+      case 'flashcards':
+        return 'text-green-500 bg-green-100 dark:bg-green-900/30';
+    }
+  };
+
+  const getMethodologyTitle = (methodology: StudyMethodology) => {
+    switch (methodology) {
+      case 'clinical_cases':
+        return 'Casos Clínicos';
+      case 'questions':
+        return 'Questões';
+      case 'flashcards':
+        return 'Flashcards';
+    }
+  };
+
+  const views = [
+    { id: 'overall' as const, name: 'Geral', description: 'Ranking geral', icon: TrendingUp },
+    { id: 'clinical_cases' as const, name: 'Casos', description: 'Casos clínicos', icon: Stethoscope },
+    { id: 'questions' as const, name: 'Questões', description: 'Banco de questões', icon: HelpCircle },
+    { id: 'flashcards' as const, name: 'Cards', description: 'Flashcards', icon: BookOpen }
   ];
 
-  const currentUser = leaderboardData.find(user => user.isCurrentUser);
+  const currentUser_data = leaderboardData.find(user => user.isCurrentUser);
+
+  if (loading) {
+    return (
+      <div className="theme-card rounded-lg p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-4">
+                <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+                </div>
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-16"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="theme-card rounded-lg">
@@ -138,34 +206,39 @@ export default function Leaderboard() {
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold theme-text-primary flex items-center">
             <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
-            Ranking de Estudantes
+            Ranking por Metodologia
           </h3>
-          <div className="flex items-center space-x-2">
-            <Star className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm font-medium theme-text-primary">
-              Sua posição: #{currentUser?.rank}
-            </span>
-          </div>
+          {currentUser_data && (
+            <div className="flex items-center space-x-2">
+              <Star className="h-4 w-4 text-yellow-500" />
+              <span className="text-sm font-medium theme-text-primary">
+                Sua posição: #{currentUser_data.rank}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Period Selector */}
+        {/* View Selector */}
         <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-          {periods.map((period) => (
-            <button
-              key={period.id}
-              onClick={() => setSelectedPeriod(period.id)}
-              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                selectedPeriod === period.id
-                  ? 'bg-white dark:bg-gray-700 theme-text-primary shadow-sm'
-                  : 'theme-text-secondary hover:theme-text-primary'
-              }`}
-            >
-              <div className="text-center">
-                <div className="font-medium">{period.name}</div>
-                <div className="text-xs opacity-75">{period.description}</div>
-              </div>
-            </button>
-          ))}
+          {views.map((view) => {
+            const IconComponent = view.icon;
+            return (
+              <button
+                key={view.id}
+                onClick={() => setSelectedView(view.id)}
+                className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  selectedView === view.id
+                    ? 'bg-white dark:bg-gray-700 theme-text-primary shadow-sm'
+                    : 'theme-text-secondary hover:theme-text-primary'
+                }`}
+              >
+                <div className="flex items-center justify-center space-x-1">
+                  <IconComponent className="h-4 w-4" />
+                  <span className="hidden sm:inline">{view.name}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -203,10 +276,17 @@ export default function Leaderboard() {
                     </h4>
                   </div>
                   <div className="flex items-center space-x-3 mt-1">
-                    <span className="text-xs theme-text-secondary">{user.specialty}</span>
+                    {selectedView !== 'overall' && (
+                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${getMethodologyColor(selectedView)}`}>
+                        <div className="flex items-center space-x-1">
+                          {getMethodologyIcon(selectedView)}
+                          <span>Nv. {user.methodologyLevel || 1}</span>
+                        </div>
+                      </div>
+                    )}
                     <div className="flex items-center space-x-1">
                       <Star className="h-3 w-3 text-yellow-500" />
-                      <span className="text-xs font-medium theme-text-primary">Nível {user.level}</span>
+                      <span className="text-xs font-medium theme-text-primary">Nível {user.overallLevel}</span>
                     </div>
                   </div>
                 </div>
@@ -215,10 +295,10 @@ export default function Leaderboard() {
               {/* Right Side - XP */}
               <div className="text-right flex-shrink-0">
                 <div className="font-bold theme-text-primary">
-                  {selectedPeriod === 'weekly' ? user.weeklyXP : user.xp} XP
+                  {user.totalXP.toLocaleString()} XP
                 </div>
                 <div className="text-xs theme-text-secondary">
-                  {selectedPeriod === 'weekly' ? 'Esta semana' : 'Total'}
+                  Total acumulado
                 </div>
               </div>
             </div>
@@ -226,29 +306,28 @@ export default function Leaderboard() {
         </div>
 
         {/* Your Progress Summary */}
-        {currentUser && (
+        {currentUser_data && (
           <div className="mt-6 pt-4 border-t theme-border">
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4">
               <h5 className="font-medium theme-text-primary mb-2">Seu Progresso</h5>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <p className="text-lg font-bold theme-text-primary">{currentUser.weeklyXP}</p>
-                  <p className="text-xs theme-text-secondary">XP esta semana</p>
+                  <p className="text-lg font-bold theme-text-primary">{currentUser_data.totalXP.toLocaleString()}</p>
+                  <p className="text-xs theme-text-secondary">XP Total</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold theme-text-primary">#{currentUser.rank}</p>
+                  <p className="text-lg font-bold theme-text-primary">#{currentUser_data.rank}</p>
                   <p className="text-xs theme-text-secondary">Posição atual</p>
                 </div>
               </div>
-              <div className="mt-3 text-center">
-                <p className="text-xs theme-text-secondary">
-                  Você precisa de{' '}
-                  <span className="font-medium theme-text-primary">
-                    {leaderboardData[currentUser.rank - 2]?.weeklyXP - currentUser.weeklyXP} XP
-                  </span>{' '}
-                  para alcançar a {currentUser.rank - 1}ª posição
-                </p>
-              </div>
+              {selectedView !== 'overall' && (
+                <div className="mt-3 text-center">
+                  <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${getMethodologyColor(selectedView)}`}>
+                    {getMethodologyIcon(selectedView)}
+                    <span>{getMethodologyTitle(selectedView)}</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

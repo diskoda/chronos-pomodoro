@@ -2,11 +2,9 @@ import {
   collection, 
   doc, 
   getDocs, 
-  addDoc, 
   query, 
   where, 
   orderBy,
-  limit,
   Timestamp,
   setDoc,
   getDoc
@@ -297,4 +295,3 @@ class QuestionCooldownService {
 // ==========================================
 
 export const questionCooldownService = new QuestionCooldownService();
-export type { QuestionCooldown, CooldownStatus };

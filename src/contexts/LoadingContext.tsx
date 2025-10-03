@@ -29,7 +29,7 @@ export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('Carregando...');
   const [variant, setVariant] = useState<'default' | 'minimal' | 'branded'>('default');
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
   const showLoading = (
     loadingMessage: string = 'Carregando...', 

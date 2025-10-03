@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "firebase:login": "firebase login",
+    "firebase:init": "firebase init firestore",
+    "firebase:deploy-indexes": "firebase deploy --only firestore:indexes",
+    "firebase:deploy-firestore": "firebase deploy --only firestore",
+    "firebase:indexes": "firebase firestore:indexes",
+    "setup:firebase": "npm run firebase:login && npm run firebase:deploy-indexes"
+  }
+}

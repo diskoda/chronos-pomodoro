@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from '../config/firebase';
+import { AuthXpIntegrationService } from '../services/authXpIntegrationService';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -43,13 +44,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+    // Integrar com sistema XP após login bem-sucedido
+    try {
+      await AuthXpIntegrationService.processUserAuth(userCredential.user);
+    } catch (error) {
+      console.error('⚠️ Erro na integração XP após login:', error);
+      // Não fazer throw para não interromper o login
+    }
   };
 
   const register = async (email: string, password: string, displayName?: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
     if (displayName && userCredential.user) {
       await updateProfile(userCredential.user, { displayName });
+    }
+    
+    // Integrar com sistema XP após registro bem-sucedido
+    try {
+      await AuthXpIntegrationService.processUserAuth(userCredential.user);
+    } catch (error) {
+      console.error('⚠️ Erro na integração XP após registro:', error);
+      // Não fazer throw para não interromper o registro
     }
   };
 
@@ -59,7 +77,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const userCredential = await signInWithPopup(auth, provider);
+    
+    // Integrar com sistema XP após login Google bem-sucedido
+    try {
+      await AuthXpIntegrationService.processUserAuth(userCredential.user);
+    } catch (error) {
+      console.error('⚠️ Erro na integração XP após login Google:', error);
+      // Não fazer throw para não interromper o login
+    }
   };
 
   const resetPassword = async (email: string) => {
@@ -73,8 +99,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      
+      // Se usuário está logado, processar integração XP
+      if (user) {
+        try {
+          await AuthXpIntegrationService.processUserAuth(user);
+        } catch (error) {
+          console.error('⚠️ Erro na integração XP durante mudança de estado:', error);
+        }
+      }
+      
       setLoading(false);
     });
 
