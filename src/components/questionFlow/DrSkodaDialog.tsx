@@ -12,7 +12,6 @@ interface DrSkodaDialogProps {
   audioSrc?: string;
   audioSequence?: string[];
   requireAudioCompletion?: boolean;
-  imageUrl?: string;
 }
 
 export default function DrSkodaDialog({
@@ -24,16 +23,13 @@ export default function DrSkodaDialog({
   className = "",
   audioSrc,
   audioSequence,
-  requireAudioCompletion = false,
-  imageUrl
+  requireAudioCompletion = false
 }: DrSkodaDialogProps) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [audioCompleted, setAudioCompleted] = useState(false);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-  const [sequenceCompleted, setSequenceCompleted] = useState(false);
   const [audioError, setAudioError] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
   const [showPlayButton, setShowPlayButton] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
@@ -89,7 +85,6 @@ export default function DrSkodaDialog({
         } else {
           // Sequence completed or single audio finished
           setAudioCompleted(true);
-          setSequenceCompleted(true);
         }
       };
 
@@ -129,7 +124,6 @@ export default function DrSkodaDialog({
     if (audioRef.current) {
       try {
         await audioRef.current.play();
-        setUserInteracted(true);
       } catch (error) {
         console.error('Error playing audio:', error);
         setAudioError(true);
@@ -223,12 +217,29 @@ export default function DrSkodaDialog({
                       // Pular parágrafos vazios
                       if (!paragraph.trim()) return null;
                       
+                      // Função para processar negrito em qualquer texto
+                      const processTextWithBold = (text: string) => {
+                        if (!text.includes('**')) return text;
+                        
+                        const parts = text.split(/(\*\*[^*]+\*\*)/);
+                        return parts.map((part, partIndex) => {
+                          if (part.startsWith('**') && part.endsWith('**')) {
+                            return (
+                              <strong key={partIndex} className="text-blue-700 dark:text-blue-300 font-semibold">
+                                {part.slice(2, -2)}
+                              </strong>
+                            );
+                          }
+                          return part;
+                        });
+                      };
+                      
                       // Títulos com **texto**
                       if (paragraph.includes('**') && paragraph.trim().startsWith('**')) {
                         const cleanTitle = paragraph.replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
                         return (
                           <h4 key={index} className="text-blue-700 dark:text-blue-300 font-bold text-sm mb-2 mt-3 first:mt-0">
-                            {cleanTitle}
+                            {processTextWithBold(cleanTitle)}
                           </h4>
                         );
                       }
@@ -243,11 +254,11 @@ export default function DrSkodaDialog({
                             isSubtopic ? 'ml-8 text-gray-600 dark:text-gray-400' : 'ml-4'
                           }`}>
                             {isSubtopic && <span className="text-blue-500 mr-2">→</span>}
-                            {content}
+                            {processTextWithBold(content)}
                           </li>
                         );
                       }
-                      
+
                       // Alternativas com indicadores visuais
                       if (paragraph.includes('✅') || paragraph.includes('❌') || paragraph.includes('⚠️') || paragraph.includes('🚨')) {
                         let bgColor, borderColor, textColor;
@@ -273,28 +284,9 @@ export default function DrSkodaDialog({
                         return (
                           <div key={index} className={`p-3 rounded-lg mb-3 border-l-4 ${bgColor} ${borderColor} ${textColor}`}>
                             <div className="text-sm font-medium">
-                              {paragraph}
+                              {processTextWithBold(paragraph)}
                             </div>
                           </div>
-                        );
-                      }
-                      
-                      // Texto com **negrito** inline
-                      if (paragraph.includes('**')) {
-                        const parts = paragraph.split(/(\*\*[^*]+\*\*)/);
-                        return (
-                          <p key={index} className="text-gray-800 dark:text-gray-200 leading-relaxed text-sm mb-2">
-                            {parts.map((part, partIndex) => {
-                              if (part.startsWith('**') && part.endsWith('**')) {
-                                return (
-                                  <strong key={partIndex} className="text-blue-700 dark:text-blue-300 font-semibold">
-                                    {part.slice(2, -2)}
-                                  </strong>
-                                );
-                              }
-                              return part;
-                            })}
-                          </p>
                         );
                       }
                       
@@ -308,23 +300,11 @@ export default function DrSkodaDialog({
                       // Parágrafos normais
                       return (
                         <p key={index} className="text-gray-800 dark:text-gray-200 leading-relaxed text-sm mb-2">
-                          {paragraph}
+                          {processTextWithBold(paragraph)}
                         </p>
                       );
                     }).filter(Boolean)}
                   </div>
-                  
-                  {/* Renderizar imagem se disponível */}
-                  {imageUrl && (
-                    <div className="mt-4 flex justify-center">
-                      <img 
-                        src={imageUrl} 
-                        alt="Imagem da questão" 
-                        className="max-w-full h-auto rounded-lg shadow-md border border-gray-200 dark:border-gray-600"
-                        style={{ maxHeight: '400px' }}
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>

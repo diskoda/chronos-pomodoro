@@ -28,8 +28,7 @@ export default function UniversalFlowStage({
     questionData, 
     selectedAlternative, 
     isCorrect,
-    nextStage,
-    questionId
+    nextStage
   } = useQuestionFlow();
 
   // Usar stage fornecido ou stage atual do contexto
@@ -81,7 +80,6 @@ export default function UniversalFlowStage({
       content={finalContent}
       continueButtonText={finalButtonText}
       onContinue={handleContinue}
-      imageUrl={questionData?.imageUrl}
     />
   );
 }

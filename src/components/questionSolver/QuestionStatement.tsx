@@ -1,5 +1,4 @@
 import { SmartTextProcessor } from '../common/SmartTextProcessor';
-import question2Image from '../../assets/images/question2_img.png';
 
 interface QuestionStatementProps {
   statement: string;
@@ -7,11 +6,6 @@ interface QuestionStatementProps {
 }
 
 export default function QuestionStatement({ statement, className = "" }: QuestionStatementProps) {
-  // Mapeamento direto das imagens
-  const imageMap: Record<string, string> = {
-    'question2_img.png': question2Image
-  };
-
   const renderContent = (text: string) => {
     console.log('renderContent chamado com texto:', text);
     const parts = text.split(/(\[IMAGEM: ([^\]]+)\])/g);
@@ -23,32 +17,21 @@ export default function QuestionStatement({ statement, className = "" }: Questio
       // Verifica se é uma tag de imagem
       if (part.match(/\[IMAGEM: ([^\]]+)\]/)) {
         const imageName = part.match(/\[IMAGEM: ([^\]]+)\]/)![1];
-        const imageUrl = imageMap[imageName];
+        const imageUrl = `/${imageName}`; // Caminho direto na pasta public
         
         console.log('Tag de imagem encontrada:', imageName, 'URL:', imageUrl);
         
-        if (imageUrl) {
-          return (
-            <div key={index} className="my-6 flex justify-center">
-              <img 
-                src={imageUrl}
-                alt="Imagem da questão"
-                className="max-w-full h-auto rounded-lg shadow-md theme-border border"
-                onLoad={() => console.log('Imagem carregada com sucesso:', imageUrl)}
-                onError={(e) => console.error('Erro ao carregar imagem:', imageUrl, e)}
-              />
-            </div>
-          );
-        } else {
-          console.log('Imagem não encontrada no mapeamento:', imageName);
-          return (
-            <div key={index} className="my-6 flex justify-center">
-              <div className="p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
-                <p className="text-gray-500">Imagem não encontrada: {imageName}</p>
-              </div>
-            </div>
-          );
-        }
+        return (
+          <div key={index} className="my-6 flex justify-center">
+            <img 
+              src={imageUrl}
+              alt="Imagem da questão"
+              className="max-w-full h-auto rounded-lg shadow-md theme-border border"
+              onLoad={() => console.log('Imagem carregada com sucesso:', imageUrl)}
+              onError={(e) => console.error('Erro ao carregar imagem:', imageUrl, e)}
+            />
+          </div>
+        );
       }
       
       // Se é o nome da imagem sozinho (capturado pelo grupo), ignora

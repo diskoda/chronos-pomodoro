@@ -29,61 +29,89 @@ O objetivo é compreender como avaliar o desempenho de programas de prevenção 
 
   explanationText: `Para resolver esta questão sobre cascata do cuidado na sífilis congênita, você precisa compreender os fundamentos epidemiológicos:
 
-Conceitos-chave:
+**Interpretação da Imagem da Cascata:**
 
-1. Cascata do Cuidado Contínuo: Representação gráfica que mostra a proporção de pessoas em diferentes etapas do cuidado, desde o diagnóstico até o desfecho final.
+A figura apresentada no enunciado mostra a **cascata do cuidado contínuo do HIV**, que serve como modelo para compreender a aplicação na sífilis congênita. Observe os elementos-chave:
 
-2. Sífilis Congênita e Transmissão Vertical:
+🔍 **Estrutura Visual da Cascata:**
+- **Barras decrescentes**: Cada barra representa uma etapa do cuidado
+- **Primeira barra (mais alta)**: População total infectada
+- **Barras intermediárias**: Etapas progressivas do cuidado
+- **Última barra (final)**: Desfecho desejado do programa
+
+📊 **Leitura dos Dados:**
+- **Altura das barras**: Proporção de pessoas em cada etapa
+- **Diminuição progressiva**: Perda de pacientes entre etapas
+- **Gaps entre barras**: Oportunidades de melhoria
+- **Objetivo**: Minimizar as perdas e maximizar a última barra
+
+**Adaptação para Sífilis Congênita:**
+
+Aplicando o mesmo modelo para sífilis congênita, a cascata teria:
+
+1. **Base da Cascata (1ª barra)**: Gestantes infectadas com sífilis
+   → População inicial de risco
+
+2. **Etapas Intermediárias**:
+   → Gestantes diagnosticadas durante o pré-natal
+   → Gestantes tratadas adequadamente
+   → Gestantes curadas após tratamento
+
+3. **Última Barra (Desfecho Final)**: Nascidos vivos sem sífilis
+   → **OBJETIVO PRINCIPAL**: Prevenção da transmissão vertical
+
+**Conceitos-chave:**
+
+1. **Cascata do Cuidado Contínuo**: Representação gráfica que mostra a proporção de pessoas em diferentes etapas do cuidado, desde o diagnóstico até o desfecho final.
+
+2. **Sífilis Congênita e Transmissão Vertical**:
     → Transmissão materno-fetal durante a gestação
     → Prevenível com tratamento adequado da gestante
     → Alta efetividade quando tratamento é oportuno
     → Indicador importante de qualidade da atenção pré-natal
 
-3. Estrutura da Cascata na Sífilis Congênita:
-    → Gestantes infectadas (base da cascata)
-    → Gestantes diagnosticadas
-    → Gestantes tratadas adequadamente
-    → Gestantes curadas
-    → Nascidos vivos sem sífilis (última barra - desfecho final)
+3. **Interpretação Crítica da Última Barra**:
+    → Representa o **sucesso final** do programa
+    → Mede a **efetividade global** da prevenção
+    → Numerador: Nascidos vivos sem sífilis
+    → Denominador: Deve refletir a **população de risco inicial**
 
-4. Interpretação de Indicadores: A última barra da cascata representa o objetivo final do programa - prevenir a transmissão vertical e garantir nascimentos sem sífilis.
+4. **Lógica Epidemiológica**: A última barra deve comparar o desfecho favorável (nascidos sem sífilis) com a população que realmente estava em risco (gestantes infectadas), não com a população geral.
 
-No contexto desta questão, é fundamental identificar qual indicador melhor representa o sucesso final da cascata de prevenção da sífilis congênita.`,
-
-  imageUrl: '/src/assets/images/question2_img.png',
+No contexto desta questão, é fundamental identificar qual indicador melhor representa o sucesso final da cascata de prevenção da sífilis congênita, seguindo a lógica visual apresentada na imagem.`,
 
   alternativesAnalysis: [
     {
       letter: 'A',
       text: 'Número de gestantes curadas /Número de gestantes tratadas X 100.',
       isCorrect: false,
-      explanation: '❌ ALTERNATIVA INCORRETA\n\nEsta fórmula representa a taxa de cura entre as gestantes tratadas, que é um indicador intermediário da cascata, não a última barra. A última barra deve representar o desfecho final: a prevenção da transmissão vertical.',
+      explanation: '❌ **ALTERNATIVA INCORRETA**\n\n**Análise baseada na imagem da cascata:**\n\nEsta fórmula representa uma **barra intermediária** da cascata, não a última barra:\n\n📊 **Posição na cascata (conforme imagem):**\n• Esta seria uma das barras do **meio da cascata**\n• Mede apenas a eficácia do tratamento entre as tratadas\n• **NÃO é a última barra** que representa o desfecho final\n\n🚫 **Por que está incorreta:**\n• **Não mede o objetivo final**: Prevenção da transmissão vertical\n• **Escopo limitado**: Apenas eficácia terapêutica\n• **Perde o conceito**: Da cascata completa mostrada na imagem\n\nA última barra deve representar o **sucesso global**, não apenas uma etapa intermediária.',
       category: 'incorrect',
-      conceptsInvolved: ['indicadores epidemiológicos', 'cascata do cuidado']
+      conceptsInvolved: ['indicadores epidemiológicos', 'cascata do cuidado', 'interpretação de imagem']
     },
     {
       letter: 'B',
       text: 'Número de gestantes curadas/Número de nascidos vivos X 100.',
       isCorrect: false,
-      explanation: '❌ ALTERNATIVA INCORRETA\n\nEsta fórmula não faz sentido epidemiológico, pois relaciona gestantes curadas com o total de nascidos vivos (incluindo filhos de mães não infectadas). O denominador não é apropriado para avaliar a efetividade da prevenção da sífilis congênita.',
+      explanation: '❌ **ALTERNATIVA INCORRETA**\n\n**Análise baseada na lógica da cascata:**\n\nEsta fórmula apresenta **inconsistência epidemiológica** fundamental:\n\n🔍 **Problemas da fórmula:**\n• **Numerador inadequado**: Gestantes curadas (não é o desfecho final)\n• **Denominador inadequado**: Nascidos vivos totais (inclui mães não infectadas)\n• **Falta de lógica**: Compara diferentes populações sem conexão\n\n📊 **Violação da cascata (conforme imagem):**\n• **Não segue a progressão**: Da base até o topo\n• **Mistura etapas**: Intermediárias com população geral\n• **Perde o foco**: No objetivo da prevenção da transmissão vertical\n\nEsta fórmula não faz sentido epidemiológico nem segue a lógica visual da cascata.',
       category: 'incorrect',
-      conceptsInvolved: ['interpretação de indicadores', 'denominadores inadequados']
+      conceptsInvolved: ['interpretação de indicadores', 'denominadores inadequados', 'lógica epidemiológica']
     },
     {
       letter: 'C',
       text: 'Número de nascidos vivos sem sífilis/Número de nascidos vivos X 100.',
       isCorrect: false,
-      explanation: '⚠️ ALTERNATIVA PLAUSÍVEL MAS INCORRETA\n\nEmbora mensure nascidos sem sífilis, esta fórmula inclui no denominador todos os nascidos vivos, mesmo de mães não infectadas. Isso não reflete especificamente a efetividade da prevenção da transmissão vertical em gestantes com sífilis.',
+      explanation: '⚠️ **ALTERNATIVA PLAUSÍVEL MAS INCORRETA**\n\n**Análise considerando a imagem da cascata:**\n\nEmbora meça nascidos sem sífilis, esta fórmula **dilui o indicador** ao incluir toda a população:\n\n📊 **Problema do denominador (conforme cascata):**\n• **Base incorreta**: Usa nascidos vivos totais, não gestantes infectadas\n• **Inclui não expostos**: Filhos de mães sem sífilis\n• **Não reflete efetividade**: Do programa específico\n\n🎯 **Comparação com a imagem:**\n• **Cascata correta**: Base = população de risco inicial\n• **Esta fórmula**: Base = população geral (incorreto)\n• **Resultado**: Prevalência geral, não efetividade do programa\n\n✅ **Numerador correto**: Nascidos vivos sem sífilis\n❌ **Denominador incorreto**: Deveria ser gestantes infectadas (base da cascata)',
       category: 'plausible',
-      conceptsInvolved: ['prevalência geral', 'especificidade do indicador']
+      conceptsInvolved: ['prevalência geral', 'especificidade do indicador', 'interpretação da cascata']
     },
     {
       letter: 'D',
       text: 'Número de nascidos vivos sem sífilis/Número de gestantes infectadas X 100.',
       isCorrect: true,
-      explanation: '✅ RESPOSTA CORRETA\n\nEsta é a fórmula correta para a última barra da cascata da sífilis congênita. Representa o desfecho final desejado: a proporção de nascidos vivos sem sífilis entre todas as gestantes que iniciaram infectadas. É o indicador mais direto da efetividade global do programa de prevenção da transmissão vertical.',
+      explanation: '✅ **RESPOSTA CORRETA**\n\n**Interpretação baseada na imagem da cascata:**\n\nEsta é a fórmula correta para a **última barra da cascata** da sífilis congênita, seguindo exatamente a lógica visual apresentada na figura:\n\n🎯 **Lógica da Cascata (conforme a imagem):**\n• **Base da cascata** (1ª barra): Gestantes infectadas (denominador)\n• **Última barra** (desfecho): Nascidos vivos sem sífilis (numerador)\n• **Proporção final**: Mede o sucesso global do programa\n\n📊 **Por que esta fórmula é correta:**\n• **Numerador apropriado**: Nascidos vivos sem sífilis (objetivo final)\n• **Denominador correto**: Gestantes infectadas (população de risco inicial)\n• **Representa fielmente**: A efetividade da cascata completa\n• **Segue o modelo**: Exatamente como mostrado na imagem do HIV\n\n🔍 **Interpretação epidemiológica:**\nEsta fórmula responde à pergunta: "De todas as gestantes que iniciaram infectadas, quantas conseguiram ter bebês sem sífilis?" - que é precisamente o que a última barra da cascata deve representar.',
       category: 'correct',
-      conceptsInvolved: ['cascata do cuidado', 'prevenção da transmissão vertical', 'efetividade do programa']
+      conceptsInvolved: ['cascata do cuidado', 'prevenção da transmissão vertical', 'efetividade do programa', 'interpretação de imagem']
     }
   ],
 
