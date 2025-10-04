@@ -17,6 +17,15 @@ export { QuestionLoading, NavigationLoading, AuthLoading, DataLoading } from './
 export { default as LoadingWrapper } from './LoadingWrapper';
 export { QuestionPageWrapper, DataPageWrapper, NavigationWrapper } from './LoadingWrapper';
 
+// Glow Effect Component
+export { default as GlowWrapper } from './GlowWrapper';
+
+// PéNaPED Style Components
+export { default as PenapadProgressStepper } from './PenapadProgressStepper';
+export { default as PenapadQuestionWrapper } from './PenapadQuestionWrapper';
+export { default as PenapadQuestionText } from './PenapadQuestionText';
+export { default as PenapadStatsCard } from './PenapadStatsCard';
+
 // TextExplanation System
 // export { default as TextExplanation } from './TextExplanation';
 export { ExplanationManager } from './ExplanationManager';

@@ -18,7 +18,7 @@ export default function DrSkodaDialog({
   title,
   content,
   showContinueButton = true,
-  continueButtonText = "Prosseguir",
+  continueButtonText = "Próximo",
   onContinue,
   className = "",
   audioSrc,
@@ -29,7 +29,6 @@ export default function DrSkodaDialog({
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [audioCompleted, setAudioCompleted] = useState(false);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-  const [audioError, setAudioError] = useState(false);
   const [showPlayButton, setShowPlayButton] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
@@ -71,7 +70,6 @@ export default function DrSkodaDialog({
       const handlePlay = () => {
         setIsAudioPlaying(true);
         setShowPlayButton(false);
-        setAudioError(false);
       };
       
       const handlePause = () => setIsAudioPlaying(false);
@@ -89,7 +87,6 @@ export default function DrSkodaDialog({
       };
 
       const handleError = () => {
-        setAudioError(true);
         setIsAudioPlaying(false);
       };
 
@@ -99,17 +96,17 @@ export default function DrSkodaDialog({
       audio.addEventListener('error', handleError);
 
       // Try to auto play, but handle autoplay restrictions
-      const tryAutoPlay = async () => {
+      const playAudio = async () => {
         try {
           await audio.play();
         } catch (error) {
-          console.log('Autoplay blocked, showing play button');
           setShowPlayButton(true);
-          setAudioError(false);
         }
       };
-
-      tryAutoPlay();
+      
+      if (!showPlayButton) {
+        playAudio();
+      }
 
       return () => {
         audio.removeEventListener('play', handlePlay);
@@ -118,16 +115,13 @@ export default function DrSkodaDialog({
         audio.removeEventListener('error', handleError);
       };
     }
-  }, [currentAudioSrc, isSequenceMode, currentAudioIndex, totalAudios]);
+  }, [currentAudioSrc, showPlayButton, isSequenceMode, currentAudioIndex, totalAudios]);
 
-  const handlePlayAudio = async () => {
+  const handlePlayAudio = () => {
     if (audioRef.current) {
-      try {
-        await audioRef.current.play();
-      } catch (error) {
-        console.error('Error playing audio:', error);
-        setAudioError(true);
-      }
+      audioRef.current.play().catch(() => {
+        // Audio play failed
+      });
     }
   };
 
@@ -135,7 +129,6 @@ export default function DrSkodaDialog({
 
   const handleContinue = () => {
     setIsAnimatingOut(true);
-    // Aguarda a animação de saída antes de chamar onContinue
     setTimeout(() => {
       if (onContinue) {
         onContinue();
@@ -143,177 +136,181 @@ export default function DrSkodaDialog({
     }, 300);
   };
 
+  // Função para processar negrito com neural styling
+  const processTextWithBold = (text: string) => {
+    if (!text.includes('**')) return text;
+    
+    const parts = text.split(/(\*\*[^*]+\*\*)/);
+    return parts.map((part, partIndex) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={partIndex} className="text-orange-300 font-semibold bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className={`fixed bottom-4 right-4 z-50 pointer-events-none ${className}`}>
-      {/* Efeito de glow pulsante - aparece depois do componente */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-glow-pulse blur-xl scale-125 animate-in fade-in duration-700 delay-1000"></div>
-      
-      {/* Borda animada rainbow - aparece depois do componente */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-600 via-pink-500 via-red-500 via-yellow-500 via-green-500 to-blue-500 animate-rainbow-border p-0.5 animate-in fade-in duration-700 delay-800">
-        <div className="w-full h-full bg-transparent rounded-2xl"></div>
-      </div>
-      
-      {/* Partículas flutuantes - aparecem depois */}
-      <div className="absolute -top-2 -right-2 w-3 h-3 bg-yellow-400 rounded-full animate-bounce opacity-80 animate-in fade-in scale-in duration-500 delay-1200"></div>
-      <div className="absolute -top-1 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-ping opacity-60 animate-in fade-in scale-in duration-500 delay-1400"></div>
-      <div className="absolute -bottom-1 -right-3 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-70 animate-in fade-in scale-in duration-500 delay-1600"></div>
-      
-      {/* Sparkles - aparecem por último */}
-      <div className="absolute top-2 right-2 text-yellow-300 animate-pulse animate-in fade-in scale-in duration-300 delay-1800">✨</div>
-      <div className="absolute bottom-3 left-2 text-purple-300 animate-bounce animate-in fade-in scale-in duration-300 delay-2000">💫</div>
-      
-      <div className={`dr-skoda-dialog bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-96 max-w-[calc(100vw-2rem)] overflow-hidden transform transition-all duration-500 max-h-[70vh] flex flex-col pointer-events-auto relative z-10 ring-4 ring-blue-400 ring-opacity-60 shadow-blue-500/50 animate-in slide-in-from-bottom-4 fade-in duration-700 ${
-        isAnimatingOut ? 'animate-out slide-out-to-bottom-4 fade-out duration-300' : ''
+      {/* Neural Dr. Skoda Dialog Container */}
+      <div className={`dr-skoda-dialog bg-gradient-to-br from-slate-900/95 via-blue-900/30 to-slate-900/95 backdrop-blur-xl border border-orange-500/40 rounded-xl shadow-2xl w-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] overflow-hidden transform transition-all duration-300 pointer-events-auto flex flex-col relative group ${
+        isAnimatingOut ? 'animate-out slide-out-to-bottom-4 fade-out duration-300' : 'animate-in slide-in-from-bottom-4 fade-in duration-500'
       }`}>
-        {/* Header com gradiente */}
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white p-4 flex-shrink-0 animate-in fade-in slide-in-from-top-2 duration-500 delay-300">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-              <span className="text-lg">👨‍⚕️</span>
+        
+        {/* Neural Activity Indicators */}
+        <div className="absolute inset-0 pointer-events-none opacity-30">
+          <div className="absolute top-2 left-2 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+          <div className="absolute top-4 right-4 w-1 h-1 bg-teal-400 rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute bottom-3 left-6 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse delay-500"></div>
+          <div className="absolute top-1/2 right-2 w-0.5 h-0.5 bg-cyan-400 rounded-full animate-pulse delay-700"></div>
+        </div>
+
+        {/* Enhanced Neural Header */}
+        <div className="bg-gradient-to-r from-orange-900/50 to-blue-900/50 border-b border-orange-500/30 px-4 py-3 flex-shrink-0 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-blue-500/5"></div>
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-teal-400 rounded-full animate-pulse"></div>
+              <h3 className="text-white font-bold text-sm bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
+                Dr. Skoda Neural Interface
+              </h3>
             </div>
-            <div>
-              <h3 className="text-lg font-bold">{title}</h3>
-              <p className="text-blue-100 text-xs">Dr. Skoda - Seu mentor</p>
+            <div className="text-slate-300 text-xs flex items-center space-x-1">
+              <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Neural Active • Cybernetic Guide</span>
             </div>
           </div>
+          
+          {/* Neural connection lines */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
         </div>
         
-        {/* Conteúdo principal com scroll */}
-        <div className="p-4 flex-1 overflow-y-auto animate-in fade-in slide-in-from-left-2 duration-500 delay-500">
-          <div className="flex items-start gap-3">
-            {/* Avatar do Dr. Skoda */}
-            <div className="flex-shrink-0 sticky top-0">
-              <div className="relative">
-                {/* Glow do avatar */}
-                <div className="absolute inset-0 w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse blur-md opacity-60"></div>
-                
-                <div className="relative w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-900 rounded-full p-1 shadow-lg ring-2 ring-blue-300 ring-opacity-50">
-                  <DoctorSkoda 
-                    width="100%"
-                    height="100%"
-                    className="rounded-full object-cover"
-                  />
-                </div>
-                {/* Indicador de "falando" com efeito vibrante */}
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white flex items-center justify-center speaking-indicator shadow-lg ring-2 ring-green-300 ring-opacity-60">
-                  <div className="w-1 h-1 bg-white rounded-full"></div>
-                </div>
-                
-                {/* Efeito de "energia" */}
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
-              </div>
+        {/* Neural Content Area with Enhanced Scroll */}
+        <div className="flex-1 overflow-y-auto min-h-0 scrollbar-custom relative">
+          {/* Neural processing overlay */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+          
+          {/* Enhanced Title Section */}
+          <div className="px-4 pt-4 pb-2 relative">
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="w-1 h-4 bg-gradient-to-b from-orange-400 to-teal-400 rounded-full"></div>
+              <h2 className="text-white font-bold text-lg bg-gradient-to-r from-orange-200 to-teal-200 bg-clip-text text-transparent">
+                {title}
+              </h2>
             </div>
-            
-            {/* Balão de fala */}
-            <div className="flex-1 min-h-0">
-              <div className="relative bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 shadow-md">
-                {/* Seta do balão */}
-                <div className="absolute -left-2 top-4 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-r-8 border-r-blue-50 dark:border-r-gray-700"></div>
+            <div className="h-px bg-gradient-to-r from-orange-500/20 via-teal-500/20 to-transparent mb-3"></div>
+          </div>
+          
+          {/* Enhanced Content Layout */}
+          <div className="px-4 pb-4 flex items-start gap-4 relative">
+            {/* Neural Text Content */}
+            <div className="flex-1 relative">
+              <div className="dr-skoda-content relative">
+                {/* Neural processing indicator */}
+                <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-500/30 via-teal-500/30 to-purple-500/30 rounded-full"></div>
                 
-                {/* Conteúdo com animação de digitação */}
-                <div className="dr-skoda-content animate-in fade-in slide-in-from-top-2 duration-700 delay-700">
-                  <div className="prose prose-blue dark:prose-invert max-w-none prose-sm">
-                    {content.split('\n').map((paragraph, index) => {
-                      // Pular parágrafos vazios
-                      if (!paragraph.trim()) return null;
-                      
-                      // Função para processar negrito em qualquer texto
-                      const processTextWithBold = (text: string) => {
-                        if (!text.includes('**')) return text;
-                        
-                        const parts = text.split(/(\*\*[^*]+\*\*)/);
-                        return parts.map((part, partIndex) => {
-                          if (part.startsWith('**') && part.endsWith('**')) {
-                            return (
-                              <strong key={partIndex} className="text-blue-700 dark:text-blue-300 font-semibold">
-                                {part.slice(2, -2)}
-                              </strong>
-                            );
-                          }
-                          return part;
-                        });
-                      };
-                      
-                      // Títulos com **texto**
-                      if (paragraph.includes('**') && paragraph.trim().startsWith('**')) {
-                        const cleanTitle = paragraph.replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
-                        return (
-                          <h4 key={index} className="text-blue-700 dark:text-blue-300 font-bold text-sm mb-2 mt-3 first:mt-0">
-                            {processTextWithBold(cleanTitle)}
-                          </h4>
-                        );
-                      }
-                      
-                      // Itens de lista com •, -, →, ou números
-                      if (paragraph.trim().match(/^[•\-\*→]\s/) || paragraph.trim().match(/^\d+\.\s/)) {
-                        const isSubtopic = paragraph.includes('→');
-                        const content = paragraph.trim().replace(/^[•\-\*→]\s/, '').replace(/^\d+\.\s/, '');
-                        
-                        return (
-                          <li key={index} className={`text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-1 ${
-                            isSubtopic ? 'ml-8 text-gray-600 dark:text-gray-400' : 'ml-4'
-                          }`}>
-                            {isSubtopic && <span className="text-blue-500 mr-2">→</span>}
-                            {processTextWithBold(content)}
-                          </li>
-                        );
-                      }
+                <div className="text-slate-200 leading-relaxed text-sm space-y-3 pl-2">
+                  {content.split('\n').map((paragraph, index) => {
+                    // Pular parágrafos vazios
+                    if (!paragraph.trim()) return null;
 
-                      // Alternativas com indicadores visuais
-                      if (paragraph.includes('✅') || paragraph.includes('❌') || paragraph.includes('⚠️') || paragraph.includes('🚨')) {
-                        let bgColor, borderColor, textColor;
-                        
-                        if (paragraph.includes('✅')) {
-                          bgColor = 'bg-green-50 dark:bg-green-900/20';
-                          borderColor = 'border-green-500';
-                          textColor = 'text-green-800 dark:text-green-200';
-                        } else if (paragraph.includes('⚠️')) {
-                          bgColor = 'bg-yellow-50 dark:bg-yellow-900/20';
-                          borderColor = 'border-yellow-500';
-                          textColor = 'text-yellow-800 dark:text-yellow-200';
-                        } else if (paragraph.includes('🚨')) {
-                          bgColor = 'bg-purple-50 dark:bg-purple-900/20';
-                          borderColor = 'border-purple-500';
-                          textColor = 'text-purple-800 dark:text-purple-200';
-                        } else {
-                          bgColor = 'bg-red-50 dark:bg-red-900/20';
-                          borderColor = 'border-red-500';
-                          textColor = 'text-red-800 dark:text-red-200';
-                        }
-                        
-                        return (
-                          <div key={index} className={`p-3 rounded-lg mb-3 border-l-4 ${bgColor} ${borderColor} ${textColor}`}>
-                            <div className="text-sm font-medium">
-                              {processTextWithBold(paragraph)}
+                    // Enhanced titles with neural styling
+                    if (paragraph.trim().startsWith('**') && paragraph.trim().endsWith('**') && !paragraph.includes(':')) {
+                      const cleanTitle = paragraph.replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
+                      return (
+                        <div key={index} className="relative mb-3 mt-4 first:mt-0">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse"></div>
+                            <h4 className="text-teal-300 font-bold text-sm bg-gradient-to-r from-teal-300 to-cyan-300 bg-clip-text text-transparent">
+                              {processTextWithBold(cleanTitle)}
+                            </h4>
+                          </div>
+                          <div className="ml-3.5 h-px bg-gradient-to-r from-teal-500/30 to-transparent mt-1"></div>
+                        </div>
+                      );
+                    }
+                    
+                    // Enhanced list items with neural bullets
+                    if (paragraph.trim().match(/^[•\-\*→]\s/) || paragraph.trim().match(/^\d+\.\s/)) {
+                      const content = paragraph.trim().replace(/^[•\-\*→]\s/, '').replace(/^\d+\.\s/, '');
+                      return (
+                        <div key={index} className="flex items-start space-x-3 text-sm relative">
+                          <div className="mt-1.5 relative">
+                            <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-teal-400 rounded-full relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-teal-400 rounded-full animate-pulse opacity-50"></div>
                             </div>
                           </div>
-                        );
-                      }
-                      
-                      // Separadores ---
-                      if (paragraph.trim() === '---') {
-                        return (
-                          <hr key={index} className="my-3 border-gray-300 dark:border-gray-600" />
-                        );
-                      }
-                      
-                      // Parágrafos normais
-                      return (
-                        <p key={index} className="text-gray-800 dark:text-gray-200 leading-relaxed text-sm mb-2">
+                          <span className="text-slate-200 leading-relaxed">{processTextWithBold(content)}</span>
+                        </div>
+                      );
+                    }
+                    
+                    // Enhanced paragraphs with subtle glow
+                    return (
+                      <div key={index} className="relative">
+                        <p className="text-slate-200 leading-relaxed text-sm relative z-10">
                           {processTextWithBold(paragraph)}
                         </p>
-                      );
-                    }).filter(Boolean)}
+                      </div>
+                    );
+                  }).filter(Boolean)}
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Dr. Skoda Avatar with Neural Frame */}
+            <div className="flex-shrink-0 sticky top-0">
+              <div className="relative group">
+                {/* Neural frame with animated borders */}
+                <div className="w-16 h-16 bg-gradient-to-br from-slate-800/80 to-blue-900/40 rounded-xl p-1 border border-orange-500/40 relative overflow-hidden">
+                  {/* Animated border effect */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-500/20 to-teal-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <div className="relative z-10 w-full h-full rounded-lg overflow-hidden">
+                    <DoctorSkoda 
+                      width="100%"
+                      height="100%"
+                      className="rounded-lg object-cover"
+                    />
+                  </div>
+                  
+                  {/* Neural scanning lines */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-orange-400/50 to-transparent animate-pulse"></div>
+                    <div className="absolute bottom-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-teal-400/50 to-transparent animate-pulse delay-500"></div>
                   </div>
                 </div>
+                
+                {/* Enhanced status indicator */}
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-ping opacity-75"></div>
+                </div>
+                
+                {/* Neural connection indicator */}
+                <div className="absolute -top-1 -left-1 w-3 h-3 bg-purple-500/80 rounded-full border border-purple-300/50 animate-pulse delay-300"></div>
               </div>
             </div>
           </div>
         </div>
         
-        {/* Botão de continuar fixo no bottom */}
+        {/* Enhanced Neural Footer */}
         {showContinueButton && (
-          <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-900">
+          <div className="flex justify-between items-center px-4 py-3 border-t border-orange-500/30 bg-gradient-to-r from-slate-900/80 to-blue-900/40 flex-shrink-0 relative overflow-hidden">
+            
+            {/* Background neural effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-teal-500/5"></div>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
+            
+            {/* Enhanced Progress Indicator */}
+            <div className="flex items-center space-x-2 relative z-10">
+              <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-pulse"></div>
+              <span className="text-slate-300 text-xs font-medium">Neural Session 1/13</span>
+            </div>
+            
             {/* Audio player (hidden) */}
             {currentAudioSrc && (
               <audio 
@@ -324,105 +321,88 @@ export default function DrSkodaDialog({
               />
             )}
             
-            {/* Status do áudio */}
+            {/* Enhanced Audio Status */}
             {currentAudioSrc && finalRequireAudioCompletion && (
-              <div className="flex items-center mr-4 text-sm">
+              <div className="flex items-center mr-4 text-sm relative z-10">
                 {showPlayButton ? (
                   <button
                     onClick={handlePlayAudio}
-                    className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center px-3 py-1.5 bg-gradient-to-r from-orange-600 to-teal-600 text-white rounded-lg hover:from-orange-700 hover:to-teal-700 transition-all duration-200 text-xs font-medium shadow-lg border border-orange-500/30"
                   >
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
-                    {isSequenceMode ? `Iniciar áudios (${totalAudios})` : 'Reproduzir áudio'}
+                    <div className="w-3 h-3 mr-1.5 relative">
+                      <div className="absolute inset-0 bg-white rounded-full"></div>
+                      <div className="absolute inset-0.5 bg-gradient-to-r from-orange-600 to-teal-600 rounded-full"></div>
+                      <div className="absolute inset-1 bg-white rounded-full flex items-center justify-center">
+                        <div className="w-1 h-1 bg-gradient-to-r from-orange-600 to-teal-600 rounded-full"></div>
+                      </div>
+                    </div>
+                    {isSequenceMode ? `Neural Audio (${totalAudios})` : 'Neural Audio'}
                   </button>
                 ) : isAudioPlaying ? (
-                  <div className="flex items-center text-blue-600">
-                    <div className="animate-pulse w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                    {isSequenceMode ? (
-                      <span>Reproduzindo áudio {currentAudioIndex + 1}/{totalAudios}...</span>
-                    ) : (
-                      <span>Reproduzindo áudio...</span>
-                    )}
+                  <div className="flex items-center text-orange-400 text-xs">
+                    <div className="relative w-2 h-2 mr-2">
+                      <div className="absolute inset-0 bg-orange-400 rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0 bg-orange-400 rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    <span className="font-medium">Neural Processing...</span>
                   </div>
                 ) : audioCompleted ? (
-                  <div className="flex items-center text-green-600">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                    {isSequenceMode ? (
-                      <span>Sequência de áudios concluída ({totalAudios}/{totalAudios})</span>
-                    ) : (
-                      <span>Áudio concluído</span>
-                    )}
-                  </div>
-                ) : audioError ? (
-                  <div className="flex items-center text-red-600">
-                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                    <span>Erro ao carregar áudio</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center text-yellow-600">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                    <span>Aguardando áudio...</span>
-                  </div>
-                )}
-                
-                {/* Progress bar for sequence */}
-                {isSequenceMode && !showPlayButton && (
-                  <div className="ml-3 flex items-center">
-                    <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-500 transition-all duration-300"
-                        style={{ 
-                          width: `${((currentAudioIndex + (audioCompleted ? 1 : 0)) / totalAudios) * 100}%` 
-                        }}
-                      ></div>
+                  <div className="flex items-center text-green-400 text-xs">
+                    <div className="relative w-2 h-2 mr-2">
+                      <div className="absolute inset-0 bg-green-400 rounded-full"></div>
+                      <div className="absolute inset-0 bg-green-400 rounded-full animate-pulse opacity-75"></div>
                     </div>
+                    <span className="font-medium">Neural Complete</span>
                   </div>
-                )}
+                ) : null}
               </div>
             )}
             
-            <button
-              onClick={handleContinue}
-              disabled={!canContinue}
-              className={`group relative ${
-                canContinue 
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white' 
-                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
-              } px-4 py-2 rounded-lg font-medium transition-all duration-300 transform ${
-                canContinue ? 'hover:scale-105 hover:shadow-lg' : ''
-              } flex items-center space-x-2 text-sm shadow-blue-500/50 ring-2 ring-blue-400 ring-opacity-50 ${
-                canContinue ? 'animate-pulse' : ''
-              }`}
-            >
-              {/* Glow do botão */}
-              {canContinue && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
-              )}
+            {/* Enhanced Navigation Buttons */}
+            <div className="flex items-center space-x-3 relative z-10">
+              <button className="text-slate-400 hover:text-orange-300 transition-colors text-xs flex items-center font-medium group">
+                <div className="w-4 h-4 mr-1 relative">
+                  <div className="absolute inset-0 border border-slate-400 group-hover:border-orange-300 rounded transition-colors transform rotate-45"></div>
+                  <div className="absolute inset-1 bg-slate-400 group-hover:bg-orange-300 rounded transition-colors transform -rotate-45"></div>
+                </div>
+                Previous
+              </button>
               
-              <span className="relative z-10">
-                {!canContinue && finalRequireAudioCompletion ? 
-                  (showPlayButton ? 
-                    'Clique em reproduzir para continuar' :
-                    isSequenceMode ? 
-                      `Ouça todos os áudios para continuar (${currentAudioIndex + 1}/${totalAudios})` : 
-                      'Ouça o áudio para continuar'
-                  ) : 
-                  continueButtonText
-                }
-              </span>
-              {canContinue && (
-                <svg 
-                  className="relative z-10 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              )}
-            </button>
+              <button
+                onClick={handleContinue}
+                disabled={!canContinue}
+                className={`group relative transition-all duration-200 ${
+                  canContinue 
+                    ? 'bg-gradient-to-r from-orange-600 to-teal-600 hover:from-orange-700 hover:to-teal-700 text-white shadow-lg border border-orange-500/30' 
+                    : 'bg-slate-700 text-slate-500 cursor-not-allowed border border-slate-600'
+                } px-4 py-1.5 rounded-lg font-medium text-xs flex items-center space-x-2`}
+              >
+                <span>{continueButtonText}</span>
+                <div className={`w-4 h-4 relative transition-transform duration-200 ${canContinue ? 'group-hover:translate-x-0.5' : ''}`}>
+                  {canContinue && (
+                    <>
+                      <div className="absolute inset-0 bg-white rounded transition-opacity group-hover:opacity-80"></div>
+                      <div className="absolute inset-0.5 bg-gradient-to-r from-orange-600 to-teal-600 rounded"></div>
+                      <div className="absolute inset-1 bg-white rounded flex items-center justify-center">
+                        <div className="w-1 h-1 bg-gradient-to-r from-orange-600 to-teal-600 rounded-full"></div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                
+                {/* Glow effect on hover */}
+                {canContinue && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-teal-600 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-200 blur-sm"></div>
+                )}
+              </button>
+            </div>
+            
+            {/* Neural activity dots */}
+            <div className="absolute bottom-1 right-4 flex space-x-1">
+              <div className="w-0.5 h-0.5 bg-orange-400 rounded-full animate-pulse"></div>
+              <div className="w-0.5 h-0.5 bg-teal-400 rounded-full animate-pulse delay-300"></div>
+              <div className="w-0.5 h-0.5 bg-purple-400 rounded-full animate-pulse delay-600"></div>
+            </div>
           </div>
         )}
       </div>

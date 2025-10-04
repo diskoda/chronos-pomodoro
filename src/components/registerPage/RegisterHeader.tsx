@@ -12,7 +12,7 @@ export default function RegisterHeader() {
         Criar Conta
       </h2>
       <p className="mt-2 text-sm theme-text-secondary">
-        Junte-se à nossa plataforma de estudos médicos
+        Junte-se à nossa plataforma de estudos em pediatria
       </p>
     </div>
   );

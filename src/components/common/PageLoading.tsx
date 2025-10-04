@@ -1,4 +1,5 @@
-import { Loader2, BookOpen } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import logoImage from '../../assets/images/logos/logo_penaped.png';
 
 interface PageLoadingProps {
   message?: string;
@@ -35,14 +36,18 @@ export default function PageLoading({
         <div className="text-center">
           {/* Logo/Ícone */}
           <div className="mb-6">
-            <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
-              <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <div className="mx-auto mb-4 flex items-center justify-center">
+              <img 
+                src={logoImage} 
+                alt="Logo Pénaped" 
+                className="w-20 h-20 object-contain"
+              />
             </div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Chronos Pomodoro
+              #PéNaPED
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Plataforma de Estudos Médicos
+              Plataforma de Estudos em Pediatria
             </p>
           </div>
 
@@ -73,8 +78,12 @@ export default function PageLoading({
         {/* Logo/Ícone (se habilitado) */}
         {showLogo && (
           <div className="mb-6">
-            <div className="mx-auto w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-3">
-              <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="mx-auto mb-3 flex items-center justify-center">
+              <img 
+                src={logoImage} 
+                alt="Logo Pénaped" 
+                className="w-16 h-16 object-contain"
+              />
             </div>
           </div>
         )}

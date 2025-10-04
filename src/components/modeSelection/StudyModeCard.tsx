@@ -8,37 +8,29 @@ interface StudyModeCardProps {
 
 export default function StudyModeCard({ mode, onSelect, className = "" }: StudyModeCardProps) {
   const IconComponent = mode.icon;
-  
-  // Define gradient backgrounds for different modes
-  const getGradientBackground = (modeId: string, isActive: boolean) => {
-    if (!isActive) return 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600';
-    
-    switch (modeId) {
-      case 'clinical-cases':
-        return 'bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500';
-      case 'question-bank':
-        return 'bg-gradient-to-br from-emerald-400 via-cyan-500 to-blue-500';
-      case 'flashcards':
-        return 'bg-gradient-to-br from-orange-400 via-red-500 to-pink-500';
-      case 'interactive':
-        return 'bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-500';
-      default:
-        return 'bg-gradient-to-br from-gray-400 to-gray-600';
-    }
-  };
 
   return (
     <div
       onClick={() => onSelect(mode)}
       className={`
-        relative rounded-2xl p-6 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden group
+        penaped-card transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden group relative
         ${mode.isActive 
-          ? 'cursor-pointer hover:shadow-2xl hover:shadow-black/25' 
+          ? 'cursor-pointer hover:shadow-2xl' 
           : 'cursor-not-allowed opacity-60'
         }
-        ${getGradientBackground(mode.id, mode.isActive)}
         ${className}
       `}
+      style={mode.isActive ? {
+        background: `linear-gradient(135deg, var(--penaped-${
+          mode.id === 'clinical-cases' ? 'teal' :
+          mode.id === 'question-bank' ? 'orange' :
+          mode.id === 'flashcards' ? 'purple' : 'pink'
+        }), var(--penaped-${
+          mode.id === 'clinical-cases' ? 'teal-dark' :
+          mode.id === 'question-bank' ? 'orange-dark' :
+          mode.id === 'flashcards' ? 'purple-dark' : 'pink-dark'
+        }))`
+      } : {}}
     >
       {/* Subtle overlay for better text readability */}
       <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-all duration-300" />

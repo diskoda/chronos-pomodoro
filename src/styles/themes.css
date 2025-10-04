@@ -1,49 +1,100 @@
-/* Theme Variables */
-:root[data-theme="light"] {
-  /* Background Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --bg-accent: #f0f9ff;
-  --bg-hover: #f3f4f6;
+/* ==========================================
+   PENAPED THEME - Tema Único da Plataforma
+   ========================================== */
+
+:root,
+:root[data-theme="penaped"] {
+  /* PéNaPED Background Colors - Navy escuro como base */
+  --bg-primary: #0f172a;     /* Fundo principal navy escuro */
+  --bg-secondary: #1e293b;   /* Cards e containers */
+  --bg-tertiary: #334155;    /* Elementos secundários */
+  --bg-card: #1e293b;        /* Cards específicos */
+  --bg-hover: #334155;       /* Hover state */
   
-  /* Text Colors */
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  --text-accent: #2563eb;
+  /* Text Colors - Texto claro no fundo escuro */
+  --text-primary: #f8fafc;   /* Texto principal branco */
+  --text-secondary: #cbd5e1; /* Texto secundário */
+  --text-tertiary: #94a3b8;  /* Texto terciário */
+  --text-muted: #64748b;     /* Texto esmaecido */
   
   /* Border Colors */
-  --border-primary: #e5e7eb;
-  --border-secondary: #d1d5db;
-  --border-focus: #3b82f6;
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  --border-focus: #60a5fa;
   
-  /* Brand Colors */
-  --brand-primary: #2563eb;
-  --brand-secondary: #1d4ed8;
-  --brand-accent: rgba(37, 99, 235, 0.2);
+  /* PéNaPED Brand Colors */
+  --brand-primary: #60a5fa;  /* Azul primário PéNaPED */
+  --brand-secondary: #3b82f6;
+  --brand-accent: rgba(96, 165, 250, 0.15);
+  
+  /* PéNaPED Semantic Colors */
+  --penaped-orange: #fb923c;
+  --penaped-orange-light: rgba(251, 146, 60, 0.2);
+  --penaped-orange-dark: #ea580c;
+  
+  --penaped-teal: #2dd4bf;
+  --penaped-teal-light: rgba(45, 212, 191, 0.2);
+  --penaped-teal-dark: #0f766e;
+  
+  --penaped-purple: #a78bfa;
+  --penaped-purple-light: rgba(167, 139, 250, 0.2);
+  --penaped-purple-dark: #7c3aed;
+  
+  --penaped-pink: #f472b6;
+  --penaped-pink-light: rgba(244, 114, 182, 0.2);
+  --penaped-pink-dark: #db2777;
+  
+  --penaped-green: #34d399;
+  --penaped-green-light: rgba(52, 211, 153, 0.2);
+  --penaped-green-dark: #047857;
+
+  /* PéNaPED Extended Colors - Cores Complementares */
+  --penaped-indigo: #6366f1;
+  --penaped-indigo-light: #e0e7ff;
+  --penaped-indigo-dark: #4f46e5;
+  
+  --penaped-cyan: #06b6d4;
+  --penaped-cyan-light: #cffafe;
+  --penaped-cyan-dark: #0891b2;
+  
+  --penaped-amber: #f59e0b;
+  --penaped-amber-light: #fef3c7;
+  --penaped-amber-dark: #d97706;
+  
+  --penaped-rose: #f43f5e;
+  --penaped-rose-light: #ffe4e6;
+  --penaped-rose-dark: #e11d48;
+  
+  --penaped-emerald: #059669;
+  --penaped-emerald-light: #d1fae5;
+  --penaped-emerald-dark: #047857;
+  
+  --penaped-violet: #7c3aed;
+  --penaped-violet-light: #ede9fe;
+  --penaped-violet-dark: #6d28d9;
   
   /* Status Colors */
-  --success: #059669;
-  --success-bg: #dcfce7;
-  --success-text: #065f46;
+  --success: #34d399;
+  --success-bg: rgba(52, 211, 153, 0.15);
+  --success-text: #6ee7b7;
   
-  --warning: #d97706;
-  --warning-bg: #fef3c7;
-  --warning-text: #92400e;
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.15);
+  --warning-text: #fcd34d;
   
-  --error: #dc2626;
-  --error-bg: #fee2e2;
-  --error-text: #991b1b;
+  --error: #f87171;
+  --error-bg: rgba(248, 113, 113, 0.15);
+  --error-text: #fca5a5;
   
-  --info: #0284c7;
-  --info-bg: #e0f2fe;
-  --info-text: #0c4a6e;
+  --info: #38bdf8;
+  --info-bg: rgba(56, 189, 248, 0.15);
+  --info-text: #7dd3fc;
   
   /* Shadow */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6);
 }
 
 /* Dr. Skoda Dialog Animations */
@@ -298,4 +349,602 @@
 /* Special theme hover for buttons and interactive elements */
 .theme-hover-accent:hover {
   background-color: var(--bg-accent);
+}
+
+/* ==========================================
+   PENAPED QUESTION STYLES
+   ========================================== */
+
+/* Question Container */
+.penaped-question-container {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.penaped-question-container:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-primary);
+}
+
+/* Question Header */
+.penaped-question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.penaped-question-number {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.penaped-question-difficulty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.penaped-difficulty-easy {
+  color: var(--penaped-green-dark);
+  background-color: var(--penaped-green-light);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.penaped-difficulty-medium {
+  color: var(--penaped-orange-dark);
+  background-color: var(--penaped-orange-light);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.penaped-difficulty-hard {
+  color: var(--penaped-pink-dark);
+  background-color: var(--penaped-pink-light);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+/* Question Content */
+.penaped-question-text {
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.penaped-question-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* Alternatives Container */
+.penaped-alternatives-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.penaped-alternative {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.penaped-alternative:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--brand-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.penaped-alternative.selected {
+  background-color: var(--brand-accent);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+.penaped-alternative.correct {
+  background-color: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success-text);
+}
+
+.penaped-alternative.incorrect {
+  background-color: var(--error-bg);
+  border-color: var(--error);
+  color: var(--error-text);
+}
+
+.penaped-alternative-letter {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.penaped-alternative.correct .penaped-alternative-letter {
+  background: linear-gradient(135deg, var(--success), var(--success-text));
+}
+
+.penaped-alternative.incorrect .penaped-alternative-letter {
+  background: linear-gradient(135deg, var(--error), var(--error-text));
+}
+
+.penaped-alternative-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Question Actions */
+.penaped-question-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-primary);
+}
+
+.penaped-submit-btn {
+  background: linear-gradient(135deg, var(--penaped-orange), var(--penaped-orange-dark));
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.penaped-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.penaped-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Progress Stepper */
+.penaped-progress-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.penaped-step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.penaped-step.completed {
+  background: linear-gradient(135deg, var(--penaped-green), var(--penaped-green-dark));
+  color: white;
+}
+
+.penaped-step.current {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.penaped-step.pending {
+  background-color: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  border: 2px solid var(--border-secondary);
+}
+
+.penaped-step-connector {
+  width: 24px;
+  height: 2px;
+  background-color: var(--border-secondary);
+  transition: all 0.3s ease;
+}
+
+.penaped-step-connector.completed {
+  background: linear-gradient(90deg, var(--penaped-green), var(--penaped-green-dark));
+}
+
+/* Question Info Panel */
+.penaped-info-panel {
+  background: linear-gradient(135deg, var(--penaped-teal-light), var(--penaped-purple-light));
+  border: 1px solid var(--penaped-teal);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.penaped-info-title {
+  color: var(--penaped-teal-dark);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.penaped-info-content {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Tags */
+.penaped-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.penaped-tag {
+  background-color: var(--penaped-purple-light);
+  color: var(--penaped-purple-dark);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--penaped-purple);
+}
+
+.penaped-tag.specialty {
+  background-color: var(--penaped-pink-light);
+  color: var(--penaped-pink-dark);
+  border-color: var(--penaped-pink);
+}
+
+.penaped-tag.topic {
+  background-color: var(--penaped-teal-light);
+  color: var(--penaped-teal-dark);
+  border-color: var(--penaped-teal);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .penaped-question-container {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .penaped-question-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .penaped-question-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .penaped-progress-stepper {
+    gap: 4px;
+    padding: 12px;
+  }
+  
+  .penaped-step {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .penaped-step-connector {
+    width: 16px;
+  }
+}
+
+/* ==========================================
+   PENAPED UTILITY CLASSES
+   ========================================== */
+
+/* Background Colors */
+.penaped-bg-orange { background-color: var(--penaped-orange); }
+.penaped-bg-orange-light { background-color: var(--penaped-orange-light); }
+.penaped-bg-teal { background-color: var(--penaped-teal); }
+.penaped-bg-teal-light { background-color: var(--penaped-teal-light); }
+.penaped-bg-purple { background-color: var(--penaped-purple); }
+.penaped-bg-purple-light { background-color: var(--penaped-purple-light); }
+.penaped-bg-pink { background-color: var(--penaped-pink); }
+.penaped-bg-pink-light { background-color: var(--penaped-pink-light); }
+.penaped-bg-green { background-color: var(--penaped-green); }
+.penaped-bg-green-light { background-color: var(--penaped-green-light); }
+
+/* Text Colors */
+.penaped-text-orange { color: var(--penaped-orange); }
+.penaped-text-orange-dark { color: var(--penaped-orange-dark); }
+.penaped-text-teal { color: var(--penaped-teal); }
+.penaped-text-teal-dark { color: var(--penaped-teal-dark); }
+.penaped-text-purple { color: var(--penaped-purple); }
+.penaped-text-purple-dark { color: var(--penaped-purple-dark); }
+.penaped-text-pink { color: var(--penaped-pink); }
+.penaped-text-pink-dark { color: var(--penaped-pink-dark); }
+.penaped-text-green { color: var(--penaped-green); }
+.penaped-text-green-dark { color: var(--penaped-green-dark); }
+
+/* Border Colors */
+.penaped-border-orange { border-color: var(--penaped-orange); }
+.penaped-border-teal { border-color: var(--penaped-teal); }
+.penaped-border-purple { border-color: var(--penaped-purple); }
+.penaped-border-pink { border-color: var(--penaped-pink); }
+.penaped-border-green { border-color: var(--penaped-green); }
+
+/* Button Variants */
+.penaped-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.penaped-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.penaped-btn-primary {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+}
+
+.penaped-btn-orange {
+  background: linear-gradient(135deg, var(--penaped-orange), var(--penaped-orange-dark));
+  color: white;
+}
+
+.penaped-btn-teal {
+  background: linear-gradient(135deg, var(--penaped-teal), var(--penaped-teal-dark));
+  color: white;
+}
+
+.penaped-btn-purple {
+  background: linear-gradient(135deg, var(--penaped-purple), var(--penaped-purple-dark));
+  color: white;
+}
+
+.penaped-btn-green {
+  background: linear-gradient(135deg, var(--penaped-green), var(--penaped-green-dark));
+  color: white;
+}
+
+.penaped-btn-outline {
+  background: transparent;
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+.penaped-btn-outline:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+/* Card Variants */
+.penaped-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.penaped-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-primary);
+}
+
+.penaped-card-flat {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Badge Variants */
+.penaped-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.penaped-badge-success {
+  background-color: var(--penaped-green-light);
+  color: var(--penaped-green-dark);
+  border: 1px solid var(--penaped-green);
+}
+
+.penaped-badge-warning {
+  background-color: var(--penaped-orange-light);
+  color: var(--penaped-orange-dark);
+  border: 1px solid var(--penaped-orange);
+}
+
+.penaped-badge-error {
+  background-color: var(--penaped-pink-light);
+  color: var(--penaped-pink-dark);
+  border: 1px solid var(--penaped-pink);
+}
+
+/* ==========================================
+   PENAPED GLOBAL APPLICATION STYLES
+   ========================================== */
+
+/* Override body and html for consistent PéNaPED styling */
+.penaped-theme body,
+.penaped-theme html {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Global container styles */
+.penaped-theme .container,
+.penaped-theme .max-w-7xl,
+.penaped-theme .max-w-4xl,
+.penaped-theme .max-w-2xl {
+  background: transparent;
+}
+
+/* Override default Tailwind cards */
+.penaped-theme .bg-white {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-primary);
+}
+
+.penaped-theme .dark\\:bg-gray-800 {
+  background-color: var(--bg-card) !important;
+}
+
+.penaped-theme .dark\\:bg-gray-700 {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Update button styles globally */
+.penaped-theme button {
+  transition: all 0.3s ease;
+}
+
+.penaped-theme button:hover {
+  transform: translateY(-1px);
+}
+
+/* Page backgrounds */
+.penaped-theme .dashboard-background,
+.penaped-theme .min-h-screen {
+  background-color: var(--bg-primary);
+}
+
+/* Navigation and headers */
+.penaped-theme nav,
+.penaped-theme header {
+  background-color: var(--bg-card);
+  border-color: var(--border-primary);
+}
+
+/* Forms */
+.penaped-theme input,
+.penaped-theme textarea,
+.penaped-theme select {
+  background-color: var(--bg-primary);
+  border-color: var(--border-primary);
+  color: var(--text-primary);
+}
+
+.penaped-theme input:focus,
+.penaped-theme textarea:focus,
+.penaped-theme select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px var(--brand-accent);
+}
+
+/* Shadows */
+.penaped-theme .shadow-sm { box-shadow: var(--shadow-sm); }
+.penaped-theme .shadow-md { box-shadow: var(--shadow-md); }
+.penaped-theme .shadow-lg { box-shadow: var(--shadow-lg); }
+.penaped-theme .shadow-xl { box-shadow: var(--shadow-xl); }
+
+/* Text colors */
+.penaped-theme .text-gray-600 { color: var(--text-secondary); }
+.penaped-theme .text-gray-700 { color: var(--text-primary); }
+.penaped-theme .text-gray-800 { color: var(--text-primary); }
+.penaped-theme .text-gray-900 { color: var(--text-primary); }
+
+.penaped-theme .dark\\:text-gray-300 { color: var(--text-secondary); }
+.penaped-theme .dark\\:text-gray-200 { color: var(--text-primary); }
+.penaped-theme .dark\\:text-gray-100 { color: var(--text-primary); }
+
+/* Border colors */
+.penaped-theme .border-gray-200 { border-color: var(--border-primary); }
+.penaped-theme .border-gray-300 { border-color: var(--border-secondary); }
+.penaped-theme .dark\\:border-gray-700 { border-color: var(--border-primary); }
+.penaped-theme .dark\\:border-gray-600 { border-color: var(--border-secondary); }
+
+/* Hover states */
+.penaped-theme .hover\\:text-blue-600:hover { color: var(--brand-primary); }
+.penaped-theme .hover\\:text-blue-500:hover { color: var(--brand-primary); }
+.penaped-theme .dark\\:hover\\:text-blue-400:hover { color: var(--brand-primary); }
+
+/* Background hover states */
+.penaped-theme .hover\\:bg-gray-50:hover { background-color: var(--bg-hover); }
+.penaped-theme .hover\\:bg-gray-100:hover { background-color: var(--bg-hover); }
+.penaped-theme .dark\\:hover\\:bg-gray-700:hover { background-color: var(--bg-hover); }
+
+/* Neural Flow Animations */
+@keyframes slide {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(300%) skewX(-12deg); }
+}
+
+.animate-slide {
+  animation: slide 2s infinite;
 }

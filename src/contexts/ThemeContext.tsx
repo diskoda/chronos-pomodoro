@@ -1,12 +1,10 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
-type Theme = 'light' | 'dark';
-
 interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
+  theme: 'penaped';
+  toggleTheme?: () => void; // Mantém para compatibilidade, mas não faz nada
+  setTheme?: (theme: string) => void; // Mantém para compatibilidade, mas não faz nada
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -16,40 +14,19 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>('light');
-
-  // Carregar tema salvo do localStorage na inicialização
+  // Aplicar tema PéNaPED fixo na inicialização
   useEffect(() => {
-    const savedTheme = localStorage.getItem('penaped-theme') as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      // Detectar preferência do sistema
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(systemPrefersDark ? 'dark' : 'light');
-    }
+    // Sempre aplicar o tema PéNaPED
+    document.documentElement.setAttribute('data-theme', 'penaped');
+    document.documentElement.classList.add('penaped-theme');
+    // Remove classes dark/light se existirem
+    document.documentElement.classList.remove('dark', 'light');
   }, []);
 
-  // Aplicar tema no documento e salvar no localStorage
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    // Também aplicar classe dark do Tailwind para compatibilidade
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('penaped-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
   const value: ThemeContextType = {
-    theme,
-    toggleTheme,
-    setTheme
+    theme: 'penaped',
+    toggleTheme: () => {}, // Função vazia para compatibilidade
+    setTheme: () => {} // Função vazia para compatibilidade
   };
 
   return (

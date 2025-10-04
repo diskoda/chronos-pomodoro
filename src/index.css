@@ -189,3 +189,172 @@ html[data-theme="dark"] {
 .hover\:rotate-0\.5:hover {
   transform: rotate(0.5deg) scale(1.02);
 }
+
+/* Custom scrollbar for Dr. Skoda Dialog */
+.dr-skoda-dialog .scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dr-skoda-dialog .scrollbar-custom::-webkit-scrollbar-track {
+  background: #475569; /* slate-600 */
+  border-radius: 3px;
+}
+
+.dr-skoda-dialog .scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #64748b; /* slate-500 */
+  border-radius: 3px;
+}
+
+.dr-skoda-dialog .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+}
+
+/* Firefox scrollbar */
+.dr-skoda-dialog .scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #475569;
+}
+
+/* ==========================================
+   GLOWING BORDER EFFECT - Efeito Luminoso
+   ========================================== */
+
+/* Base do efeito de borda luminosa */
+.glow-border {
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(45deg, 
+    #00d4ff, 
+    #0099cc, 
+    #006b96, 
+    #00d4ff
+  );
+  background-size: 300% 300%;
+  animation: glowRotate 3s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.glow-border:hover::before,
+.glow-border:focus-within::before,
+.glow-border.active::before {
+  opacity: 1;
+}
+
+/* Animação do gradiente rotativo */
+@keyframes glowRotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Variações de cores */
+.glow-border-blue::before {
+  background: linear-gradient(45deg, 
+    #00d4ff, 
+    #0099cc, 
+    #006b96, 
+    #00d4ff
+  );
+}
+
+.glow-border-purple::before {
+  background: linear-gradient(45deg, 
+    #a855f7, 
+    #8b5cf6, 
+    #7c3aed, 
+    #a855f7
+  );
+}
+
+.glow-border-green::before {
+  background: linear-gradient(45deg, 
+    #10b981, 
+    #059669, 
+    #047857, 
+    #10b981
+  );
+}
+
+.glow-border-orange::before {
+  background: linear-gradient(45deg, 
+    #f97316, 
+    #ea580c, 
+    #dc2626, 
+    #f97316
+  );
+}
+
+/* Efeito mais intenso para elementos ativos */
+.glow-border-intense::before {
+  inset: -3px;
+  border-radius: 16px;
+  background: linear-gradient(45deg, 
+    #00d4ff, 
+    #0099cc, 
+    #006b96, 
+    #00d4ff,
+    #00f0ff,
+    #00d4ff
+  );
+  background-size: 400% 400%;
+  animation: glowRotate 2s linear infinite;
+}
+
+/* Efeito pulsante */
+.glow-border-pulse::before {
+  animation: glowRotate 3s linear infinite, glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Efeito para componentes específicos */
+.card-glow {
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(45deg, 
+    #00d4ff, 
+    #0099cc, 
+    #006b96, 
+    #00d4ff
+  );
+  background-size: 300% 300%;
+  animation: glowRotate 3s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card-glow:hover::before,
+.card-glow:focus-within::before,
+.card-glow.active::before {
+  opacity: 1;
+}

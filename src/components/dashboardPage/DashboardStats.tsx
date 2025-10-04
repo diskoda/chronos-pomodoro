@@ -112,148 +112,202 @@ export default function DashboardStats() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {/* XP Total e Nível Geral */}
-      <div className="theme-card rounded-lg p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">XP Total</p>
-            <p className="text-3xl font-bold theme-text-primary">{stats.totalXP.toLocaleString()}</p>
-            <div className="flex items-center space-x-2 mt-1">
-              <Star className="h-4 w-4 text-yellow-500" />
-              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                Nível {stats.overallLevel}
-              </span>
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-purple-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">XP Total</p>
+              <p className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300 tracking-tight">{stats.totalXP.toLocaleString()}</p>
+              <div className="flex items-center space-x-2 mt-2">
+                <Star className="h-4 w-4 text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300" />
+                <span className="text-sm font-medium text-purple-400 group-hover:text-purple-300 transition-colors duration-300">
+                  Nível {stats.overallLevel}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-full p-3">
-            <Zap className="h-6 w-6 text-white" />
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-xl p-3 group-hover:from-purple-500/40 group-hover:to-blue-500/40 transition-all duration-300">
+                <Zap className="h-7 w-7 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Casos Clínicos */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Casos Clínicos</p>
-            <div className="flex items-center space-x-2">
-              <p className="text-3xl font-bold theme-text-primary">
-                {Math.floor(stats.casesCompleted)}
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-purple-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Casos Clínicos</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300 tracking-tight">
+                  {Math.floor(stats.casesCompleted)}
+                </p>
+                <span className="text-sm font-medium text-purple-400 group-hover:text-purple-300 transition-colors duration-300">
+                  Nv.{stats.methodologyLevels.clinical_cases.level}
+                </span>
+              </div>
+              <p className="text-sm text-purple-400 group-hover:text-purple-300 transition-colors duration-300 mt-1">
+                {stats.methodologyLevels.clinical_cases.xp} XP
               </p>
-              <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-                Nv.{stats.methodologyLevels.clinical_cases.level}
-              </span>
             </div>
-            <p className="text-sm text-purple-600 dark:text-purple-400">
-              {stats.methodologyLevels.clinical_cases.xp} XP
-            </p>
-          </div>
-          <div className="bg-purple-100/20 dark:bg-purple-900/40 backdrop-blur-sm rounded-full p-3 border border-purple-200/30 dark:border-purple-800/30">
-            <Stethoscope className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-purple-500/20 rounded-xl p-3 group-hover:bg-purple-500/30 transition-colors duration-300">
+                <Stethoscope className="h-7 w-7 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Questões */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Questões</p>
-            <div className="flex items-center space-x-2">
-              <p className="text-3xl font-bold theme-text-primary">
-                {Math.floor(stats.questionsAnswered)}
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-orange-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Questões</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-3xl font-bold text-white group-hover:text-orange-300 transition-colors duration-300 tracking-tight">
+                  {Math.floor(stats.questionsAnswered)}
+                </p>
+                <span className="text-sm font-medium text-orange-400 group-hover:text-orange-300 transition-colors duration-300">
+                  Nv.{stats.methodologyLevels.questions.level}
+                </span>
+              </div>
+              <p className="text-sm text-orange-400 group-hover:text-orange-300 transition-colors duration-300 mt-1">
+                {stats.methodologyLevels.questions.xp} XP
               </p>
-              <span className="text-sm font-medium text-yellow-600 dark:text-yellow-400">
-                Nv.{stats.methodologyLevels.questions.level}
-              </span>
             </div>
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">
-              {stats.methodologyLevels.questions.xp} XP
-            </p>
-          </div>
-          <div className="bg-yellow-100/20 dark:bg-yellow-900/40 backdrop-blur-sm rounded-full p-3 border border-yellow-200/30 dark:border-yellow-800/30">
-            <HelpCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 to-amber-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-orange-500/20 rounded-xl p-3 group-hover:bg-orange-500/30 transition-colors duration-300">
+                <HelpCircle className="h-7 w-7 text-orange-400 group-hover:text-orange-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Flashcards */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Flashcards</p>
-            <div className="flex items-center space-x-2">
-              <p className="text-3xl font-bold theme-text-primary">
-                {Math.floor(stats.flashcardsStudied)}
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-emerald-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Flashcards</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-3xl font-bold text-white group-hover:text-emerald-300 transition-colors duration-300 tracking-tight">
+                  {Math.floor(stats.flashcardsStudied)}
+                </p>
+                <span className="text-sm font-medium text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300">
+                  Nv.{stats.methodologyLevels.flashcards.level}
+                </span>
+              </div>
+              <p className="text-sm text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300 mt-1">
+                {stats.methodologyLevels.flashcards.xp} XP
               </p>
-              <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                Nv.{stats.methodologyLevels.flashcards.level}
-              </span>
             </div>
-            <p className="text-sm text-green-600 dark:text-green-400">
-              {stats.methodologyLevels.flashcards.xp} XP
-            </p>
-          </div>
-          <div className="bg-green-100/20 dark:bg-green-900/40 backdrop-blur-sm rounded-full p-3 border border-green-200/30 dark:border-green-800/30">
-            <BookOpen className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-emerald-500/20 rounded-xl p-3 group-hover:bg-emerald-500/30 transition-colors duration-300">
+                <BookOpen className="h-7 w-7 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Sequência de Estudo */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Sequência de Estudo</p>
-            <div className="flex items-center space-x-2">
-              <p className="text-3xl font-bold theme-text-primary">{stats.studyStreak}</p>
-              <span className="text-2xl">🔥</span>
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-orange-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Sequência de Estudo</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-3xl font-bold text-white group-hover:text-orange-300 transition-colors duration-300 tracking-tight">{stats.studyStreak}</p>
+                <span className="text-2xl group-hover:scale-110 transition-transform duration-300">🔥</span>
+              </div>
+              <p className="text-sm text-orange-400 group-hover:text-orange-300 transition-colors duration-300 mt-1">+2 vs ontem</p>
             </div>
-            <p className="text-sm text-orange-600 dark:text-orange-400">+2 vs ontem</p>
-          </div>
-          <div className="bg-orange-100/20 dark:bg-orange-900/40 backdrop-blur-sm rounded-full p-3 border border-orange-200/30 dark:border-orange-800/30">
-            <Clock className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 to-red-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-orange-500/20 rounded-xl p-3 group-hover:bg-orange-500/30 transition-colors duration-300">
+                <Clock className="h-7 w-7 text-orange-400 group-hover:text-orange-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Taxa de Acerto */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Taxa de Acerto</p>
-            <p className="text-3xl font-bold theme-text-primary">{stats.accuracy}%</p>
-            <p className="text-sm text-green-600 dark:text-green-400">+5% esta semana</p>
-          </div>
-          <div className="bg-green-100/20 dark:bg-green-900/40 backdrop-blur-sm rounded-full p-3 border border-green-200/30 dark:border-green-800/30">
-            <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-emerald-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Taxa de Acerto</p>
+              <div className="flex items-baseline space-x-1">
+                <p className="text-3xl font-bold text-white group-hover:text-emerald-300 transition-colors duration-300 tracking-tight">{stats.accuracy}</p>
+                <span className="text-xl font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300">%</span>
+              </div>
+              <p className="text-sm text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300 mt-1">+5% esta semana</p>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-green-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-emerald-500/20 rounded-xl p-3 group-hover:bg-emerald-500/30 transition-colors duration-300">
+                <TrendingUp className="h-7 w-7 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Horas de Estudo */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Horas de Estudo</p>
-            <p className="text-3xl font-bold theme-text-primary">{stats.studyHours}h</p>
-            <p className="text-sm text-blue-600 dark:text-blue-400">Meta: 30h/semana</p>
-          </div>
-          <div className="bg-blue-100/20 dark:bg-blue-900/40 backdrop-blur-sm rounded-full p-3 border border-blue-200/30 dark:border-blue-800/30">
-            <Clock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-blue-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Horas de Estudo</p>
+              <div className="flex items-baseline space-x-1">
+                <p className="text-3xl font-bold text-white group-hover:text-blue-300 transition-colors duration-300 tracking-tight">{stats.studyHours}</p>
+                <span className="text-lg font-semibold text-blue-400 group-hover:text-blue-300 transition-colors duration-300">h</span>
+              </div>
+              <p className="text-sm text-blue-400 group-hover:text-blue-300 transition-colors duration-300 mt-1">Meta: 30h/semana</p>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-blue-500/20 rounded-xl p-3 group-hover:bg-blue-500/30 transition-colors duration-300">
+                <Clock className="h-7 w-7 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Conquistas */}
-      <div className="theme-card rounded-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium theme-text-secondary">Conquistas</p>
-            <p className="text-3xl font-bold theme-text-primary">{stats.achievements}</p>
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">3 desbloqueadas hoje</p>
-          </div>
-          <div className="bg-yellow-100/20 dark:bg-yellow-900/40 backdrop-blur-sm rounded-full p-3 border border-yellow-200/30 dark:border-yellow-800/30">
-            <Trophy className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-yellow-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/20 hover:scale-105 transform">
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mb-2">Conquistas</p>
+              <p className="text-3xl font-bold text-white group-hover:text-yellow-300 transition-colors duration-300 tracking-tight">{stats.achievements}</p>
+              <p className="text-sm text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300 mt-1">3 desbloqueadas hoje</p>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-yellow-500/20 rounded-xl p-3 group-hover:bg-yellow-500/30 transition-colors duration-300">
+                <Trophy className="h-7 w-7 text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

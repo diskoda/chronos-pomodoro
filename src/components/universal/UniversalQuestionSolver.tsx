@@ -283,22 +283,22 @@ function IntegratedQuestionInterface({
     <div className={`dashboard-background min-h-screen ${uiConfig.className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
-          (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis') 
-            ? 'pointer-events-none opacity-50' 
+          (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis')
+            ? 'pointer-events-none opacity-50'
             : ''
         }`}>
-          
+
           {/* Indicador de Progresso do Fluxo */}
           {uiConfig.showProgress && (
             <FlowProgressIndicator className="mb-6" showDetails={true} />
           )}
-          
-          <QuestionSolverHeader 
+
+          <QuestionSolverHeader
             onBack={onBack}
             backButtonText="Voltar"
           />
 
-          <QuestionInfo 
+          <QuestionInfo
             question={question}
             showTags={uiConfig.showTags}
             showTimeEstimate={uiConfig.showTimeEstimate}
@@ -307,28 +307,60 @@ function IntegratedQuestionInterface({
 
           {question.statement && (
             <div className="mb-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-700">
+              {/* Neural Statement Container */}
+              <div className="bg-gradient-to-br from-slate-900/95 via-purple-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl p-6 border border-purple-500/30 shadow-2xl relative overflow-hidden">
+                {/* Neural processing indicators */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
+                  <div className="absolute bottom-2 left-2 w-1 h-1 bg-blue-400 rounded-full animate-pulse delay-700"></div>
+                  <div className="absolute top-1/2 left-4 w-0.5 h-0.5 bg-cyan-400 rounded-full animate-pulse delay-300"></div>
+                </div>
+                
                 <QuestionStatement 
                   statement={question.statement}
                   className=""
                 />
+                
+                {/* Neural activity indicator */}
+                <div className="absolute bottom-2 right-2 opacity-50">
+                  <div className="flex items-center space-x-1 text-xs text-slate-400">
+                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span>Processing</span>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
-
-          {question.alternatives && (
+          )}          {question.alternatives && (
             <div className="mb-6">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-                    <span className="mr-2">🎯</span>
-                    Escolha a melhor alternativa:
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Analise cada opção cuidadosamente antes de decidir
-                  </p>
+              {/* Neural Alternatives Container */}
+              <div className="bg-gradient-to-br from-slate-900/95 via-blue-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl border border-orange-500/30 overflow-hidden shadow-2xl relative group">
+                {/* Neural activity indicators */}
+                <div className="absolute inset-0 opacity-30">
+                  <div className="absolute top-2 left-2 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                  <div className="absolute top-4 right-4 w-1 h-1 bg-teal-400 rounded-full animate-pulse delay-1000"></div>
+                  <div className="absolute bottom-3 left-6 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse delay-500"></div>
                 </div>
-                <div className="p-6">
+                
+                {/* Enhanced header with gradient */}
+                <div className="bg-gradient-to-r from-orange-900/40 to-teal-900/40 px-6 py-4 border-b border-orange-500/20 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-teal-500/5"></div>
+                  <h3 className="text-lg font-bold text-white flex items-center relative z-10">
+                    <span className="mr-3 text-orange-400 text-xl">🧠</span>
+                    <span className="bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
+                      Neural Alternative Analysis
+                    </span>
+                  </h3>
+                  <p className="text-sm text-slate-300 mt-1 relative z-10">
+                    Process each option through neural pathways before decision
+                  </p>
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
+                    <div className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></div>
+                    <div className="w-1 h-1 bg-teal-400 rounded-full animate-bounce delay-100"></div>
+                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"></div>
+                  </div>
+                </div>
+                
+                <div className="p-6 relative">
                   <QuestionAlternatives
                     alternatives={question.alternatives}
                     selectedAlternative={selectedAlternative}
@@ -336,6 +368,14 @@ function IntegratedQuestionInterface({
                     isSubmitted={isSubmitted}
                     className=""
                   />
+                  
+                  {/* Neural processing indicator */}
+                  <div className="absolute bottom-2 right-2 opacity-60">
+                    <div className="flex items-center space-x-1 text-xs text-slate-400">
+                      <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>Neural Active</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -442,13 +482,13 @@ function SimpleQuestionInterface({
     <div className={`dashboard-background min-h-screen ${uiConfig.className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
-          
-          <QuestionSolverHeader 
+
+          <QuestionSolverHeader
             onBack={onBack}
             backButtonText="Voltar"
           />
 
-          <QuestionInfo 
+          <QuestionInfo
             question={question}
             showTags={uiConfig.showTags}
             showTimeEstimate={uiConfig.showTimeEstimate}
@@ -457,28 +497,60 @@ function SimpleQuestionInterface({
 
           {question.statement && (
             <div className="mb-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-700">
+              {/* Neural Statement Container - Simple Mode */}
+              <div className="bg-gradient-to-br from-slate-900/95 via-purple-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl p-6 border border-purple-500/30 shadow-2xl relative overflow-hidden">
+                {/* Neural processing indicators */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
+                  <div className="absolute bottom-2 left-2 w-1 h-1 bg-blue-400 rounded-full animate-pulse delay-700"></div>
+                  <div className="absolute top-1/2 left-4 w-0.5 h-0.5 bg-cyan-400 rounded-full animate-pulse delay-300"></div>
+                </div>
+                
                 <QuestionStatement 
                   statement={question.statement}
                   className=""
                 />
+                
+                {/* Neural activity indicator */}
+                <div className="absolute bottom-2 right-2 opacity-50">
+                  <div className="flex items-center space-x-1 text-xs text-slate-400">
+                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span>Processing</span>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
-
-          {question.alternatives && (
+          )}          {question.alternatives && (
             <div className="mb-6">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-                    <span className="mr-2">🎯</span>
-                    Escolha a melhor alternativa:
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Analise cada opção cuidadosamente antes de decidir
-                  </p>
+              {/* Neural Alternatives Container - Simple Mode */}
+              <div className="bg-gradient-to-br from-slate-900/95 via-blue-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl border border-orange-500/30 overflow-hidden shadow-2xl relative group">
+                {/* Neural activity indicators */}
+                <div className="absolute inset-0 opacity-30">
+                  <div className="absolute top-2 left-2 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                  <div className="absolute top-4 right-4 w-1 h-1 bg-teal-400 rounded-full animate-pulse delay-1000"></div>
+                  <div className="absolute bottom-3 left-6 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse delay-500"></div>
                 </div>
-                <div className="p-6">
+                
+                {/* Enhanced header with gradient */}
+                <div className="bg-gradient-to-r from-orange-900/40 to-teal-900/40 px-6 py-4 border-b border-orange-500/20 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-teal-500/5"></div>
+                  <h3 className="text-lg font-bold text-white flex items-center relative z-10">
+                    <span className="mr-3 text-orange-400 text-xl">🧠</span>
+                    <span className="bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
+                      Neural Alternative Analysis
+                    </span>
+                  </h3>
+                  <p className="text-sm text-slate-300 mt-1 relative z-10">
+                    Process each option through neural pathways before decision
+                  </p>
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
+                    <div className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></div>
+                    <div className="w-1 h-1 bg-teal-400 rounded-full animate-bounce delay-100"></div>
+                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"></div>
+                  </div>
+                </div>
+                
+                <div className="p-6 relative">
                   <QuestionAlternatives
                     alternatives={question.alternatives}
                     selectedAlternative={selectedAlternative}
@@ -486,6 +558,14 @@ function SimpleQuestionInterface({
                     isSubmitted={isSubmitted}
                     className=""
                   />
+                  
+                  {/* Neural processing indicator */}
+                  <div className="absolute bottom-2 right-2 opacity-60">
+                    <div className="flex items-center space-x-1 text-xs text-slate-400">
+                      <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>Neural Active</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

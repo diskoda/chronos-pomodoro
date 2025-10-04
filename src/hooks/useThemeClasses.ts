@@ -35,17 +35,18 @@ export function useThemeClasses() {
   };
 
   /**
-   * Retorna classes condicionais baseadas no tema
+   * Retorna classes condicionais baseadas no tema PéNaPED
+   * Como só temos um tema, sempre retorna a classe do tema escuro
    */
-  const conditional = (lightClass: string, darkClass: string) => {
-    return theme === 'dark' ? darkClass : lightClass;
+  const conditional = (_lightClass: string, darkClass: string) => {
+    return darkClass; // Sempre usa o estilo escuro do PéNaPED
   };
 
   /**
    * Combina classes base com classes condicionais de tema
    */
-  const combine = (baseClasses: string, lightClasses: string, darkClasses: string) => {
-    return `${baseClasses} ${theme === 'dark' ? darkClasses : lightClasses}`;
+  const combine = (baseClasses: string, _lightClasses: string, darkClasses: string) => {
+    return `${baseClasses} ${darkClasses}`; // Sempre usa as classes escuras do PéNaPED
   };
 
   return {
@@ -53,8 +54,9 @@ export function useThemeClasses() {
     classes: getThemeClasses,
     conditional,
     combine,
-    isDark: theme === 'dark',
-    isLight: theme === 'light',
+    isDark: true, // PéNaPED é sempre escuro
+    isLight: false, // PéNaPED nunca é claro
+    isPenaped: true, // Sempre verdadeiro
   };
 }
 

@@ -69,7 +69,7 @@ export default function ModeSelection() {
   };
 
   return (
-    <div className="dashboard-background min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <BackButton 
@@ -93,10 +93,10 @@ export default function ModeSelection() {
           </div>
           
           {/* Title and Subtitle */}
-          <h1 className="text-4xl font-bold theme-text-primary mb-4">
+          <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             Escolha seu Modo de Estudo
           </h1>
-          <p className="text-lg theme-text-secondary max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
             Selecione a modalidade de estudo que melhor se adapta ao seu objetivo de aprendizado
           </p>
         </div>

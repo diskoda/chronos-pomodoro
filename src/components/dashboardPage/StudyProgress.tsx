@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, Clock, Target, Stethoscope, HelpCircle, BookOpen, Star } from 'lucide-react';
+import { TrendingUp, Clock, Target, Stethoscope, HelpCircle, BookOpen, Star, Award } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { MethodologyXPService } from '../../services/methodologyXPService';
 import type { StudyMethodology } from '../../types/xpMethodologies';
@@ -155,53 +155,102 @@ export default function StudyProgress() {
   }
 
   return (
-    <div className="theme-card rounded-lg">
-      <div className="p-6 border-b theme-border">
+    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      {/* Header */}
+      <div className="relative z-10 p-6 border-b border-slate-700/50">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold theme-text-primary flex items-center">
-            <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
-            Progresso por Metodologia
-          </h2>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+              <div className="relative bg-blue-500/20 rounded-xl p-3 group-hover:bg-blue-500/30 transition-colors duration-300">
+                <TrendingUp className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors duration-300">
+                Progresso por Metodologia
+              </h2>
+              <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
+                Acompanhe seu desenvolvimento em cada área
+              </p>
+            </div>
+          </div>
           <div className="text-right">
-            <p className="text-sm font-medium theme-text-primary">
-              Nível médio: {Math.round(progressData.reduce((acc, p) => acc + p.currentLevel, 0) / progressData.length)}
+            <p className="text-lg font-bold text-white group-hover:text-blue-300 transition-colors duration-300">
+              Nível {Math.round(progressData.reduce((acc, p) => acc + p.currentLevel, 0) / progressData.length)}
             </p>
-            <p className="text-xs theme-text-secondary">
+            <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
               {progressData.reduce((acc, p) => acc + p.totalActivities, 0)} atividades totais
             </p>
           </div>
         </div>
       </div>
       
-      <div className="p-6">
-        <div className="space-y-6">
+      {/* Content */}
+      <div className="relative z-10 p-6">
+        <div className="space-y-8">
           {progressData.map((methodology) => (
-            <div key={methodology.methodology} className="space-y-3">
+            <div key={methodology.methodology} className="space-y-4">
               {/* Header da metodologia */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className={`p-2 rounded-lg ${methodology.color.replace('text-', 'bg-')}/10`}>
-                    <span className={methodology.color}>{methodology.icon}</span>
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <div className={`absolute -inset-1 rounded-full blur opacity-0 group-hover:opacity-50 transition duration-500 ${
+                      methodology.methodology === 'clinical_cases' 
+                        ? 'bg-gradient-to-r from-purple-400 to-violet-400'
+                        : methodology.methodology === 'questions'
+                        ? 'bg-gradient-to-r from-orange-400 to-amber-400'
+                        : 'bg-gradient-to-r from-emerald-400 to-teal-400'
+                    }`}></div>
+                    <div className={`relative p-3 rounded-xl transition-colors duration-300 ${
+                      methodology.methodology === 'clinical_cases'
+                        ? 'bg-purple-500/20 group-hover:bg-purple-500/30'
+                        : methodology.methodology === 'questions'
+                        ? 'bg-orange-500/20 group-hover:bg-orange-500/30'
+                        : 'bg-emerald-500/20 group-hover:bg-emerald-500/30'
+                    }`}>
+                      <span className={`transition-colors duration-300 ${
+                        methodology.methodology === 'clinical_cases'
+                          ? 'text-purple-400 group-hover:text-purple-300'
+                          : methodology.methodology === 'questions'
+                          ? 'text-orange-400 group-hover:text-orange-300'
+                          : 'text-emerald-400 group-hover:text-emerald-300'
+                      }`}>
+                        {methodology.icon}
+                      </span>
+                    </div>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium theme-text-primary">{methodology.name}</h3>
-                    <div className="flex items-center space-x-2 text-xs theme-text-secondary">
-                      <Star className="h-3 w-3" />
-                      <span>Nível {methodology.currentLevel}</span>
+                    <h3 className="text-lg font-bold text-white group-hover:text-slate-200 transition-colors duration-300">
+                      {methodology.name}
+                    </h3>
+                    <div className="flex items-center space-x-3 text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
+                      <div className="flex items-center space-x-1">
+                        <Star className="h-4 w-4 text-yellow-400" />
+                        <span>Nível {methodology.currentLevel}</span>
+                      </div>
                       {methodology.streak > 0 && (
-                        <>
-                          <span>•</span>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-orange-400">🔥</span>
                           <span>{methodology.streak} dias seguidos</span>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold theme-text-primary">
+                  <p className={`text-2xl font-bold transition-colors duration-300 ${
+                    methodology.methodology === 'clinical_cases'
+                      ? 'text-purple-400 group-hover:text-purple-300'
+                      : methodology.methodology === 'questions'
+                      ? 'text-orange-400 group-hover:text-orange-300'
+                      : 'text-emerald-400 group-hover:text-emerald-300'
+                  }`}>
                     {Math.round(methodology.progress)}%
                   </p>
-                  <p className="text-xs theme-text-secondary">
+                  <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
                     {methodology.currentXP} / {methodology.xpForNextLevel} XP
                   </p>
                 </div>
@@ -209,16 +258,22 @@ export default function StudyProgress() {
               
               {/* Barra de progresso */}
               <div className="relative">
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
                   <div 
-                    className={`${methodology.bgColor} h-2 rounded-full transition-all duration-500`}
+                    className={`h-full rounded-full transition-all duration-700 ease-out ${
+                      methodology.methodology === 'clinical_cases'
+                        ? 'bg-gradient-to-r from-purple-400 to-violet-400'
+                        : methodology.methodology === 'questions'
+                        ? 'bg-gradient-to-r from-orange-400 to-amber-400'
+                        : 'bg-gradient-to-r from-emerald-400 to-teal-400'
+                    }`}
                     style={{ width: `${Math.min(methodology.progress, 100)}%` }}
                   ></div>
                 </div>
                 
                 {/* Indicador de nível próximo */}
                 {methodology.progress < 100 && (
-                  <div className="mt-1 flex justify-between text-xs theme-text-tertiary">
+                  <div className="mt-2 flex justify-between text-xs text-slate-400">
                     <span>Nível {methodology.currentLevel}</span>
                     <span>Nível {methodology.currentLevel + 1}</span>
                   </div>
@@ -226,26 +281,28 @@ export default function StudyProgress() {
               </div>
 
               {/* Estatísticas adicionais */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-700">
-                <div className="flex items-center space-x-4 text-xs theme-text-secondary">
-                  <div className="flex items-center space-x-1">
-                    <Target className="h-3 w-3" />
+              <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
+                <div className="flex items-center space-x-6 text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
+                  <div className="flex items-center space-x-2">
+                    <Target className="h-4 w-4" />
                     <span>{methodology.totalActivities} atividades</span>
                   </div>
                   {methodology.streak > 0 && (
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-3 w-3" />
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-4 w-4" />
                       <span>{methodology.streak} dias consecutivos</span>
                     </div>
                   )}
                 </div>
                 
                 {methodology.progress >= 100 ? (
-                  <span className="text-xs font-medium text-green-600 dark:text-green-400">
-                    ✓ Próximo nível desbloqueado!
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-emerald-400">
+                      ✓ Próximo nível desbloqueado!
+                    </span>
+                  </div>
                 ) : (
-                  <span className="text-xs theme-text-secondary">
+                  <span className="text-sm text-slate-400">
                     {methodology.xpForNextLevel - methodology.currentXP} XP para próximo nível
                   </span>
                 )}
@@ -255,21 +312,27 @@ export default function StudyProgress() {
         </div>
 
         {/* Resumo geral */}
-        <div className="mt-6 pt-4 border-t theme-border">
-          <div className="bg-gradient-to-r from-blue-50/30 to-purple-50/30 dark:from-blue-900/10 dark:to-purple-900/10 rounded-lg p-4">
-            <h4 className="font-medium theme-text-primary mb-2">Resumo Semanal</h4>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div>
-                <p className="text-lg font-bold theme-text-primary">
-                  {progressData.reduce((acc, p) => acc + p.totalActivities, 0)}
-                </p>
-                <p className="text-xs theme-text-secondary">Atividades completas</p>
-              </div>
-              <div>
-                <p className="text-lg font-bold theme-text-primary">
-                  {Math.max(...progressData.map(p => p.streak))}
-                </p>
-                <p className="text-xs theme-text-secondary">Maior sequência</p>
+        <div className="mt-8 pt-6 border-t border-slate-700/50">
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm p-6 border border-slate-600/30">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-teal-500/5"></div>
+            <div className="relative z-10">
+              <h4 className="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                <Award className="h-5 w-5 text-yellow-400" />
+                <span>Resumo Semanal</span>
+              </h4>
+              <div className="grid grid-cols-2 gap-6 text-center">
+                <div>
+                  <p className="text-3xl font-bold text-white mb-1">
+                    {progressData.reduce((acc, p) => acc + p.totalActivities, 0)}
+                  </p>
+                  <p className="text-sm text-slate-400">Atividades completas</p>
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-white mb-1">
+                    {Math.max(...progressData.map(p => p.streak))}
+                  </p>
+                  <p className="text-sm text-slate-400">Maior sequência</p>
+                </div>
               </div>
             </div>
           </div>
