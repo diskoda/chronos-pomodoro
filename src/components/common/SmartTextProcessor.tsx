@@ -47,6 +47,12 @@ const defaultTermMappings: TermMap[] = [
   { term: 'otite', explanationId: 'otite-media', wholeWord: false },
   { term: 'sífilis congênita', explanationId: 'sifilis-congenita' },
   { term: 'sífilis', explanationId: 'sifilis-congenita', wholeWord: false },
+  { term: 'transmissão vertical', explanationId: 'transmissao-vertical' },
+  { term: 'gestante', explanationId: 'gestante', wholeWord: false },
+  { term: 'cascata do cuidado contínuo', explanationId: 'cascata-cuidado-continuo' },
+  { term: 'cascata do cuidado', explanationId: 'cascata-cuidado-continuo' },
+  { term: 'cascata do cuidado contínuo do HIV', explanationId: 'cascata-cuidado-hiv' },
+  { term: 'HIV', explanationId: 'hiv', wholeWord: true },
   
   // Emergências endócrinas
   { term: 'cetoacidose diabética', explanationId: 'cetoacidose-diabetica' },

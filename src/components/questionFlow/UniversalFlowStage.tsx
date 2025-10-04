@@ -81,6 +81,7 @@ export default function UniversalFlowStage({
       content={finalContent}
       continueButtonText={finalButtonText}
       onContinue={handleContinue}
+      imageUrl={questionData?.imageUrl}
     />
   );
 }

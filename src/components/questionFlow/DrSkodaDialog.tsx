@@ -12,6 +12,7 @@ interface DrSkodaDialogProps {
   audioSrc?: string;
   audioSequence?: string[];
   requireAudioCompletion?: boolean;
+  imageUrl?: string;
 }
 
 export default function DrSkodaDialog({
@@ -23,7 +24,8 @@ export default function DrSkodaDialog({
   className = "",
   audioSrc,
   audioSequence,
-  requireAudioCompletion = false
+  requireAudioCompletion = false,
+  imageUrl
 }: DrSkodaDialogProps) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -311,6 +313,18 @@ export default function DrSkodaDialog({
                       );
                     }).filter(Boolean)}
                   </div>
+                  
+                  {/* Renderizar imagem se disponível */}
+                  {imageUrl && (
+                    <div className="mt-4 flex justify-center">
+                      <img 
+                        src={imageUrl} 
+                        alt="Imagem da questão" 
+                        className="max-w-full h-auto rounded-lg shadow-md border border-gray-200 dark:border-gray-600"
+                        style={{ maxHeight: '400px' }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

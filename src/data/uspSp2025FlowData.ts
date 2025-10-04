@@ -13,98 +13,91 @@ import {
 // Questão 1 - Já existe no enhancedQuestionFlowData.ts
 import { question1FlowData } from './enhancedQuestionFlowData';
 
-// Questão 2 - Exemplo detalhado
+// Questão 2 - Cascata do cuidado contínuo - Sífilis congênita
 const question2FlowData: QuestionFlowData = {
-  contextText: `Esta questão aborda conceitos fundamentais de Medicina Interna, especificamente relacionados ao diagnóstico diferencial e raciocínio clínico.
+  contextText: `Esta questão aborda conceitos fundamentais de Saúde Pública e Epidemiologia, especificamente sobre a cascata do cuidado contínuo aplicada à prevenção da sífilis congênita.
 
-É essencial aplicar conhecimento fisiopatológico e correlacionar achados clínicos com possíveis diagnósticos. 
+A cascata do cuidado é uma ferramenta epidemiológica essencial para monitorar a efetividade dos programas de saúde. 
 
-Analise cuidadosamente todas as informações apresentadas no caso clínico, considerando:
-- Apresentação clínica
-- Fatores de risco
-- Achados físicos
-- Dados laboratoriais quando disponíveis
+Analise cuidadosamente:
+- O conceito de cascata do cuidado contínuo
+- A aplicação específica na prevenção da sífilis congênita
+- A efetividade do tratamento adequado da sífilis materna
+- A interpretação correta dos indicadores epidemiológicos
 
-O objetivo é desenvolver raciocínio clínico estruturado e chegar à conclusão mais adequada baseada em evidências.`,
+O objetivo é compreender como avaliar o desempenho de programas de prevenção da transmissão vertical.`,
 
-  explanationText: `Para resolver questões de Medicina Interna é fundamental seguir uma abordagem sistemática:
+  explanationText: `Para resolver esta questão sobre cascata do cuidado na sífilis congênita, você precisa compreender os fundamentos epidemiológicos:
 
-**1. Análise do Caso Clínico:**
-- Identificar sintomas principais
-- Avaliar tempo de evolução
-- Considerar fatores de risco
-- Analisar exame físico
+Conceitos-chave:
 
-**2. Raciocínio Diferencial:**
-- Formular hipóteses diagnósticas
-- Priorizar diagnósticos mais prováveis
-- Considerar diagnósticos de exclusão
+1. Cascata do Cuidado Contínuo: Representação gráfica que mostra a proporção de pessoas em diferentes etapas do cuidado, desde o diagnóstico até o desfecho final.
 
-**3. Tomada de Decisão:**
-- Avaliar cada alternativa sistematicamente
-- Aplicar conhecimento baseado em evidências
-- Eliminar opções inconsistentes
+2. Sífilis Congênita e Transmissão Vertical:
+    → Transmissão materno-fetal durante a gestação
+    → Prevenível com tratamento adequado da gestante
+    → Alta efetividade quando tratamento é oportuno
+    → Indicador importante de qualidade da atenção pré-natal
 
-**Conceitos-chave para esta questão:**
-- Fisiopatologia dos processos envolvidos
-- Manifestações clínicas típicas
-- Critérios diagnósticos atuais
-- Abordagem terapêutica baseada em diretrizes`,
+3. Estrutura da Cascata na Sífilis Congênita:
+    → Gestantes infectadas (base da cascata)
+    → Gestantes diagnosticadas
+    → Gestantes tratadas adequadamente
+    → Gestantes curadas
+    → Nascidos vivos sem sífilis (última barra - desfecho final)
+
+4. Interpretação de Indicadores: A última barra da cascata representa o objetivo final do programa - prevenir a transmissão vertical e garantir nascimentos sem sífilis.
+
+No contexto desta questão, é fundamental identificar qual indicador melhor representa o sucesso final da cascata de prevenção da sífilis congênita.`,
+
+  imageUrl: '/src/assets/images/question2_img.png',
 
   alternativesAnalysis: [
     {
       letter: 'A',
-      text: 'Primeira alternativa apresentada',
+      text: 'Número de gestantes curadas /Número de gestantes tratadas X 100.',
       isCorrect: false,
-      explanation: 'Esta alternativa não é correta porque não corresponde ao quadro clínico apresentado. A fisiopatologia envolvida não sustenta esta hipótese diagnóstica.',
+      explanation: '❌ ALTERNATIVA INCORRETA\n\nEsta fórmula representa a taxa de cura entre as gestantes tratadas, que é um indicador intermediário da cascata, não a última barra. A última barra deve representar o desfecho final: a prevenção da transmissão vertical.',
       category: 'incorrect',
-      conceptsInvolved: ['diagnóstico diferencial', 'fisiopatologia']
+      conceptsInvolved: ['indicadores epidemiológicos', 'cascata do cuidado']
     },
     {
       letter: 'B',
-      text: 'Segunda alternativa apresentada',
-      isCorrect: true,
-      explanation: 'Esta é a alternativa correta. O quadro clínico apresentado é característico desta condição, com manifestações típicas e evolução compatível. A fisiopatologia explica adequadamente os achados descritos.',
-      category: 'correct',
-      conceptsInvolved: ['diagnóstico correto', 'raciocínio clínico', 'fisiopatologia']
+      text: 'Número de gestantes curadas/Número de nascidos vivos X 100.',
+      isCorrect: false,
+      explanation: '❌ ALTERNATIVA INCORRETA\n\nEsta fórmula não faz sentido epidemiológico, pois relaciona gestantes curadas com o total de nascidos vivos (incluindo filhos de mães não infectadas). O denominador não é apropriado para avaliar a efetividade da prevenção da sífilis congênita.',
+      category: 'incorrect',
+      conceptsInvolved: ['interpretação de indicadores', 'denominadores inadequados']
     },
     {
       letter: 'C',
-      text: 'Terceira alternativa apresentada',
+      text: 'Número de nascidos vivos sem sífilis/Número de nascidos vivos X 100.',
       isCorrect: false,
-      explanation: 'Embora possa haver alguma sobreposição de sintomas, esta alternativa não explica completamente o quadro apresentado. Faltam elementos-chave para sustentar este diagnóstico.',
-      category: 'incorrect',
-      conceptsInvolved: ['diagnóstico diferencial', 'manifestações clínicas']
+      explanation: '⚠️ ALTERNATIVA PLAUSÍVEL MAS INCORRETA\n\nEmbora mensure nascidos sem sífilis, esta fórmula inclui no denominador todos os nascidos vivos, mesmo de mães não infectadas. Isso não reflete especificamente a efetividade da prevenção da transmissão vertical em gestantes com sífilis.',
+      category: 'plausible',
+      conceptsInvolved: ['prevalência geral', 'especificidade do indicador']
     },
     {
       letter: 'D',
-      text: 'Quarta alternativa apresentada',
-      isCorrect: false,
-      explanation: 'Esta alternativa representa uma condição menos provável dado o contexto clínico. Os achados descritos não são típicos desta patologia.',
-      category: 'incorrect',
-      conceptsInvolved: ['diagnóstico diferencial', 'epidemiologia']
-    },
-    {
-      letter: 'E',
-      text: 'Quinta alternativa apresentada',
-      isCorrect: false,
-      explanation: 'Esta opção não se adequa ao perfil do paciente ou à apresentação clínica descrita. A evolução temporal também não é compatível.',
-      category: 'incorrect',
-      conceptsInvolved: ['anamnese', 'evolução clínica']
+      text: 'Número de nascidos vivos sem sífilis/Número de gestantes infectadas X 100.',
+      isCorrect: true,
+      explanation: '✅ RESPOSTA CORRETA\n\nEsta é a fórmula correta para a última barra da cascata da sífilis congênita. Representa o desfecho final desejado: a proporção de nascidos vivos sem sífilis entre todas as gestantes que iniciaram infectadas. É o indicador mais direto da efetividade global do programa de prevenção da transmissão vertical.',
+      category: 'correct',
+      conceptsInvolved: ['cascata do cuidado', 'prevenção da transmissão vertical', 'efetividade do programa']
     }
   ],
 
   metadata: {
-    specialty: 'Medicina Interna',
+    specialty: 'Saúde Pública',
     difficulty: 'medium',
-    tags: ['diagnóstico diferencial', 'raciocínio clínico', 'medicina interna'],
-    estimatedTime: 6,
-    conceptsRequired: ['fisiopatologia', 'semiologia', 'diagnóstico diferencial'],
+    tags: ['epidemiologia', 'sífilis congênita', 'cascata do cuidado', 'indicadores de saúde', 'transmissão vertical'],
+    estimatedTime: 5,
+    conceptsRequired: ['cascata do cuidado', 'epidemiologia', 'saúde materno-infantil', 'indicadores epidemiológicos'],
     learningObjectives: [
-      'Aplicar raciocínio clínico sistemático',
-      'Realizar diagnóstico diferencial adequado',
-      'Correlacionar manifestações clínicas com fisiopatologia',
-      'Desenvolver pensamento crítico em medicina'
+      'Compreender o conceito de cascata do cuidado contínuo',
+      'Aplicar indicadores epidemiológicos na avaliação de programas',
+      'Analisar a efetividade da prevenção da transmissão vertical',
+      'Interpretar dados de saúde pública relacionados à sífilis congênita'
     ]
   }
 };

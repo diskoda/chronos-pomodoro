@@ -707,6 +707,105 @@ export const explanationsDatabase: Record<string, Explanation> = {
     ],
     keywords: ['prescrições', 'medicamentos', 'orientações', 'receita'],
     difficulty: 'basic'
+  },
+
+  // Epidemiologia e Saúde Pública
+  'sifilis-congenita': {
+    id: 'sifilis-congenita',
+    type: 'medical',
+    title: 'Sífilis Congênita',
+    content: 'Infecção pelo Treponema pallidum transmitida da mãe infectada para o feto durante a gestação. É uma condição prevenível através do diagnóstico e tratamento adequado da sífilis materna durante o pré-natal.',
+    icon: '🤰',
+    category: 'Infectologia',
+    examples: [
+      'Manifestações precoces: hepatomegalia, lesões cutâneas',
+      'Manifestações tardias: surdez, deformidades ósseas',
+      'Morte fetal ou neonatal'
+    ],
+    keywords: ['sífilis', 'transmissão vertical', 'treponema', 'pré-natal'],
+    difficulty: 'intermediate'
+  },
+
+  'transmissao-vertical': {
+    id: 'transmissao-vertical',
+    type: 'concept',
+    title: 'Transmissão Vertical',
+    content: 'Transmissão de patógenos da mãe para o feto durante a gestação, parto ou amamentação. É um importante modo de transmissão para diversas infecções, incluindo HIV, sífilis, hepatite B, entre outras.',
+    icon: '👶',
+    category: 'Epidemiologia',
+    examples: [
+      'Transmissão intrauterina (sífilis, toxoplasmose)',
+      'Transmissão durante o parto (HIV, hepatite B)',
+      'Transmissão pela amamentação (HIV)'
+    ],
+    keywords: ['materno-fetal', 'transmissão', 'gestação', 'perinatal'],
+    difficulty: 'basic'
+  },
+
+  'gestante': {
+    id: 'gestante',
+    type: 'definition',
+    title: 'Gestante',
+    content: 'Mulher que está grávida, desde a concepção até o parto. Durante a gestação, requer cuidados médicos especiais para garantir sua saúde e a do feto, incluindo consultas de pré-natal regulares.',
+    icon: '🤱',
+    category: 'Obstetrícia',
+    examples: [
+      'Consultas de pré-natal',
+      'Exames laboratoriais específicos',
+      'Vacinação durante a gestação'
+    ],
+    keywords: ['gravidez', 'pré-natal', 'maternidade', 'obstetrícia'],
+    difficulty: 'basic'
+  },
+
+  'cascata-cuidado-continuo': {
+    id: 'cascata-cuidado-continuo',
+    type: 'concept',
+    title: 'Cascata do Cuidado Contínuo',
+    content: 'Representação gráfica que mostra a proporção de pessoas em diferentes etapas do cuidado de saúde, desde o diagnóstico até o desfecho final. É uma ferramenta epidemiológica para avaliar a efetividade de programas de saúde.',
+    icon: '📊',
+    category: 'Epidemiologia',
+    examples: [
+      'Cascata do HIV: diagnóstico → tratamento → supressão viral',
+      'Cascata da sífilis congênita: gestantes infectadas → tratadas → nascidos sem sífilis',
+      'Cascata da tuberculose: casos notificados → tratamento → cura'
+    ],
+    keywords: ['epidemiologia', 'indicadores', 'monitoramento', 'programa de saúde'],
+    difficulty: 'intermediate'
+  },
+
+  'cascata-cuidado-hiv': {
+    id: 'cascata-cuidado-hiv',
+    type: 'medical',
+    title: 'Cascata do Cuidado Contínuo do HIV',
+    content: 'Parâmetro internacional para avaliar o desempenho da atenção de saúde em HIV. Mostra a proporção de pessoas vivendo com HIV em cada etapa: diagnóstico, vinculação ao cuidado, retenção no cuidado, prescrição de antirretrovirais e supressão viral.',
+    icon: '🏥',
+    category: 'Infectologia',
+    examples: [
+      'Etapa 1: Pessoas vivendo com HIV diagnosticadas',
+      'Etapa 2: Pessoas vinculadas ao cuidado',
+      'Etapa 3: Pessoas em tratamento antirretroviral',
+      'Etapa 4: Pessoas com carga viral suprimida'
+    ],
+    keywords: ['HIV', 'AIDS', 'antirretroviral', 'carga viral', 'monitoramento'],
+    difficulty: 'advanced'
+  },
+
+  'hiv': {
+    id: 'hiv',
+    type: 'medical',
+    title: 'HIV (Vírus da Imunodeficiência Humana)',
+    content: 'Retrovírus que infecta células do sistema imunológico, especialmente linfócitos T CD4+, causando progressiva imunodeficiência. Transmitido principalmente por via sexual, sanguínea e vertical (mãe-filho). Com tratamento antirretroviral adequado, pode-se alcançar carga viral indetectável e vida normal.',
+    icon: '🦠',
+    category: 'Infectologia',
+    examples: [
+      'Transmissão sexual desprotegida (principal via)',
+      'Compartilhamento de seringas contaminadas',
+      'Transmissão vertical durante gravidez/parto/amamentação',
+      'Tratamento com antirretrovirais (TARV)'
+    ],
+    keywords: ['retrovírus', 'CD4', 'carga viral', 'TARV', 'PrEP', 'AIDS'],
+    difficulty: 'intermediate'
   }
 };
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { SmartTextProcessor } from '../common/SmartTextProcessor';
+import question2Image from '../../assets/images/question2_img.png';
 
 interface QuestionStatementProps {
   statement: string;
@@ -7,39 +7,25 @@ interface QuestionStatementProps {
 }
 
 export default function QuestionStatement({ statement, className = "" }: QuestionStatementProps) {
-  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
-
-  const loadImage = async (imageName: string) => {
-    try {
-      const imageModule = await import(`../../assets/images/${imageName}`);
-      return imageModule.default;
-    } catch (error) {
-      console.error('Erro ao carregar imagem:', imageName, error);
-      return null;
-    }
+  // Mapeamento direto das imagens
+  const imageMap: Record<string, string> = {
+    'question2_img.png': question2Image
   };
 
-  useEffect(() => {
-    const imageMatches = statement.match(/\[IMAGEM: ([^\]]+)\]/g);
-    if (imageMatches) {
-      imageMatches.forEach(async (match) => {
-        const imageName = match.match(/\[IMAGEM: ([^\]]+)\]/)![1];
-        const url = await loadImage(imageName);
-        if (url) {
-          setImageUrls(prev => ({ ...prev, [imageName]: url }));
-        }
-      });
-    }
-  }, [statement]);
-
   const renderContent = (text: string) => {
+    console.log('renderContent chamado com texto:', text);
     const parts = text.split(/(\[IMAGEM: ([^\]]+)\])/g);
+    console.log('Partes divididas:', parts);
     
     return parts.map((part, index) => {
+      console.log(`Processando parte ${index}:`, part);
+      
       // Verifica se é uma tag de imagem
       if (part.match(/\[IMAGEM: ([^\]]+)\]/)) {
         const imageName = part.match(/\[IMAGEM: ([^\]]+)\]/)![1];
-        const imageUrl = imageUrls[imageName];
+        const imageUrl = imageMap[imageName];
+        
+        console.log('Tag de imagem encontrada:', imageName, 'URL:', imageUrl);
         
         if (imageUrl) {
           return (
@@ -48,11 +34,21 @@ export default function QuestionStatement({ statement, className = "" }: Questio
                 src={imageUrl}
                 alt="Imagem da questão"
                 className="max-w-full h-auto rounded-lg shadow-md theme-border border"
+                onLoad={() => console.log('Imagem carregada com sucesso:', imageUrl)}
+                onError={(e) => console.error('Erro ao carregar imagem:', imageUrl, e)}
               />
             </div>
           );
+        } else {
+          console.log('Imagem não encontrada no mapeamento:', imageName);
+          return (
+            <div key={index} className="my-6 flex justify-center">
+              <div className="p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
+                <p className="text-gray-500">Imagem não encontrada: {imageName}</p>
+              </div>
+            </div>
+          );
         }
-        return null;
       }
       
       // Se é o nome da imagem sozinho (capturado pelo grupo), ignora

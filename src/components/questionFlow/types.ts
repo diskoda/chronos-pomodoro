@@ -7,6 +7,7 @@ export interface QuestionFlowData {
   explanationText: string;
   alternativesAnalysis: AlternativeAnalysis[];
   metadata?: QuestionMetadata;
+  imageUrl?: string;
 }
 
 export interface AlternativeAnalysis {

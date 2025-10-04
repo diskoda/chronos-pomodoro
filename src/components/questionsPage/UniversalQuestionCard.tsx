@@ -363,10 +363,6 @@ export default function UniversalQuestionCard({
           <div className="flex gap-3">
             <span className="text-purple-600 dark:text-purple-400">{question.exam}</span>
           </div>
-          
-          <div className="flex gap-1">
-            <span title="Sistema universal ativo" className="text-green-500 text-xs">Sistema ativo</span>
-          </div>
         </div>
       </div>
     </div>
