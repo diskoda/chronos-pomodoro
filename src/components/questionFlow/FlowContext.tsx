@@ -14,6 +14,7 @@ interface FlowState {
   progress: number;
   timeSpent: number;
   stagesVisited: FlowStage[];
+  questionId?: number;
 }
 
 type FlowAction = 
@@ -22,7 +23,8 @@ type FlowAction =
   | { type: 'SELECT_ALTERNATIVE'; payload: string }
   | { type: 'NEXT_STAGE' }
   | { type: 'RESET_FLOW' }
-  | { type: 'UPDATE_TIME'; payload: number };
+  | { type: 'UPDATE_TIME'; payload: number }
+  | { type: 'SET_QUESTION_ID'; payload: number };
 
 const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
   switch (action.type) {
@@ -88,6 +90,12 @@ const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
         timeSpent: action.payload
       };
       
+    case 'SET_QUESTION_ID':
+      return {
+        ...state,
+        questionId: action.payload
+      };
+      
     default:
       return state;
   }
@@ -100,7 +108,8 @@ const initialFlowState: FlowState = {
   isCorrect: false,
   progress: 0,
   timeSpent: 0,
-  stagesVisited: []
+  stagesVisited: [],
+  questionId: undefined
 };
 
 // ==========================================
@@ -133,9 +142,10 @@ const FlowContext = createContext<FlowContextType | null>(null);
 interface FlowProviderProps {
   children: ReactNode;
   questionData?: QuestionFlowData;
+  questionId?: number;
 }
 
-export function FlowProvider({ children, questionData }: FlowProviderProps) {
+export function FlowProvider({ children, questionData, questionId }: FlowProviderProps) {
   const [state, dispatch] = useReducer(flowReducer, initialFlowState);
 
   // Inicializar dados da questão quando fornecidos
@@ -148,12 +158,18 @@ export function FlowProvider({ children, questionData }: FlowProviderProps) {
     dispatch({ type: 'SET_QUESTION_DATA', payload: questionData });
   }
 
+  // Inicializar questionId quando fornecido
+  if (questionId && state.questionId !== questionId) {
+    dispatch({ type: 'SET_QUESTION_ID', payload: questionId });
+  }
+
   const contextValue: FlowContextType = {
     currentStage: state.currentStage,
     questionData: state.questionData,
     selectedAlternative: state.selectedAlternative,
     isCorrect: state.isCorrect,
     progress: state.progress,
+    questionId: state.questionId,
     
     goToStage: (stage: FlowStage) => {
       dispatch({ type: 'SET_STAGE', payload: stage });
@@ -169,6 +185,10 @@ export function FlowProvider({ children, questionData }: FlowProviderProps) {
     
     resetFlow: () => {
       dispatch({ type: 'RESET_FLOW' });
+    },
+    
+    setQuestionId: (id: number) => {
+      dispatch({ type: 'SET_QUESTION_ID', payload: id });
     }
   };
 

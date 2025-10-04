@@ -9,26 +9,26 @@ export const question1FlowData: QuestionFlowData = {
 
 Você está diante de uma situação que exige não apenas conhecimento médico, mas também habilidades de comunicação e abordagem motivacional. O objetivo é criar um ambiente propício para mudança de comportamento do pai tabagista.`,
 
-  explanationText: `Para resolver esta questão, você precisa compreender os fundamentos da **entrevista motivacional**:
+  explanationText: `Para resolver esta questão, você precisa compreender os fundamentos da entrevista motivacional:
 
-**Conceitos-chave:**
+Conceitos-chave:
 
-1. **Entrevista Motivacional**: Técnica de comunicação que visa despertar a motivação intrínseca da pessoa para a mudança de comportamento.
+1. Entrevista Motivacional: Técnica de comunicação que visa despertar a motivação intrínseca da pessoa para a mudança de comportamento.
 
-2. **Estágios de Mudança (Modelo Transteórico)**:
-   - Pré-contemplação: pessoa não considera mudar
-   - Contemplação: pessoa pondera sobre a mudança
-   - Preparação: pessoa se prepara para agir
-   - Ação: pessoa implementa a mudança
-   - Manutenção: pessoa sustenta a mudança
+2. Estágios de Mudança (Modelo Transteórico):
+    → Pré-contemplação: pessoa não considera mudar
+    → Contemplação: pessoa pondera sobre a mudança  
+    → Preparação: pessoa se prepara para agir
+    → Ação: pessoa implementa a mudança
+    → Manutenção: pessoa sustenta a mudança
 
-3. **Princípios da Abordagem Motivacional**:
-   - Expressar empatia
-   - Desenvolver discrepância (entre comportamento atual e objetivos)
-   - Aceitar a resistência sem confrontação
-   - Fortalecer a autoeficácia
+3. Princípios da Abordagem Motivacional:
+    → Expressar empatia
+    → Desenvolver discrepância (entre comportamento atual e objetivos)
+    → Aceitar a resistência sem confrontação
+    → Fortalecer a autoeficácia
 
-4. **Perguntas Abertas vs. Fechadas**: A abordagem motivacional privilegia perguntas que estimulem a reflexão, não o confronto.
+4. Perguntas Abertas vs. Fechadas: A abordagem motivacional privilegia perguntas que estimulem a reflexão, não o confronto.
 
 No contexto desta questão, é fundamental identificar qual pergunta melhor explora a motivação intrínseca do pai para cessação do tabagismo.`,
 
@@ -37,7 +37,7 @@ No contexto desta questão, é fundamental identificar qual pergunta melhor expl
       letter: "A",
       text: "Você já pensou em parar de fumar?",
       isCorrect: true,
-      explanation: "Esta é a pergunta ideal na abordagem motivacional. É uma pergunta aberta que convida à reflexão sem criar confronto. Ela explora se o paciente já contemplou a cessação, permitindo avaliar em qual estágio de mudança ele se encontra. Estimula a motivação intrínseca e abre espaço para o diálogo terapêutico.",
+      explanation: "✅ RESPOSTA CORRETA\n\nEsta é a pergunta ideal na abordagem motivacional. É uma pergunta aberta que convida à reflexão sem criar confronto. Ela explora se o paciente já contemplou a cessação, permitindo avaliar em qual estágio de mudança ele se encontra. Estimula a motivação intrínseca e abre espaço para o diálogo terapêutico.",
       category: 'correct',
       conceptsInvolved: ['entrevista motivacional', 'pergunta aberta', 'reflexão', 'estágios de mudança']
     },
@@ -45,7 +45,7 @@ No contexto desta questão, é fundamental identificar qual pergunta melhor expl
       letter: "B", 
       text: "Você já pensou nos riscos de fumar?",
       isCorrect: false,
-      explanation: "Embora seja uma pergunta aberta, ela foca nos aspectos negativos do tabagismo de forma direta. Na abordagem motivacional, evitamos perguntas que possam soar como 'sermão' ou que coloquem o paciente em posição defensiva. Esta abordagem pode gerar resistência.",
+      explanation: "⚠️ ALTERNATIVA PLAUSÍVEL MAS INCORRETA\n\nEmbora seja uma pergunta aberta, ela foca nos aspectos negativos do tabagismo de forma direta. Na abordagem motivacional, evitamos perguntas que possam soar como 'sermão' ou que coloquem o paciente em posição defensiva. Esta abordagem pode gerar resistência.",
       category: 'plausible',
       conceptsInvolved: ['confrontação', 'resistência', 'abordagem defensiva']
     },
@@ -53,7 +53,7 @@ No contexto desta questão, é fundamental identificar qual pergunta melhor expl
       letter: "C",
       text: "Você fuma quantos cigarros por dia?",
       isCorrect: false, 
-      explanation: "Esta é uma pergunta fechada que busca informações quantitativas. Embora seja importante para a avaliação clínica, não é adequada para a abordagem motivacional inicial. Não estimula reflexão sobre mudança de comportamento.",
+      explanation: "❌ ALTERNATIVA INCORRETA\n\nEsta é uma pergunta fechada que busca informações quantitativas. Embora seja importante para a avaliação clínica, não é adequada para a abordagem motivacional inicial. Não estimula reflexão sobre mudança de comportamento.",
       category: 'incorrect',
       conceptsInvolved: ['pergunta fechada', 'avaliação quantitativa', 'falta de reflexão']
     },
@@ -61,7 +61,7 @@ No contexto desta questão, é fundamental identificar qual pergunta melhor expl
       letter: "D",
       text: "Você sabe que o tabagismo pode piorar a asma?",
       isCorrect: false,
-      explanation: "Esta pergunta é confrontativa e didática. Na abordagem motivacional, evitamos 'educar' de forma direta no primeiro momento, pois pode criar resistência. O paciente pode se sentir julgado ou repreendido, o que não favorece a mudança comportamental.",
+      explanation: "🚨 ALTERNATIVA PERIGOSA\n\nEsta pergunta é confrontativa e didática. Na abordagem motivacional, evitamos 'educar' de forma direta no primeiro momento, pois pode criar resistência. O paciente pode se sentir julgado ou repreendido, o que não favorece a mudança comportamental.",
       category: 'dangerous',
       conceptsInvolved: ['confrontação', 'educação prematura', 'resistência', 'julgamento']
     }
@@ -95,32 +95,54 @@ Descreva brevemente:
 
   explanationText: `[EXPLICAÇÃO TEÓRICA]
 
-**Conceitos-chave:**
+Conceitos-chave:
 
-1. **Conceito Principal**: Definição e importância
+1. Conceito Principal: Definição e importância
 
-2. **Conceitos Secundários**:
-   - Tópico 1: explicação
-   - Tópico 2: explicação
+2. Conceitos Secundários:
+    → Tópico 1: explicação
+    → Tópico 2: explicação
 
-3. **Aplicação Prática**:
-   - Como usar na prática
-   - Quando aplicar
+3. Aplicação Prática:
+    → Como usar na prática
+    → Quando aplicar
 
-**Pontos importantes:**
-- Lista de considerações especiais
-- Cuidados a serem tomados`,
+4. Pontos importantes: Lista de considerações especiais, Cuidados a serem tomados`,
 
   alternativesAnalysis: [
     {
       letter: "A",
       text: "[Texto da alternativa A]",
       isCorrect: true, // ou false
-      explanation: "[Explicação detalhada por que está correta/incorreta]",
+      explanation: "✅ RESPOSTA CORRETA\n\n[Explicação detalhada por que está correta]",
       category: 'correct', // 'correct' | 'plausible' | 'incorrect' | 'dangerous'
       conceptsInvolved: ['conceito1', 'conceito2']
     },
-    // ... demais alternativas
+    {
+      letter: "B",
+      text: "[Texto da alternativa B]",
+      isCorrect: false,
+      explanation: "⚠️ ALTERNATIVA PLAUSÍVEL MAS INCORRETA\n\n[Explicação detalhada por que está incorreta mas é plausível]",
+      category: 'plausible',
+      conceptsInvolved: ['conceito1', 'conceito2']
+    },
+    {
+      letter: "C",
+      text: "[Texto da alternativa C]",
+      isCorrect: false,
+      explanation: "❌ ALTERNATIVA INCORRETA\n\n[Explicação detalhada por que está incorreta]",
+      category: 'incorrect',
+      conceptsInvolved: ['conceito1', 'conceito2']
+    },
+    {
+      letter: "D",
+      text: "[Texto da alternativa D]",
+      isCorrect: false,
+      explanation: "🚨 ALTERNATIVA PERIGOSA\n\n[Explicação detalhada por que esta abordagem é perigosa]",
+      category: 'dangerous',
+      conceptsInvolved: ['conceito1', 'conceito2']
+    }
+    // ... demais alternativas se houver
   ],
   metadata: {
     specialty: '[Especialidade]',

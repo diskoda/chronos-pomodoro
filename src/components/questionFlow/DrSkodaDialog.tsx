@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DoctorSkoda from '../images/DoctorSkoda';
+import { useQuestionFlow } from './FlowContext';
 
 interface DrSkodaDialogProps {
   title: string;
@@ -8,6 +9,9 @@ interface DrSkodaDialogProps {
   continueButtonText?: string;
   onContinue?: () => void;
   className?: string;
+  audioSrc?: string;
+  audioSequence?: string[];
+  requireAudioCompletion?: boolean;
 }
 
 export default function DrSkodaDialog({
@@ -16,9 +20,122 @@ export default function DrSkodaDialog({
   showContinueButton = true,
   continueButtonText = "Prosseguir",
   onContinue,
-  className = ""
+  className = "",
+  audioSrc,
+  audioSequence,
+  requireAudioCompletion = false
 }: DrSkodaDialogProps) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [audioCompleted, setAudioCompleted] = useState(false);
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [sequenceCompleted, setSequenceCompleted] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
+  // Get questionId from context if available
+  const { questionId, currentStage } = useQuestionFlow();
+  
+  // Auto-configure audio for question 1
+  const getAudioConfig = () => {
+    if (audioSrc || audioSequence) {
+      return { src: audioSrc, sequence: audioSequence };
+    }
+    
+    if (questionId === 1) {
+      if (currentStage === 'begin') {
+        return { src: '/question1.1.mp3', sequence: undefined };
+      } else if (currentStage === 'explanation') {
+        return { 
+          src: undefined, 
+          sequence: ['/question1.2.mp3', '/question1.3.mp3', '/question1.4.mp3'] 
+        };
+      }
+    }
+    
+    return { src: undefined, sequence: undefined };
+  };
+
+  const { src: finalAudioSrc, sequence: finalAudioSequence } = getAudioConfig();
+  const finalRequireAudioCompletion = requireAudioCompletion || (questionId === 1 && (currentStage === 'begin' || currentStage === 'explanation'));
+
+  // Determine current audio to play
+  const currentAudioSrc = finalAudioSequence ? finalAudioSequence[currentAudioIndex] : finalAudioSrc;
+  const isSequenceMode = !!finalAudioSequence;
+  const totalAudios = finalAudioSequence?.length || 1;
+
+  useEffect(() => {
+    if (currentAudioSrc && audioRef.current) {
+      const audio = audioRef.current;
+      
+      const handlePlay = () => {
+        setIsAudioPlaying(true);
+        setShowPlayButton(false);
+        setAudioError(false);
+      };
+      
+      const handlePause = () => setIsAudioPlaying(false);
+      
+      const handleEnded = () => {
+        setIsAudioPlaying(false);
+        
+        if (isSequenceMode && currentAudioIndex < totalAudios - 1) {
+          // Play next audio in sequence
+          setCurrentAudioIndex(prev => prev + 1);
+        } else {
+          // Sequence completed or single audio finished
+          setAudioCompleted(true);
+          setSequenceCompleted(true);
+        }
+      };
+
+      const handleError = () => {
+        setAudioError(true);
+        setIsAudioPlaying(false);
+      };
+
+      audio.addEventListener('play', handlePlay);
+      audio.addEventListener('pause', handlePause);
+      audio.addEventListener('ended', handleEnded);
+      audio.addEventListener('error', handleError);
+
+      // Try to auto play, but handle autoplay restrictions
+      const tryAutoPlay = async () => {
+        try {
+          await audio.play();
+        } catch (error) {
+          console.log('Autoplay blocked, showing play button');
+          setShowPlayButton(true);
+          setAudioError(false);
+        }
+      };
+
+      tryAutoPlay();
+
+      return () => {
+        audio.removeEventListener('play', handlePlay);
+        audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('ended', handleEnded);
+        audio.removeEventListener('error', handleError);
+      };
+    }
+  }, [currentAudioSrc, isSequenceMode, currentAudioIndex, totalAudios]);
+
+  const handlePlayAudio = async () => {
+    if (audioRef.current) {
+      try {
+        await audioRef.current.play();
+        setUserInteracted(true);
+      } catch (error) {
+        console.error('Error playing audio:', error);
+        setAudioError(true);
+      }
+    }
+  };
+
+  const canContinue = !finalRequireAudioCompletion || audioCompleted;
 
   const handleContinue = () => {
     setIsAnimatingOut(true);
@@ -114,24 +231,45 @@ export default function DrSkodaDialog({
                         );
                       }
                       
-                      // Itens de lista com •, -, ou números
-                      if (paragraph.trim().match(/^[•\-\*]\s/) || paragraph.trim().match(/^\d+\.\s/)) {
+                      // Itens de lista com •, -, →, ou números
+                      if (paragraph.trim().match(/^[•\-\*→]\s/) || paragraph.trim().match(/^\d+\.\s/)) {
+                        const isSubtopic = paragraph.includes('→');
+                        const content = paragraph.trim().replace(/^[•\-\*→]\s/, '').replace(/^\d+\.\s/, '');
+                        
                         return (
-                          <li key={index} className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-1 ml-4">
-                            {paragraph.trim().replace(/^[•\-\*]\s/, '').replace(/^\d+\.\s/, '')}
+                          <li key={index} className={`text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-1 ${
+                            isSubtopic ? 'ml-8 text-gray-600 dark:text-gray-400' : 'ml-4'
+                          }`}>
+                            {isSubtopic && <span className="text-blue-500 mr-2">→</span>}
+                            {content}
                           </li>
                         );
                       }
                       
-                      // Alternativas com ✅ ou ❌
-                      if (paragraph.includes('✅') || paragraph.includes('❌')) {
-                        const isCorrect = paragraph.includes('✅');
+                      // Alternativas com indicadores visuais
+                      if (paragraph.includes('✅') || paragraph.includes('❌') || paragraph.includes('⚠️') || paragraph.includes('🚨')) {
+                        let bgColor, borderColor, textColor;
+                        
+                        if (paragraph.includes('✅')) {
+                          bgColor = 'bg-green-50 dark:bg-green-900/20';
+                          borderColor = 'border-green-500';
+                          textColor = 'text-green-800 dark:text-green-200';
+                        } else if (paragraph.includes('⚠️')) {
+                          bgColor = 'bg-yellow-50 dark:bg-yellow-900/20';
+                          borderColor = 'border-yellow-500';
+                          textColor = 'text-yellow-800 dark:text-yellow-200';
+                        } else if (paragraph.includes('🚨')) {
+                          bgColor = 'bg-purple-50 dark:bg-purple-900/20';
+                          borderColor = 'border-purple-500';
+                          textColor = 'text-purple-800 dark:text-purple-200';
+                        } else {
+                          bgColor = 'bg-red-50 dark:bg-red-900/20';
+                          borderColor = 'border-red-500';
+                          textColor = 'text-red-800 dark:text-red-200';
+                        }
+                        
                         return (
-                          <div key={index} className={`p-2 rounded-lg mb-2 border-l-4 ${
-                            isCorrect 
-                              ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200' 
-                              : 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-800 dark:text-red-200'
-                          }`}>
+                          <div key={index} className={`p-3 rounded-lg mb-3 border-l-4 ${bgColor} ${borderColor} ${textColor}`}>
                             <div className="text-sm font-medium">
                               {paragraph}
                             </div>
@@ -182,22 +320,114 @@ export default function DrSkodaDialog({
         {/* Botão de continuar fixo no bottom */}
         {showContinueButton && (
           <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-900">
+            {/* Audio player (hidden) */}
+            {currentAudioSrc && (
+              <audio 
+                ref={audioRef} 
+                src={currentAudioSrc}
+                className="hidden"
+                preload="auto"
+              />
+            )}
+            
+            {/* Status do áudio */}
+            {currentAudioSrc && finalRequireAudioCompletion && (
+              <div className="flex items-center mr-4 text-sm">
+                {showPlayButton ? (
+                  <button
+                    onClick={handlePlayAudio}
+                    className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
+                    {isSequenceMode ? `Iniciar áudios (${totalAudios})` : 'Reproduzir áudio'}
+                  </button>
+                ) : isAudioPlaying ? (
+                  <div className="flex items-center text-blue-600">
+                    <div className="animate-pulse w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                    {isSequenceMode ? (
+                      <span>Reproduzindo áudio {currentAudioIndex + 1}/{totalAudios}...</span>
+                    ) : (
+                      <span>Reproduzindo áudio...</span>
+                    )}
+                  </div>
+                ) : audioCompleted ? (
+                  <div className="flex items-center text-green-600">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    {isSequenceMode ? (
+                      <span>Sequência de áudios concluída ({totalAudios}/{totalAudios})</span>
+                    ) : (
+                      <span>Áudio concluído</span>
+                    )}
+                  </div>
+                ) : audioError ? (
+                  <div className="flex items-center text-red-600">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span>Erro ao carregar áudio</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-yellow-600">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                    <span>Aguardando áudio...</span>
+                  </div>
+                )}
+                
+                {/* Progress bar for sequence */}
+                {isSequenceMode && !showPlayButton && (
+                  <div className="ml-3 flex items-center">
+                    <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-blue-500 transition-all duration-300"
+                        style={{ 
+                          width: `${((currentAudioIndex + (audioCompleted ? 1 : 0)) / totalAudios) * 100}%` 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            
             <button
               onClick={handleContinue}
-              className="group relative bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center space-x-2 text-sm shadow-blue-500/50 ring-2 ring-blue-400 ring-opacity-50 animate-pulse"
+              disabled={!canContinue}
+              className={`group relative ${
+                canContinue 
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white' 
+                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              } px-4 py-2 rounded-lg font-medium transition-all duration-300 transform ${
+                canContinue ? 'hover:scale-105 hover:shadow-lg' : ''
+              } flex items-center space-x-2 text-sm shadow-blue-500/50 ring-2 ring-blue-400 ring-opacity-50 ${
+                canContinue ? 'animate-pulse' : ''
+              }`}
             >
               {/* Glow do botão */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
+              {canContinue && (
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
+              )}
               
-              <span className="relative z-10">{continueButtonText}</span>
-              <svg 
-                className="relative z-10 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <span className="relative z-10">
+                {!canContinue && finalRequireAudioCompletion ? 
+                  (showPlayButton ? 
+                    'Clique em reproduzir para continuar' :
+                    isSequenceMode ? 
+                      `Ouça todos os áudios para continuar (${currentAudioIndex + 1}/${totalAudios})` : 
+                      'Ouça o áudio para continuar'
+                  ) : 
+                  continueButtonText
+                }
+              </span>
+              {canContinue && (
+                <svg 
+                  className="relative z-10 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              )}
             </button>
           </div>
         )}

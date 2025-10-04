@@ -75,10 +75,12 @@ export interface FlowContextType {
   selectedAlternative: string | null;
   isCorrect: boolean;
   progress: number;
+  questionId?: number;
   goToStage: (stage: FlowStage) => void;
   selectAlternative: (letter: string) => void;
   nextStage: () => void;
   resetFlow: () => void;
+  setQuestionId: (id: number) => void;
 }
 
 export interface AnalyticsData {

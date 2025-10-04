@@ -28,7 +28,8 @@ export default function UniversalFlowStage({
     questionData, 
     selectedAlternative, 
     isCorrect,
-    nextStage 
+    nextStage,
+    questionId
   } = useQuestionFlow();
 
   // Usar stage fornecido ou stage atual do contexto

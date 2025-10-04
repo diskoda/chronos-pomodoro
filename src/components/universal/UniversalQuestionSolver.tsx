@@ -162,7 +162,7 @@ export default function UniversalQuestionSolver({
 
   if (shouldUseDrSkoda) {
     return (
-      <FlowProvider questionData={flowData}>
+      <FlowProvider questionData={flowData} questionId={questionId}>
         <IntegratedQuestionInterface 
           question={question}
           onBack={handleBack}
