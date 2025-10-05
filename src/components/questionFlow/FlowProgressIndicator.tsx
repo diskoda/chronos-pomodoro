@@ -20,27 +20,27 @@ export default function FlowProgressIndicator({
   const stages = [
     {
       key: 'begin' as FlowStage,
-      label: 'Inicialização',
-      description: 'Neural bootstrap',
-      icon: '🧠',
+      label: 'Leitura',
+      description: 'Análise do enunciado',
+      icon: '',
       color: 'from-orange-500 to-orange-600',
       glowColor: 'orange-500',
       threshold: 25
     },
     {
       key: 'question' as FlowStage,
-      label: 'Processamento',
-      description: 'Análise neural ativa',
-      icon: '⚡',
+      label: 'Contextualização',
+      description: 'Interpretação clínica',
+      icon: '',
       color: 'from-purple-500 to-purple-600',
       glowColor: 'purple-500',
       threshold: 50
     },
     {
       key: 'explanation' as FlowStage,
-      label: 'Síntese',
-      description: 'Compilação teórica',
-      icon: '🔬',
+      label: 'Análise',
+      description: 'Avaliação das alternativas',
+      icon: '',
       color: 'from-teal-500 to-teal-600',
       glowColor: 'teal-500',
       threshold: 75
@@ -48,74 +48,29 @@ export default function FlowProgressIndicator({
     {
       key: 'analysis' as FlowStage,
       label: 'Conclusão',
-      description: 'Output neural final',
-      icon: '🎯',
+      description: 'Resultado final',
+      icon: '',
       color: 'from-pink-500 to-pink-600',
       glowColor: 'pink-500',
       threshold: 100
     }
   ];
 
-  // Obter estágio atual
-  const currentStageData = stages.find(stage => stage.key === currentStage);
-  
   return (
     <div className={`relative ${className}`}>
       {/* Cyber Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/20 via-purple-900/20 to-teal-900/20 rounded-2xl blur-sm opacity-60"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/20 via-purple-900/20 to-teal-900/20 rounded-xl blur-sm opacity-60"></div>
       
       {/* Main Container */}
-      <div className="relative bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-lg border border-purple-500/30 rounded-2xl p-6 shadow-2xl">
+      <div className="relative bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-lg border border-purple-500/30 rounded-xl p-4 shadow-xl">
         {/* Animated Border Glow */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/20 via-orange-600/20 to-teal-600/20 rounded-2xl blur opacity-75 animate-pulse"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/20 via-orange-600/20 to-teal-600/20 rounded-xl blur opacity-75 animate-pulse"></div>
         
         <div className="relative">
-          {/* Neural Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              {/* Current Stage Icon */}
-              <div className="relative">
-                <div className={`absolute -inset-1 bg-gradient-to-r ${currentStageData?.color || 'from-purple-500 to-purple-600'} rounded-full blur opacity-60 animate-pulse`}></div>
-                <div className={`relative w-12 h-12 bg-gradient-to-r ${currentStageData?.color || 'from-purple-500 to-purple-600'} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
-                  {currentStageData?.icon || '🧠'}
-                </div>
-                {/* Pulse Ring */}
-                <div className={`absolute inset-0 rounded-full border-2 border-${currentStageData?.glowColor || 'purple-500'} animate-ping opacity-60`}></div>
-              </div>
-
-              {/* Stage Info */}
-              <div>
-                <h3 className={`text-lg font-bold bg-gradient-to-r ${currentStageData?.color || 'from-purple-400 to-purple-600'} bg-clip-text text-transparent`}>
-                  {currentStageData?.label || 'Neural Flow'}
-                </h3>
-                {showDetails && currentStageData && (
-                  <p className="text-sm text-slate-400 font-medium">
-                    {currentStageData.description}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Progress Percentage */}
-            <div className="text-right">
-              <div className="relative">
-                <div className={`absolute -inset-1 bg-gradient-to-r ${currentStageData?.color || 'from-purple-500 to-purple-600'} rounded-lg blur opacity-40`}></div>
-                <div className="relative bg-slate-800/80 border border-slate-600/40 rounded-lg px-4 py-2">
-                  <span className={`text-2xl font-bold bg-gradient-to-r ${currentStageData?.color || 'from-purple-400 to-purple-600'} bg-clip-text text-transparent`}>
-                    {progress}%
-                  </span>
-                  <p className="text-xs text-slate-400 font-medium">
-                    neural sync
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Neural Progress Bar */}
-          <div className="relative mb-6">
+          <div className="relative mb-4">
             {/* Background Track */}
-            <div className="w-full bg-slate-700/60 rounded-full h-4 border border-slate-600/40 overflow-hidden">
+            <div className="w-full bg-slate-700/60 rounded-full h-3 border border-slate-600/40 overflow-hidden">
               {/* Progress Fill */}
               <div 
                 className="h-full bg-gradient-to-r from-orange-500 via-purple-500 via-teal-500 to-pink-500 transition-all duration-1000 ease-out relative overflow-hidden" 
@@ -132,7 +87,7 @@ export default function FlowProgressIndicator({
             {/* Progress Labels */}
             <div className="flex justify-between mt-2 text-xs text-slate-400">
               <span>0%</span>
-              <span className="text-slate-300 font-medium">Neural Processing</span>
+              <span className="text-slate-300 font-medium">Progresso da Questão</span>
               <span>100%</span>
             </div>
           </div>
@@ -141,7 +96,7 @@ export default function FlowProgressIndicator({
           {showDetails && (
             <div className="relative">
               {/* Connection Lines */}
-              <div className="absolute top-6 left-8 right-8 h-0.5 bg-slate-600/40">
+              <div className="absolute top-4 left-6 right-6 h-0.5 bg-slate-600/40">
                 <div 
                   className="h-full bg-gradient-to-r from-orange-500 via-purple-500 to-teal-500 transition-all duration-1000 ease-out"
                   style={{ width: `${Math.min(progress * 1.1, 100)}%` }}
@@ -163,14 +118,14 @@ export default function FlowProgressIndicator({
                       }`}
                     >
                       {/* Stage Node */}
-                      <div className="relative mb-3">
+                      <div className="relative mb-2">
                         {/* Glow Effect */}
                         {isActive && (
-                          <div className={`absolute -inset-2 bg-gradient-to-r ${stage.color} rounded-full blur opacity-60 ${isCurrent ? 'animate-pulse' : ''}`}></div>
+                          <div className={`absolute -inset-1 bg-gradient-to-r ${stage.color} rounded-full blur opacity-60 ${isCurrent ? 'animate-pulse' : ''}`}></div>
                         )}
                         
                         {/* Main Node */}
-                        <div className={`relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-500 ${
+                        <div className={`relative flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-500 ${
                           isCompleted 
                             ? `bg-gradient-to-r ${stage.color} border-transparent text-white shadow-lg shadow-${stage.glowColor}/30`
                             : isCurrent
@@ -178,11 +133,11 @@ export default function FlowProgressIndicator({
                             : 'bg-slate-700/60 border-slate-600 text-slate-500'
                         }`}>
                           {isCompleted ? (
-                            <span className="text-lg animate-bounce">✅</span>
+                            <div className="w-3 h-3 bg-white rounded-full"></div>
                           ) : isCurrent ? (
-                            <span className="text-lg animate-pulse">{stage.icon}</span>
+                            <div className={`w-2 h-2 bg-${stage.glowColor} rounded-full animate-pulse`}></div>
                           ) : (
-                            <span className="text-lg opacity-60">{stage.icon}</span>
+                            <div className="w-2 h-2 bg-slate-500 rounded-full opacity-60"></div>
                           )}
                           
                           {/* Neural Pulse Ring */}
@@ -190,18 +145,11 @@ export default function FlowProgressIndicator({
                             <div className={`absolute inset-0 rounded-full border-2 border-${stage.glowColor} animate-ping opacity-75`}></div>
                           )}
                         </div>
-
-                        {/* Progress Indicator */}
-                        {isCurrent && (
-                          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
-                            <div className={`w-2 h-2 bg-${stage.glowColor} rounded-full animate-ping`}></div>
-                          </div>
-                        )}
                       </div>
                       
                       {/* Stage Label */}
                       <div className="text-center">
-                        <span className={`text-sm font-bold transition-all duration-300 ${
+                        <span className={`text-xs font-medium transition-all duration-300 ${
                           isActive 
                             ? `bg-gradient-to-r ${stage.color} bg-clip-text text-transparent` 
                             : 'text-slate-500'
@@ -210,7 +158,7 @@ export default function FlowProgressIndicator({
                         </span>
                         {showDetails && (
                           <p className={`text-xs mt-1 transition-all duration-300 ${
-                            isActive ? 'text-slate-300' : 'text-slate-600'
+                            isActive ? 'text-slate-400' : 'text-slate-600'
                           }`}>
                             {stage.description}
                           </p>
@@ -222,14 +170,6 @@ export default function FlowProgressIndicator({
               </div>
             </div>
           )}
-
-          {/* Neural Activity Dots */}
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30">
-            <div className="absolute top-4 left-8 w-1 h-1 bg-orange-400 rounded-full animate-ping"></div>
-            <div className="absolute top-8 right-12 w-1 h-1 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-6 left-1/3 w-1 h-1 bg-teal-400 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-4 right-1/4 w-1 h-1 bg-pink-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-          </div>
         </div>
       </div>
     </div>

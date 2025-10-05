@@ -806,6 +806,197 @@ export const explanationsDatabase: Record<string, Explanation> = {
     ],
     keywords: ['retrovírus', 'CD4', 'carga viral', 'TARV', 'PrEP', 'AIDS'],
     difficulty: 'intermediate'
+  },
+
+  // =========================================
+  // TERMOS ESPECÍFICOS DA QUESTÃO 4
+  // =========================================
+
+  'letargico': {
+    id: 'letargico',
+    type: 'medical',
+    title: 'Letargia / Letárgico',
+    content: 'Estado de diminuição da consciência e responsividade, caracterizado por sonolência excessiva, redução da atividade motora e lentidão nas respostas. Em pediatria, é um sinal de alarme que indica deterioração clínica.',
+    icon: '😴',
+    category: 'Sinais e Sintomas',
+    examples: [
+      'Criança muito sonolenta, difícil de despertar',
+      'Redução significativa da atividade e brincadeiras',
+      'Respostas lentas aos estímulos verbais',
+      'Perda do interesse pelo ambiente'
+    ],
+    keywords: ['letargia', 'consciência', 'sonolência', 'deterioração'],
+    difficulty: 'basic'
+  },
+
+  'gemencia': {
+    id: 'gemencia',
+    type: 'medical',
+    title: 'Gemência / Gemente',
+    content: 'Som respiratório anormal caracterizado por gemidos durante a expiração, indicando desconforto respiratório significativo. É um sinal de gravidade em pediatria, sugerindo esforço para manter adequada ventilação.',
+    icon: '😣',
+    category: 'Sinais Respiratórios',
+    examples: [
+      'Sons de gemido durante a respiração',
+      'Expressão de desconforto facial',
+      'Tentativa de reduzir o trabalho respiratório',
+      'Sinal de insuficiência respiratória'
+    ],
+    keywords: ['gemência', 'respiração', 'desconforto', 'gravidade'],
+    difficulty: 'basic'
+  },
+
+  'frequencia-cardiaca': {
+    id: 'frequencia-cardiaca',
+    type: 'medical',
+    title: 'Frequência Cardíaca (FC)',
+    content: 'Número de batimentos cardíacos por minuto. Em pediatria, varia conforme a idade: RN (120-160 bpm), lactentes (100-140 bpm), pré-escolares (80-120 bpm), escolares (70-100 bpm).',
+    icon: '💓',
+    category: 'Sinais Vitais',
+    examples: [
+      'FC normal em lactente: 100-140 bpm',
+      'Taquicardia: FC acima do normal para idade',
+      'Bradicardia: FC abaixo do normal para idade',
+      'Monitorização contínua em UTI'
+    ],
+    keywords: ['frequência cardíaca', 'batimentos', 'taquicardia', 'bradicardia'],
+    difficulty: 'basic'
+  },
+
+  'bpm': {
+    id: 'bpm',
+    type: 'medical',
+    title: 'BPM - Batimentos Por Minuto',
+    content: 'Unidade de medida da frequência cardíaca que expressa o número de contrações do coração em um minuto. Parâmetro vital essencial para avaliação cardiovascular.',
+    icon: '⏱️',
+    category: 'Unidades de Medida',
+    examples: [
+      'FC: 120 bpm (frequência normal)',
+      'Taquicardia: >140 bpm em lactentes',
+      'Bradicardia: <100 bpm em lactentes',
+      'Monitorização: FC contínua em bpm'
+    ],
+    keywords: ['bpm', 'batimentos', 'frequência', 'cardíaca'],
+    difficulty: 'basic'
+  },
+
+  'ipm': {
+    id: 'ipm',
+    type: 'medical',
+    title: 'IPM - Incursões Por Minuto',
+    content: 'Unidade de medida da frequência respiratória que expressa o número de movimentos respiratórios (inspiração + expiração) em um minuto. Sinônimo de respirações por minuto (rpm).',
+    icon: '🫁',
+    category: 'Unidades de Medida',
+    examples: [
+      'FR: 88 ipm (taquipneia severa)',
+      'Normal lactente: 30-40 ipm',
+      'Taquipneia: >50 ipm em lactentes',
+      'Bradipneia: <20 ipm'
+    ],
+    keywords: ['ipm', 'incursões', 'respiração', 'frequência respiratória'],
+    difficulty: 'basic'
+  },
+
+  'pressao-arterial': {
+    id: 'pressao-arterial',
+    type: 'medical',
+    title: 'Pressão Arterial (PA)',
+    content: 'Força exercida pelo sangue contra as paredes das artérias. Medida em mmHg, expressa como sistólica/diastólica. Em pediatria, valores normais variam conforme idade, sexo e altura.',
+    icon: '🩺',
+    category: 'Sinais Vitais',
+    examples: [
+      'PA normal lactente: 80-100/45-65 mmHg',
+      'Hipertensão: PA >P95 para idade',
+      'Hipotensão: PA <P5 para idade',
+      'Medição com manguito adequado'
+    ],
+    keywords: ['pressão arterial', 'hipertensão', 'hipotensão', 'sistólica', 'diastólica'],
+    difficulty: 'basic'
+  },
+
+  'mmhg': {
+    id: 'mmhg',
+    type: 'medical',
+    title: 'mmHg - Milímetros de Mercúrio',
+    content: 'Unidade de medida de pressão utilizada para expressar a pressão arterial e outras pressões fisiológicas. Refere-se à altura de uma coluna de mercúrio que a pressão pode sustentar.',
+    icon: '📏',
+    category: 'Unidades de Medida',
+    examples: [
+      'PA: 120/80 mmHg (pressão normal adulto)',
+      'PA: 90/60 mmHg (normal para criança)',
+      'Pressão intracraniana: 10-15 mmHg',
+      'Pressão venosa central: 2-8 mmHg'
+    ],
+    keywords: ['mmHg', 'pressão', 'mercúrio', 'unidade'],
+    difficulty: 'basic'
+  },
+
+  'tiragem-intercostal': {
+    id: 'tiragem-intercostal',
+    type: 'medical',
+    title: 'Tiragem Intercostal',
+    content: 'Retração dos músculos entre as costelas durante a inspiração, visível como depressões entre as costelas. Indica aumento do trabalho respiratório e obstrução das vias aéreas ou redução da complacência pulmonar.',
+    icon: '🫁',
+    category: 'Sinais Respiratórios',
+    examples: [
+      'Depressões visíveis entre as costelas',
+      'Sinal de esforço respiratório aumentado',
+      'Comum em asma, pneumonia, bronquiolite',
+      'Indica necessidade de suporte ventilatório'
+    ],
+    keywords: ['tiragem', 'intercostal', 'retração', 'esforço respiratório'],
+    difficulty: 'intermediate'
+  },
+
+  'tiragem-subdiafragmatica': {
+    id: 'tiragem-subdiafragmatica',
+    type: 'medical',
+    title: 'Tiragem Subdiafragmática',
+    content: 'Retração da região abaixo das costelas (região subcostal) durante a inspiração. Indica esforço respiratório significativo e pode estar associada a obstrução das vias aéreas inferiores.',
+    icon: '🫁',
+    category: 'Sinais Respiratórios',
+    examples: [
+      'Depressão abaixo das últimas costelas',
+      'Movimento paradoxal do abdome',
+      'Sinal de insuficiência respiratória',
+      'Comum em bronquiolite severa'
+    ],
+    keywords: ['tiragem', 'subdiafragmática', 'subcostal', 'esforço'],
+    difficulty: 'intermediate'
+  },
+
+  'tiragem-furcula': {
+    id: 'tiragem-furcula',
+    type: 'medical',
+    title: 'Tiragem de Fúrcula',
+    content: 'Retração da fossa supraesternal (depressão acima do esterno, entre as clavículas) durante a inspiração. Indica obstrução das vias aéreas superiores ou esforço respiratório severo.',
+    icon: '🫁',
+    category: 'Sinais Respiratórios',
+    examples: [
+      'Depressão na base do pescoço',
+      'Retração supraesternal visível',
+      'Sinal de obstrução alta',
+      'Indica gravidade respiratória'
+    ],
+    keywords: ['tiragem', 'fúrcula', 'supraesternal', 'obstrução'],
+    difficulty: 'intermediate'
+  },
+
+  'enchimento-capilar': {
+    id: 'enchimento-capilar',
+    type: 'medical',
+    title: 'Tempo de Enchimento Capilar (TEC)',
+    content: 'Tempo necessário para retorno da coloração normal após compressão de um leito ungueal ou pele. Normal: <2 segundos em crianças, <3 segundos em adultos. Avalia perfusão periférica.',
+    icon: '💅',
+    category: 'Sinais de Perfusão',
+    examples: [
+      'TEC <2s: perfusão normal',
+      'TEC 3-4s: perfusão comprometida',
+      'TEC >5s: choque/hipoperfusão',
+      'Teste no leito ungueal ou esterno'
+    ],
+    keywords: ['enchimento capilar', 'perfusão', 'choque', 'circulação'],
+    difficulty: 'basic'
   }
 };
 

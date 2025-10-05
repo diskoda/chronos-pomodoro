@@ -78,6 +78,8 @@ export interface FlowContextType {
   questionId?: number;
   goToStage: (stage: FlowStage) => void;
   selectAlternative: (letter: string) => void;
+  confirmSelection: () => void; // Nova função para confirmar seleção
+  startReading: () => void; // Nova função para iniciar leitura
   nextStage: () => void;
   resetFlow: () => void;
   setQuestionId: (id: number) => void;

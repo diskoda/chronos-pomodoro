@@ -33,13 +33,13 @@ O objetivo é compreender como avaliar o desempenho de programas de prevenção 
 
 A figura apresentada no enunciado mostra a **cascata do cuidado contínuo do HIV**, que serve como modelo para compreender a aplicação na sífilis congênita. Observe os elementos-chave:
 
-🔍 **Estrutura Visual da Cascata:**
+**Estrutura Visual da Cascata:**
 - **Barras decrescentes**: Cada barra representa uma etapa do cuidado
 - **Primeira barra (mais alta)**: População total infectada
 - **Barras intermediárias**: Etapas progressivas do cuidado
 - **Última barra (final)**: Desfecho desejado do programa
 
-📊 **Leitura dos Dados:**
+**Leitura dos Dados:**
 - **Altura das barras**: Proporção de pessoas em cada etapa
 - **Diminuição progressiva**: Perda de pacientes entre etapas
 - **Gaps entre barras**: Oportunidades de melhoria
@@ -85,7 +85,7 @@ No contexto desta questão, é fundamental identificar qual indicador melhor rep
       letter: 'A',
       text: 'Número de gestantes curadas /Número de gestantes tratadas X 100.',
       isCorrect: false,
-      explanation: '❌ **ALTERNATIVA INCORRETA**\n\n**Análise baseada na imagem da cascata:**\n\nEsta fórmula representa uma **barra intermediária** da cascata, não a última barra:\n\n📊 **Posição na cascata (conforme imagem):**\n• Esta seria uma das barras do **meio da cascata**\n• Mede apenas a eficácia do tratamento entre as tratadas\n• **NÃO é a última barra** que representa o desfecho final\n\n🚫 **Por que está incorreta:**\n• **Não mede o objetivo final**: Prevenção da transmissão vertical\n• **Escopo limitado**: Apenas eficácia terapêutica\n• **Perde o conceito**: Da cascata completa mostrada na imagem\n\nA última barra deve representar o **sucesso global**, não apenas uma etapa intermediária.',
+      explanation: '**ALTERNATIVA INCORRETA**\n\n**Análise baseada na imagem da cascata:**\n\nEsta fórmula representa uma **barra intermediária** da cascata, não a última barra:\n\n**Posição na cascata (conforme imagem):**\n• Esta seria uma das barras do **meio da cascata**\n• Mede apenas a eficácia do tratamento entre as tratadas\n• **NÃO é a última barra** que representa o desfecho final\n\n**Por que está incorreta:**\n• **Não mede o objetivo final**: Prevenção da transmissão vertical\n• **Escopo limitado**: Apenas eficácia terapêutica\n• **Perde o conceito**: Da cascata completa mostrada na imagem\n\nA última barra deve representar o **sucesso global**, não apenas uma etapa intermediária.',
       category: 'incorrect',
       conceptsInvolved: ['indicadores epidemiológicos', 'cascata do cuidado', 'interpretação de imagem']
     },
@@ -93,7 +93,7 @@ No contexto desta questão, é fundamental identificar qual indicador melhor rep
       letter: 'B',
       text: 'Número de gestantes curadas/Número de nascidos vivos X 100.',
       isCorrect: false,
-      explanation: '❌ **ALTERNATIVA INCORRETA**\n\n**Análise baseada na lógica da cascata:**\n\nEsta fórmula apresenta **inconsistência epidemiológica** fundamental:\n\n🔍 **Problemas da fórmula:**\n• **Numerador inadequado**: Gestantes curadas (não é o desfecho final)\n• **Denominador inadequado**: Nascidos vivos totais (inclui mães não infectadas)\n• **Falta de lógica**: Compara diferentes populações sem conexão\n\n📊 **Violação da cascata (conforme imagem):**\n• **Não segue a progressão**: Da base até o topo\n• **Mistura etapas**: Intermediárias com população geral\n• **Perde o foco**: No objetivo da prevenção da transmissão vertical\n\nEsta fórmula não faz sentido epidemiológico nem segue a lógica visual da cascata.',
+      explanation: '**ALTERNATIVA INCORRETA**\n\n**Análise baseada na lógica da cascata:**\n\nEsta fórmula apresenta **inconsistência epidemiológica** fundamental:\n\n**Problemas da fórmula:**\n• **Numerador inadequado**: Gestantes curadas (não é o desfecho final)\n• **Denominador inadequado**: Nascidos vivos totais (inclui mães não infectadas)\n• **Falta de lógica**: Compara diferentes populações sem conexão\n\n**Violação da cascata (conforme imagem):**\n• **Não segue a progressão**: Da base até o topo\n• **Mistura etapas**: Intermediárias com população geral\n• **Perde o foco**: No objetivo da prevenção da transmissão vertical\n\nEsta fórmula não faz sentido epidemiológico nem segue a lógica visual da cascata.',
       category: 'incorrect',
       conceptsInvolved: ['interpretação de indicadores', 'denominadores inadequados', 'lógica epidemiológica']
     },
@@ -101,7 +101,7 @@ No contexto desta questão, é fundamental identificar qual indicador melhor rep
       letter: 'C',
       text: 'Número de nascidos vivos sem sífilis/Número de nascidos vivos X 100.',
       isCorrect: false,
-      explanation: '⚠️ **ALTERNATIVA PLAUSÍVEL MAS INCORRETA**\n\n**Análise considerando a imagem da cascata:**\n\nEmbora meça nascidos sem sífilis, esta fórmula **dilui o indicador** ao incluir toda a população:\n\n📊 **Problema do denominador (conforme cascata):**\n• **Base incorreta**: Usa nascidos vivos totais, não gestantes infectadas\n• **Inclui não expostos**: Filhos de mães sem sífilis\n• **Não reflete efetividade**: Do programa específico\n\n🎯 **Comparação com a imagem:**\n• **Cascata correta**: Base = população de risco inicial\n• **Esta fórmula**: Base = população geral (incorreto)\n• **Resultado**: Prevalência geral, não efetividade do programa\n\n✅ **Numerador correto**: Nascidos vivos sem sífilis\n❌ **Denominador incorreto**: Deveria ser gestantes infectadas (base da cascata)',
+      explanation: '**ALTERNATIVA PLAUSÍVEL MAS INCORRETA**\n\n**Análise considerando a imagem da cascata:**\n\nEmbora meça nascidos sem sífilis, esta fórmula **dilui o indicador** ao incluir toda a população:\n\n**Problema do denominador (conforme cascata):**\n• **Base incorreta**: Usa nascidos vivos totais, não gestantes infectadas\n• **Inclui não expostos**: Filhos de mães sem sífilis\n• **Não reflete efetividade**: Do programa específico\n\n**Comparação com a imagem:**\n• **Cascata correta**: Base = população de risco inicial\n• **Esta fórmula**: Base = população geral (incorreto)\n• **Resultado**: Prevalência geral, não efetividade do programa\n\n**Numerador correto**: Nascidos vivos sem sífilis\n**Denominador incorreto**: Deveria ser gestantes infectadas (base da cascata)',
       category: 'plausible',
       conceptsInvolved: ['prevalência geral', 'especificidade do indicador', 'interpretação da cascata']
     },
@@ -109,7 +109,7 @@ No contexto desta questão, é fundamental identificar qual indicador melhor rep
       letter: 'D',
       text: 'Número de nascidos vivos sem sífilis/Número de gestantes infectadas X 100.',
       isCorrect: true,
-      explanation: '✅ **RESPOSTA CORRETA**\n\n**Interpretação baseada na imagem da cascata:**\n\nEsta é a fórmula correta para a **última barra da cascata** da sífilis congênita, seguindo exatamente a lógica visual apresentada na figura:\n\n🎯 **Lógica da Cascata (conforme a imagem):**\n• **Base da cascata** (1ª barra): Gestantes infectadas (denominador)\n• **Última barra** (desfecho): Nascidos vivos sem sífilis (numerador)\n• **Proporção final**: Mede o sucesso global do programa\n\n📊 **Por que esta fórmula é correta:**\n• **Numerador apropriado**: Nascidos vivos sem sífilis (objetivo final)\n• **Denominador correto**: Gestantes infectadas (população de risco inicial)\n• **Representa fielmente**: A efetividade da cascata completa\n• **Segue o modelo**: Exatamente como mostrado na imagem do HIV\n\n🔍 **Interpretação epidemiológica:**\nEsta fórmula responde à pergunta: "De todas as gestantes que iniciaram infectadas, quantas conseguiram ter bebês sem sífilis?" - que é precisamente o que a última barra da cascata deve representar.',
+      explanation: '**RESPOSTA CORRETA**\n\n**Interpretação baseada na imagem da cascata:**\n\nEsta é a fórmula correta para a **última barra da cascata** da sífilis congênita, seguindo exatamente a lógica visual apresentada na figura:\n\n**Lógica da Cascata (conforme a imagem):**\n• **Base da cascata** (1ª barra): Gestantes infectadas (denominador)\n• **Última barra** (desfecho): Nascidos vivos sem sífilis (numerador)\n• **Proporção final**: Mede o sucesso global do programa\n\n**Por que esta fórmula é correta:**\n• **Numerador apropriado**: Nascidos vivos sem sífilis (objetivo final)\n• **Denominador correto**: Gestantes infectadas (população de risco inicial)\n• **Representa fielmente**: A efetividade da cascata completa\n• **Segue o modelo**: Exatamente como mostrado na imagem do HIV\n\n**Interpretação epidemiológica:**\nEsta fórmula responde à pergunta: "De todas as gestantes que iniciaram infectadas, quantas conseguiram ter bebês sem sífilis?" - que é precisamente o que a última barra da cascata deve representar.',
       category: 'correct',
       conceptsInvolved: ['cascata do cuidado', 'prevenção da transmissão vertical', 'efetividade do programa', 'interpretação de imagem']
     }
@@ -268,7 +268,7 @@ Analise os dados laboratoriais cuidadosamente para identificar o padrão compat�
       letter: 'A',
       text: 'Glicemia: 450 mg/dL, pH: 7.25, HCO₃⁻: 12 mEq/L, cetonúria positiva',
       isCorrect: true,
-      explanation: '✅ **RESPOSTA CORRETA**\n\nEsta alternativa apresenta todos os critérios diagnósticos da cetoacidose diabética:\n\n• **Hiperglicemia severa:** 450 mg/dL (>250 mg/dL)\n• **Acidose metabólica:** pH 7.25 (<7.30)\n• **Bicarbonato baixo:** 12 mEq/L (<15 mEq/L)\n• **Cetonúria positiva:** confirma a presença de corpos cetônicos\n\nTodos os valores são compatíveis com CAD moderada a grave, explicando o quadro clínico da paciente.',
+      explanation: ' **RESPOSTA CORRETA**\n\nEsta alternativa apresenta todos os critérios diagnósticos da cetoacidose diabética:\n\n• **Hiperglicemia severa:** 450 mg/dL (>250 mg/dL)\n• **Acidose metabólica:** pH 7.25 (<7.30)\n• **Bicarbonato baixo:** 12 mEq/L (<15 mEq/L)\n• **Cetonúria positiva:** confirma a presença de corpos cetônicos\n\nTodos os valores são compatíveis com CAD moderada a grave, explicando o quadro clínico da paciente.',
       category: 'correct',
       conceptsInvolved: ['cetoacidose diabética', 'critérios diagnósticos', 'acidose metabólica', 'hiperglicemia']
     },
@@ -536,11 +536,11 @@ function generateUSPSP2025FlowData(): void {
     if (!flowDataManager.hasFlowData(question.id)) {
       const autoFlowData = generateSpecificFlowData(question);
       registerQuestionFlowData(question.id, autoFlowData);
-      console.log(`✅ Dados gerados para questão ${question.id}: ${question.title}`);
+      console.log(` Dados gerados para questão ${question.id}: ${question.title}`);
     }
   });
 
-  console.log('✅ Todos os dados de fluxo USP-SP 2025 foram registrados');
+  console.log(' Todos os dados de fluxo USP-SP 2025 foram registrados');
 }
 
 /**
@@ -708,10 +708,10 @@ async function initializeUSPSP2025System(): Promise<void> {
       loadedSources: stats.loadedSources
     });
     
-    console.log('✅ Sistema Universal USP-SP 2025 pronto para uso!');
+    console.log(' Sistema Universal USP-SP 2025 pronto para uso!');
     
   } catch (error) {
-    console.error('❌ Erro ao inicializar sistema USP-SP 2025:', error);
+    console.error(' Erro ao inicializar sistema USP-SP 2025:', error);
     throw error;
   }
 }

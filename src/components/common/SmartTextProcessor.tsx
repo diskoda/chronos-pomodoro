@@ -172,7 +172,41 @@ const defaultTermMappings: TermMap[] = [
   { term: 'Na+', explanationId: 'sodio', wholeWord: true },
   { term: 'hipocalemia', explanationId: 'hipocalemia', wholeWord: false },
   { term: 'prescrições', explanationId: 'prescricoes', wholeWord: false },
-  { term: 'prescrição', explanationId: 'prescricoes', wholeWord: false }
+  { term: 'prescrição', explanationId: 'prescricoes', wholeWord: false },
+
+  // Termos específicos da questão 4 - Sinais vitais e exame físico
+  { term: 'letárgico', explanationId: 'letargico', wholeWord: false },
+  { term: 'letargia', explanationId: 'letargico', wholeWord: false },
+  { term: 'gemente', explanationId: 'gemencia', wholeWord: false },
+  { term: 'gemência', explanationId: 'gemencia', wholeWord: false },
+  { term: 'FC', explanationId: 'frequencia-cardiaca', wholeWord: true },
+  { term: 'frequência cardíaca', explanationId: 'frequencia-cardiaca', wholeWord: false },
+  { term: 'bpm', explanationId: 'bpm', wholeWord: true },
+  { term: 'batimentos por minuto', explanationId: 'bpm', wholeWord: false },
+  { term: 'FR', explanationId: 'frequencia-respiratoria', wholeWord: true },
+  { term: 'ipm', explanationId: 'ipm', wholeWord: true },
+  { term: 'incursões por minuto', explanationId: 'ipm', wholeWord: false },
+  { term: 'PA', explanationId: 'pressao-arterial', wholeWord: true },
+  { term: 'pressão arterial', explanationId: 'pressao-arterial', wholeWord: false },
+  { term: 'mmHg', explanationId: 'mmhg', wholeWord: true },
+  { term: 'milímetros de mercúrio', explanationId: 'mmhg', wholeWord: false },
+  { term: 'tiragem intercostal', explanationId: 'tiragem-intercostal', wholeWord: false },
+  { term: 'tiragem subdiafragmática', explanationId: 'tiragem-subdiafragmatica', wholeWord: false },
+  { term: 'subdiafragmática', explanationId: 'tiragem-subdiafragmatica', wholeWord: false },
+  { term: 'tiragem de fúrcula', explanationId: 'tiragem-furcula', wholeWord: false },
+  { term: 'fúrcula', explanationId: 'tiragem-furcula', wholeWord: false },
+  { term: 'enchimento capilar', explanationId: 'enchimento-capilar', wholeWord: false },
+  { term: 'tempo de enchimento capilar', explanationId: 'enchimento-capilar', wholeWord: false },
+  { term: 'TEC', explanationId: 'enchimento-capilar', wholeWord: true },
+
+  // Termos adicionais relacionados à insuficiência respiratória
+  { term: 'insuficiência respiratória', explanationId: 'insuficiencia-respiratoria', wholeWord: false },
+  { term: 'IRpA', explanationId: 'insuficiencia-respiratoria-aguda', wholeWord: true },
+  { term: 'esforço respiratório', explanationId: 'esforco-respiratorio', wholeWord: false },
+  { term: 'retração intercostal', explanationId: 'tiragem-intercostal', wholeWord: false },
+  { term: 'batimento de asa nasal', explanationId: 'batimento-asa-nasal', wholeWord: false },
+  { term: 'cornagem', explanationId: 'cornagem', wholeWord: false },
+  { term: 'estridor', explanationId: 'estridor', wholeWord: false }
 ];
 
 export const SmartTextProcessor: React.FC<SmartTextProcessorProps> = ({

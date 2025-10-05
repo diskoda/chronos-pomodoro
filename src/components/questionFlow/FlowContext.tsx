@@ -15,12 +15,16 @@ interface FlowState {
   timeSpent: number;
   stagesVisited: FlowStage[];
   questionId?: number;
+  hasConfirmedSelection: boolean; // Para controlar quando finaliza a leitura
+  dialogOpenCount: number; // Para controlar quantas vezes o DrSkodaDialog foi aberto
 }
 
 type FlowAction = 
   | { type: 'SET_QUESTION_DATA'; payload: QuestionFlowData }
   | { type: 'SET_STAGE'; payload: FlowStage }
   | { type: 'SELECT_ALTERNATIVE'; payload: string }
+  | { type: 'CONFIRM_SELECTION' } // Nova action para quando confirma seleção
+  | { type: 'START_READING' } // Nova action para início da leitura
   | { type: 'NEXT_STAGE' }
   | { type: 'RESET_FLOW' }
   | { type: 'UPDATE_TIME'; payload: number }
@@ -39,12 +43,22 @@ const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
       const newStagesVisited = state.stagesVisited.includes(action.payload) 
         ? state.stagesVisited 
         : [...state.stagesVisited, action.payload];
+
+      // Incrementar contador de diálogos quando entrar em explanation ou analysis
+      const newDialogCount = (action.payload === 'explanation' || action.payload === 'analysis') 
+        ? state.dialogOpenCount + 1 
+        : state.dialogOpenCount;
         
-      return {
+      const newState = {
         ...state,
         currentStage: action.payload,
         stagesVisited: newStagesVisited,
-        progress: calculateProgress(action.payload)
+        dialogOpenCount: newDialogCount
+      };
+        
+      return {
+        ...newState,
+        progress: calculateProgressWithState(newState)
       };
       
     case 'SELECT_ALTERNATIVE':
@@ -75,6 +89,24 @@ const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
         ...state,
         selectedAlternative: action.payload,
         isCorrect: selectedAlt?.isCorrect || false
+      };
+
+    case 'CONFIRM_SELECTION':
+      // Finaliza a etapa de Leitura e avança para Contextualização
+      return {
+        ...state,
+        hasConfirmedSelection: true,
+        progress: calculateProgressWithState({
+          ...state,
+          hasConfirmedSelection: true
+        })
+      };
+
+    case 'START_READING':
+      // Inicia a etapa de Leitura
+      return {
+        ...state,
+        progress: calculateProgressWithState(state)
       };
       
     case 'NEXT_STAGE':
@@ -109,22 +141,46 @@ const initialFlowState: FlowState = {
   progress: 0,
   timeSpent: 0,
   stagesVisited: [],
-  questionId: undefined
+  questionId: undefined,
+  hasConfirmedSelection: false,
+  dialogOpenCount: 0
 };
 
 // ==========================================
 // FUNÇÕES AUXILIARES
 // ==========================================
 
-function calculateProgress(stage: FlowStage): number {
+function calculateProgressWithState(state: FlowState): number {
+  // Leitura: 0% -> 25% (desde início até confirmar seleção)
+  if (!state.hasConfirmedSelection) {
+    return 25; // Etapa de Leitura em andamento
+  }
+  
+  // Contextualização: 25% -> 50% (segunda abertura do DrSkodaDialog)
+  if (state.dialogOpenCount >= 1 && state.currentStage === 'explanation') {
+    return 50; // Etapa de Contextualização
+  }
+  
+  // Análise: 50% -> 75% (DrSkodaDialog analisando alternativas)
+  if (state.currentStage === 'analysis') {
+    return 75; // Etapa de Análise
+  }
+  
+  // Conclusão: 75% -> 100% (última renderização)
+  if (state.currentStage === 'finished') {
+    return 100; // Etapa de Conclusão
+  }
+  
+  // Default baseado no estágio atual
   const stageProgress = {
-    'begin': 25,     // Introdução completa
-    'question': 50,  // Questão sendo resolvida
-    'explanation': 75, // Explicação teórica
-    'analysis': 100, // Análise completa
-    'finished': 100
+    'begin': 25,       // Leitura
+    'question': 25,    // Leitura continua
+    'explanation': 50, // Contextualização
+    'analysis': 75,    // Análise
+    'finished': 100    // Conclusão
   };
-  return stageProgress[stage] || 0;
+  
+  return stageProgress[state.currentStage] || 0;
 }
 
 function getNextStage(currentStage: FlowStage): FlowStage {
@@ -177,6 +233,14 @@ export function FlowProvider({ children, questionData, questionId }: FlowProvide
     
     selectAlternative: (letter: string) => {
       dispatch({ type: 'SELECT_ALTERNATIVE', payload: letter });
+    },
+    
+    confirmSelection: () => {
+      dispatch({ type: 'CONFIRM_SELECTION' });
+    },
+    
+    startReading: () => {
+      dispatch({ type: 'START_READING' });
     },
     
     nextStage: () => {

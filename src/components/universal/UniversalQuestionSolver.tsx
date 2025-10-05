@@ -368,14 +368,6 @@ function IntegratedQuestionInterface({
                     isSubmitted={isSubmitted}
                     className=""
                   />
-                  
-                  {/* Neural processing indicator */}
-                  <div className="absolute bottom-2 right-2 opacity-60">
-                    <div className="flex items-center space-x-1 text-xs text-slate-400">
-                      <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-                      <span>Neural Active</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -558,14 +550,6 @@ function SimpleQuestionInterface({
                     isSubmitted={isSubmitted}
                     className=""
                   />
-                  
-                  {/* Neural processing indicator */}
-                  <div className="absolute bottom-2 right-2 opacity-60">
-                    <div className="flex items-center space-x-1 text-xs text-slate-400">
-                      <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-                      <span>Neural Active</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

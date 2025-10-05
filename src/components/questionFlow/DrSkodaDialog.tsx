@@ -172,15 +172,65 @@ export default function DrSkodaDialog({
         <div className="bg-gradient-to-r from-orange-900/50 to-blue-900/50 border-b border-orange-500/30 px-4 py-3 flex-shrink-0 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-blue-500/5"></div>
           <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-teal-400 rounded-full animate-pulse"></div>
               <h3 className="text-white font-bold text-sm bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
                 Dr. Skoda Neural Interface
               </h3>
             </div>
-            <div className="text-slate-300 text-xs flex items-center space-x-1">
-              <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-              <span>Neural Active • Cybernetic Guide</span>
+            
+            {/* Dr. Skoda Portrait - Enlarged with Overflow */}
+            <div className="flex items-center space-x-2 relative z-50">
+              <div className="relative group">
+                {/* Enlarged neural frame - overflows header */}
+                <div className="w-20 h-20 -mt-4 -mb-4 bg-gradient-to-br from-slate-800/90 to-blue-900/60 rounded-xl p-1 border border-orange-500/50 relative overflow-hidden shadow-2xl">
+                  {/* Animated border effect */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-500/30 to-teal-500/30 opacity-50 group-hover:opacity-100 transition-all duration-300 animate-pulse"></div>
+                  
+                  <div className="relative z-10 w-full h-full rounded-lg overflow-hidden">
+                    <DoctorSkoda 
+                      width="100%"
+                      height="100%"
+                      className="rounded-lg object-cover scale-110"
+                    />
+                  </div>
+                  
+                  {/* Enhanced neural scanning lines */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-orange-400/70 to-transparent animate-pulse"></div>
+                    <div className="absolute top-4 left-1 right-1 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-pulse delay-300"></div>
+                    <div className="absolute bottom-4 left-1 right-1 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent animate-pulse delay-700"></div>
+                    <div className="absolute bottom-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent animate-pulse delay-500"></div>
+                  </div>
+                  
+                  {/* Neural grid overlay */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute inset-0" style={{
+                      backgroundImage: `linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+                                       linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px)`,
+                      backgroundSize: '8px 8px'
+                    }}></div>
+                  </div>
+                </div>
+                
+                {/* Enhanced status indicator */}
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-2xl z-50">
+                  <div className="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-ping opacity-75"></div>
+                </div>
+                
+                {/* Neural connection indicators */}
+                <div className="absolute -top-1 -left-1 w-3 h-3 bg-purple-500/80 rounded-full border border-purple-300/50 animate-pulse delay-300"></div>
+                <div className="absolute top-2 -right-1 w-2 h-2 bg-cyan-500/80 rounded-full border border-cyan-300/50 animate-pulse delay-700"></div>
+                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-orange-500/80 rounded-full border border-orange-300/50 animate-pulse delay-1000"></div>
+              </div>
+              
+              <div className="text-slate-300 text-xs">
+                <div className="flex items-center space-x-1">
+                  <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="font-medium">Online</span>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -205,9 +255,9 @@ export default function DrSkodaDialog({
           </div>
           
           {/* Enhanced Content Layout */}
-          <div className="px-4 pb-4 flex items-start gap-4 relative">
+          <div className="px-4 pb-4 relative">
             {/* Neural Text Content */}
-            <div className="flex-1 relative">
+            <div className="relative">
               <div className="dr-skoda-content relative">
                 {/* Neural processing indicator */}
                 <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-500/30 via-teal-500/30 to-purple-500/30 rounded-full"></div>
@@ -258,40 +308,6 @@ export default function DrSkodaDialog({
                     );
                   }).filter(Boolean)}
                 </div>
-              </div>
-            </div>
-
-            {/* Enhanced Dr. Skoda Avatar with Neural Frame */}
-            <div className="flex-shrink-0 sticky top-0">
-              <div className="relative group">
-                {/* Neural frame with animated borders */}
-                <div className="w-16 h-16 bg-gradient-to-br from-slate-800/80 to-blue-900/40 rounded-xl p-1 border border-orange-500/40 relative overflow-hidden">
-                  {/* Animated border effect */}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-500/20 to-teal-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  <div className="relative z-10 w-full h-full rounded-lg overflow-hidden">
-                    <DoctorSkoda 
-                      width="100%"
-                      height="100%"
-                      className="rounded-lg object-cover"
-                    />
-                  </div>
-                  
-                  {/* Neural scanning lines */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-orange-400/50 to-transparent animate-pulse"></div>
-                    <div className="absolute bottom-1 left-1 right-1 h-px bg-gradient-to-r from-transparent via-teal-400/50 to-transparent animate-pulse delay-500"></div>
-                  </div>
-                </div>
-                
-                {/* Enhanced status indicator */}
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-ping opacity-75"></div>
-                </div>
-                
-                {/* Neural connection indicator */}
-                <div className="absolute -top-1 -left-1 w-3 h-3 bg-purple-500/80 rounded-full border border-purple-300/50 animate-pulse delay-300"></div>
               </div>
             </div>
           </div>

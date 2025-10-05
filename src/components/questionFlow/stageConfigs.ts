@@ -8,34 +8,34 @@ export const stageConfigurations: Record<string, FlowStageConfig> = {
   // ===== ESTÁGIO INICIAL =====
   begin: {
     stage: 'begin',
-    title: "🎯 Vamos começar esta jornada!",
-    icon: "🚀",
-    buttonText: "🚀 Estou pronto, vamos lá!",
-    content: `Olá! Sou o Dr. Skoda e será um prazer te acompanhar nesta questão! 👨‍⚕️
+    title: "Vamos começar esta jornada!",
+    icon: "",
+    buttonText: "Estou pronto, vamos lá!",
+    content: `Olá! Sou o Dr. Skoda e será um prazer te acompanhar nesta questão!
 
-📚 Sobre esta questão:
+Sobre esta questão:
 {contextText}
 
-💡 Dica importante:
+Dica importante:
 Leia com atenção cada palavra do enunciado e das alternativas. Na medicina, cada detalhe pode fazer a diferença entre o diagnóstico correto e um equívoco.
 
-🎯 Seu objetivo:
+Seu objetivo:
 Analise o cenário clínico apresentado e identifique a melhor abordagem baseada em evidências científicas.
 
-✨ Lembre-se:
+Lembre-se:
 • Não há pressa - qualidade > velocidade
 • Pense como um pediatra experiente
 • Considere o contexto familiar e social
 • Aplique os princípios éticos da medicina
 
-Quando estiver pronto, clique em continuar para ver a questão! 🚀`
+Quando estiver pronto, clique em continuar para ver a questão!`
   },
 
   // ===== ESTÁGIO DE QUESTÃO (SILENCIOSO) =====
   question: {
     stage: 'question',
-    title: "📝 Resolvendo a questão",
-    icon: "🤔",
+    title: "Resolvendo a questão",
+    icon: "",
     buttonText: "Continuar",
     content: `Agora é sua vez! Analise cuidadosamente o enunciado e as alternativas.
 
@@ -47,67 +47,67 @@ Quando estiver pronto, selecione sua resposta e confirme!`
   // ===== ESTÁGIO DE EXPLICAÇÃO =====
   explanation: {
     stage: 'explanation',
-    title: "🧠 Hora de aprofundar o conhecimento!",
-    icon: "📖",
-    buttonText: "🔍 Sim, vamos analisar as alternativas!",
-    content: `Excelente! Você fez sua escolha! 👏
+    title: "Hora de aprofundar o conhecimento!",
+    icon: "",
+    buttonText: "Sim, vamos analisar as alternativas!",
+    content: `Excelente! Você fez sua escolha!
 
 Agora, antes de revelarmos a resposta correta, vou te explicar os conceitos fundamentais que você precisa dominar para resolver esta questão com total segurança.
 
-📖 Base teórica essencial:
+Base teórica essencial:
 
 {explanationText}
 
-🎯 Por que isso é importante?
+Por que isso é importante?
 Entender esses conceitos não apenas te ajuda a responder esta questão, mas também te prepara para situações reais na prática médica.
 
-⚡ Próximos passos:
+Próximos passos:
 Agora que você tem uma base sólida, vamos analisar cada alternativa em detalhes. Você verá não apenas qual é a resposta correta, mas também por que cada opção está certa ou errada.
 
-Preparado para a análise completa? 🔍`
+Preparado para a análise completa?`
   },
 
   // ===== CONFIGURAÇÕES PARA ANÁLISE (DINÂMICAS) =====
   analysis_correct: {
     stage: 'analysis',
-    title: "🎉 Parabéns! Você acertou!",
-    icon: "🏆",
-    buttonText: "🏆 Finalizar com sucesso!",
-    content: `🌟 Excelente trabalho! Você escolheu a alternativa {selectedAlternative} e acertou em cheio! 
+    title: "Parabéns! Você acertou!",
+    icon: "",
+    buttonText: "Finalizar com sucesso!",
+    content: `Excelente trabalho! Você escolheu a alternativa {selectedAlternative} e acertou em cheio! 
 
 Seu raciocínio clínico está afiado! Vou explicar por que sua resposta está correta e também revisar as demais alternativas para consolidar ainda mais seu aprendizado.
 
 {alternativesAnalysis}
 
-**💡 PONTOS-CHAVE PARA LEMBRAR:**
+**PONTOS-CHAVE PARA LEMBRAR:**
 • Na medicina, cada pergunta tem um propósito específico
 • A abordagem do paciente deve ser sempre empática e eficaz
 • O contexto clínico orienta nossa tomada de decisão
 • A comunicação é uma ferramenta terapêutica poderosa
 
-**🚀 Continue assim!** Cada questão te aproxima mais de se tornar um pediatra excepcional! 
+**Continue assim!** Cada questão te aproxima mais de se tornar um pediatra excepcional! 
 
 Você está no caminho certo! Continue confiante e estudando com dedicação.`
   },
 
   analysis_incorrect: {
     stage: 'analysis',
-    title: "📚 Vamos aprender juntos!",
-    icon: "💪",
-    buttonText: "💪 Continuar aprendendo!",
+    title: "Vamos aprender juntos!",
+    icon: "",
+    buttonText: "Continuar aprendendo!",
     content: `Você escolheu a alternativa {selectedAlternative}. A resposta correta é a alternativa {correctAlternative}.
 
-Não se preocupe! 💪 Errar faz parte do processo de aprendizado. Cada erro é uma oportunidade valiosa de crescimento. Vamos revisar todas as opções para que você entenda perfeitamente o raciocínio.
+Não se preocupe! Errar faz parte do processo de aprendizado. Cada erro é uma oportunidade valiosa de crescimento. Vamos revisar todas as opções para que você entenda perfeitamente o raciocínio.
 
 {alternativesAnalysis}
 
-💡 PONTOS-CHAVE PARA LEMBRAR:
+PONTOS-CHAVE PARA LEMBRAR:
 • Na medicina, cada pergunta tem um propósito específico
 • A abordagem do paciente deve ser sempre empática e eficaz
 • O contexto clínico orienta nossa tomada de decisão
 • A comunicação é uma ferramenta terapêutica poderosa
 
-🚀 Continue assim! Cada questão te aproxima mais de se tornar um pediatra excepcional! 
+Continue assim! Cada questão te aproxima mais de se tornar um pediatra excepcional! 
 
 Use este aprendizado como combustível para seguir estudando. Você tem potencial!`
   }
@@ -117,7 +117,7 @@ Use este aprendizado como combustível para seguir estudando. Você tem potencia
 // TEMPLATES PARA ANÁLISE DE ALTERNATIVAS
 // ==========================================
 
-export const alternativeAnalysisTemplate = `**🔍 ANÁLISE DETALHADA DAS ALTERNATIVAS:**
+export const alternativeAnalysisTemplate = `**ANÁLISE DETALHADA DAS ALTERNATIVAS:**
 
 {alternatives}`;
 
@@ -174,9 +174,9 @@ export function generateAlternativesAnalysis(
   selectedAlternative: string
 ): string {
   const alternativeItems = alternatives.map(alt => {
-    const icon = alt.isCorrect ? '✅' : '❌';
+    const icon = alt.isCorrect ? '' : '';
     const status = alt.isCorrect ? '**RESPOSTA CORRETA**' : '**INCORRETA**';
-    const selectedMark = alt.letter === selectedAlternative ? '\n\n🎯 **Esta foi sua escolha**' : '';
+    const selectedMark = alt.letter === selectedAlternative ? '\n\n**Esta foi sua escolha**' : '';
     
     return alternativeItemTemplate
       .replace('{icon}', icon)
