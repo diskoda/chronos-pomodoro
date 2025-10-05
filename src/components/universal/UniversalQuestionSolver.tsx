@@ -281,6 +281,11 @@ function IntegratedQuestionInterface({
 
   return (
     <div className={`dashboard-background min-h-screen ${uiConfig.className}`}>
+      {/* Indicador de Progresso do Fluxo - Fixo no Topo */}
+      {uiConfig.showProgress && (
+        <FlowProgressIndicator showDetails={true} />
+      )}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
           (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis')
@@ -288,14 +293,10 @@ function IntegratedQuestionInterface({
             : ''
         }`}>
 
-          {/* Indicador de Progresso do Fluxo */}
-          {uiConfig.showProgress && (
-            <FlowProgressIndicator className="mb-6" showDetails={true} />
-          )}
-
           <QuestionSolverHeader
             onBack={onBack}
             backButtonText="Voltar"
+            className="mt-20"
           />
 
           <QuestionInfo
@@ -333,42 +334,14 @@ function IntegratedQuestionInterface({
           )}          {question.alternatives && (
             <div className="mb-6">
               {/* Neural Alternatives Container */}
-              <div className="bg-gradient-to-br from-slate-900/95 via-blue-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl border border-orange-500/30 overflow-hidden shadow-2xl relative group">
-                {/* Neural activity indicators */}
-                <div className="absolute inset-0 opacity-30">
-                  <div className="absolute top-2 left-2 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                  <div className="absolute top-4 right-4 w-1 h-1 bg-teal-400 rounded-full animate-pulse delay-1000"></div>
-                  <div className="absolute bottom-3 left-6 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse delay-500"></div>
-                </div>
-                
-                {/* Enhanced header with gradient */}
-                <div className="bg-gradient-to-r from-orange-900/40 to-teal-900/40 px-6 py-4 border-b border-orange-500/20 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-teal-500/5"></div>
-                  <h3 className="text-lg font-bold text-white flex items-center relative z-10">
-                    <span className="mr-3 text-orange-400 text-xl">🧠</span>
-                    <span className="bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
-                      Neural Alternative Analysis
-                    </span>
-                  </h3>
-                  <p className="text-sm text-slate-300 mt-1 relative z-10">
-                    Process each option through neural pathways before decision
-                  </p>
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                    <div className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></div>
-                    <div className="w-1 h-1 bg-teal-400 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"></div>
-                  </div>
-                </div>
-                
-                <div className="p-6 relative">
-                  <QuestionAlternatives
-                    alternatives={question.alternatives}
-                    selectedAlternative={selectedAlternative}
-                    onSelect={handleAlternativeSelect}
-                    isSubmitted={isSubmitted}
-                    className=""
-                  />
-                </div>
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4 backdrop-blur-sm">
+                <QuestionAlternatives
+                  alternatives={question.alternatives}
+                  selectedAlternative={selectedAlternative}
+                  onSelect={handleAlternativeSelect}
+                  isSubmitted={isSubmitted}
+                  className=""
+                />
               </div>
             </div>
           )}
@@ -515,42 +488,14 @@ function SimpleQuestionInterface({
           )}          {question.alternatives && (
             <div className="mb-6">
               {/* Neural Alternatives Container - Simple Mode */}
-              <div className="bg-gradient-to-br from-slate-900/95 via-blue-900/20 to-slate-900/95 backdrop-blur-xl rounded-xl border border-orange-500/30 overflow-hidden shadow-2xl relative group">
-                {/* Neural activity indicators */}
-                <div className="absolute inset-0 opacity-30">
-                  <div className="absolute top-2 left-2 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                  <div className="absolute top-4 right-4 w-1 h-1 bg-teal-400 rounded-full animate-pulse delay-1000"></div>
-                  <div className="absolute bottom-3 left-6 w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse delay-500"></div>
-                </div>
-                
-                {/* Enhanced header with gradient */}
-                <div className="bg-gradient-to-r from-orange-900/40 to-teal-900/40 px-6 py-4 border-b border-orange-500/20 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-teal-500/5"></div>
-                  <h3 className="text-lg font-bold text-white flex items-center relative z-10">
-                    <span className="mr-3 text-orange-400 text-xl">🧠</span>
-                    <span className="bg-gradient-to-r from-orange-300 to-teal-300 bg-clip-text text-transparent">
-                      Neural Alternative Analysis
-                    </span>
-                  </h3>
-                  <p className="text-sm text-slate-300 mt-1 relative z-10">
-                    Process each option through neural pathways before decision
-                  </p>
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                    <div className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></div>
-                    <div className="w-1 h-1 bg-teal-400 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"></div>
-                  </div>
-                </div>
-                
-                <div className="p-6 relative">
-                  <QuestionAlternatives
-                    alternatives={question.alternatives}
-                    selectedAlternative={selectedAlternative}
-                    onSelect={handleAlternativeSelect}
-                    isSubmitted={isSubmitted}
-                    className=""
-                  />
-                </div>
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4 backdrop-blur-sm">
+                <QuestionAlternatives
+                  alternatives={question.alternatives}
+                  selectedAlternative={selectedAlternative}
+                  onSelect={handleAlternativeSelect}
+                  isSubmitted={isSubmitted}
+                  className=""
+                />
               </div>
             </div>
           )}

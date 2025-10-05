@@ -1,4 +1,4 @@
-import { FileText, Image } from 'lucide-react';
+import { Image } from 'lucide-react';
 import { SmartTextProcessor } from '../common/SmartTextProcessor';
 
 interface QuestionStatementProps {
@@ -86,65 +86,12 @@ export default function QuestionStatement({ statement, className = "" }: Questio
   };
 
   return (
-    <div className={`relative ${className}`}>
-      {/* Cyber Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/20 via-indigo-900/20 to-teal-900/20 rounded-2xl blur-sm opacity-60"></div>
-      
-      {/* Main Container */}
-      <div className="relative bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-lg border border-indigo-500/30 rounded-2xl p-8 shadow-2xl">
-        {/* Animated Border Glow */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-teal-600/20 rounded-2xl blur opacity-75 animate-pulse"></div>
-        
-        <div className="relative">
-          {/* Enhanced Header */}
-          <div className="flex items-center gap-4 mb-6">
-            {/* Neural Icon */}
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl blur opacity-60 animate-pulse"></div>
-              <div className="relative w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            
-            {/* Header Text */}
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-teal-400 bg-clip-text text-transparent">
-                Neural Case Statement
-              </h2>
-              <p className="text-sm text-slate-400 font-medium">
-                Processamento de dados clínicos
-              </p>
-            </div>
-          </div>
-
-          {/* Enhanced Content Container */}
-          <div className="relative">
-            {/* Content Background */}
-            <div className="absolute -inset-4 bg-gradient-to-br from-slate-800/30 via-slate-700/20 to-slate-800/30 rounded-xl blur opacity-50"></div>
-            
-            {/* Main Content */}
-            <div className="relative bg-slate-800/40 border border-slate-700/50 rounded-xl p-6 text-lg leading-relaxed">
-              {renderContent(statement)}
-            </div>
-          </div>
-
-          {/* Neural Processing Indicator */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            <div className="flex gap-1">
-              <div className="w-2 h-2 bg-indigo-400 rounded-full animate-ping"></div>
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '0.3s' }}></div>
-              <div className="w-2 h-2 bg-teal-400 rounded-full animate-ping" style={{ animationDelay: '0.6s' }}></div>
-            </div>
-            <span className="text-xs text-slate-400 font-medium ml-2">PROCESSAMENTO NEURAL ATIVO</span>
-          </div>
-
-          {/* Neural Connection Dots */}
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30">
-            <div className="absolute top-6 left-8 w-1 h-1 bg-indigo-400 rounded-full animate-ping"></div>
-            <div className="absolute top-12 right-12 w-1 h-1 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-8 left-1/3 w-1 h-1 bg-teal-400 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-6 right-1/4 w-1 h-1 bg-pink-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-          </div>
+    <div className={`relative ${className}`} data-question-container>
+      {/* Simplified Container */}
+      <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4 backdrop-blur-sm">
+        {/* Main Content Only */}
+        <div className="text-slate-200 leading-relaxed">
+          {renderContent(statement)}
         </div>
       </div>
     </div>

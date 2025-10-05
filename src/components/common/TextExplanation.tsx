@@ -58,31 +58,44 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
     const tooltipElement = tooltipRef.current;
     if (!tooltipElement) return;
 
-    // Medidas da janela
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const scrollY = window.scrollY;
-    const scrollX = window.scrollX;
+    // Encontrar o container da questão mais próximo
+    const questionContainer = triggerRef.current.closest('.question-container, [data-question-container]') || 
+                             triggerRef.current.closest('.bg-slate-800') ||
+                             document.body;
     
-    // Dimensões estimadas do tooltip
-    const tooltipWidth = maxWidth;
-    const tooltipHeight = 200; // Estimativa
-
-    // Posição inicial: abaixo do trigger
-    let top = triggerRect.bottom + scrollY + 8;
-    let left = triggerRect.left + scrollX;
-
-    // Ajustar horizontalmente se ultrapassar a janela
-    if (left + tooltipWidth > windowWidth + scrollX - 20) {
-      left = windowWidth + scrollX - tooltipWidth - 20;
+    const containerRect = questionContainer.getBoundingClientRect();
+    
+    // Dimensões do tooltip (mais compactas)
+    const tooltipWidth = Math.min(maxWidth, containerRect.width - 40);
+    const tooltipHeight = 180; // Estimativa menor
+    
+    // Posição relativa ao trigger
+    const triggerCenterX = triggerRect.left + triggerRect.width / 2;
+    
+    // Calcular posição inicial (centralizada horizontalmente no trigger)
+    let left = triggerCenterX - tooltipWidth / 2;
+    let top = triggerRect.bottom + 8;
+    
+    // Ajustar para não sair do container horizontalmente
+    const containerLeft = containerRect.left + 20;
+    const containerRight = containerRect.right - 20;
+    
+    if (left < containerLeft) {
+      left = containerLeft;
+    } else if (left + tooltipWidth > containerRight) {
+      left = containerRight - tooltipWidth;
     }
-    if (left < scrollX + 20) {
-      left = scrollX + 20;
-    }
-
-    // Ajustar verticalmente se ultrapassar a janela
-    if (top + tooltipHeight > windowHeight + scrollY - 20) {
-      top = triggerRect.top + scrollY - tooltipHeight - 8;
+    
+    // Ajustar verticalmente se não couber abaixo
+    const containerBottom = containerRect.bottom - 20;
+    if (top + tooltipHeight > containerBottom) {
+      // Colocar acima do trigger
+      top = triggerRect.top - tooltipHeight - 8;
+      
+      // Se ainda não couber, ajustar para dentro do container
+      if (top < containerRect.top + 20) {
+        top = containerRect.top + 20;
+      }
     }
 
     setTooltipPosition({ top, left });
@@ -282,12 +295,14 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
       {isVisible && (
         <div
           ref={tooltipRef}
-          className={`fixed z-50 p-4 rounded-lg ${themeStyles.tooltip} transition-all duration-200 transform`}
+          className={`fixed z-[60] p-3 rounded-lg ${themeStyles.tooltip} transition-all duration-200 transform shadow-xl border-2`}
           style={{
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.left}px`,
-            maxWidth: `${maxWidth}px`,
-            minWidth: '250px'
+            maxWidth: `280px`,
+            minWidth: '200px',
+            maxHeight: '300px',
+            overflow: 'auto'
           }}
           onMouseEnter={handleTooltipMouseEnter}
           onMouseLeave={handleTooltipMouseLeave}
@@ -295,50 +310,53 @@ export const TextExplanation: React.FC<TextExplanationProps> = ({
         >
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-lg">{getTypeIcon(explanation.type)}</span>
-              <h3 className="font-semibold text-sm">{explanation.title}</h3>
+              <span className="text-sm">{getTypeIcon(explanation.type)}</span>
+              <h3 className="font-semibold text-xs leading-tight">{explanation.title}</h3>
             </div>
             <button
               onClick={hideTooltip}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 ml-2"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 h-3" />
             </button>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-sm leading-relaxed">{explanation.content}</p>
+          <div className="space-y-2">
+            <p className="text-xs leading-relaxed">{explanation.content}</p>
 
             {explanation.examples && explanation.examples.length > 0 && (
               <div>
                 <h4 className="font-medium text-xs text-gray-600 mb-1">Exemplos:</h4>
-                <ul className="text-xs space-y-1">
-                  {explanation.examples.map((example, index) => (
+                <ul className="text-xs space-y-1 max-h-20 overflow-y-auto">
+                  {explanation.examples.slice(0, 3).map((example, index) => (
                     <li key={index} className="flex items-start">
-                      <span className="text-blue-500 mr-1">•</span>
-                      <span>{example}</span>
+                      <span className="text-blue-500 mr-1 flex-shrink-0">•</span>
+                      <span className="break-words">{example}</span>
                     </li>
                   ))}
+                  {explanation.examples.length > 3 && (
+                    <li className="text-gray-500 italic">+{explanation.examples.length - 3} mais...</li>
+                  )}
                 </ul>
               </div>
             )}
 
             <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 flex-wrap">
                 {explanation.category && (
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                  <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">
                     {explanation.category}
                   </span>
                 )}
                 {explanation.difficulty && (
-                  <span className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(explanation.difficulty)}`}>
+                  <span className={`px-1.5 py-0.5 rounded text-xs ${getDifficultyColor(explanation.difficulty)}`}>
                     {explanation.difficulty}
                   </span>
                 )}
               </div>
               
               {explanation.relatedLinks && explanation.relatedLinks.length > 0 && (
-                <button className="text-blue-600 hover:text-blue-700 transition-colors">
+                <button className="text-blue-600 hover:text-blue-700 transition-colors flex-shrink-0">
                   <ExternalLink className="w-3 h-3" />
                 </button>
               )}
