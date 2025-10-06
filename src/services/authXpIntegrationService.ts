@@ -28,8 +28,6 @@ export class AuthXpIntegrationService {
    */
   static async processUserAuth(user: User): Promise<void> {
     try {
-      console.log(`🔐 Processando autenticação para usuário: ${user.uid}`);
-      
       // 1. Criar/atualizar perfil do usuário
       await this.createOrUpdateUserProfile(user);
       
@@ -37,17 +35,11 @@ export class AuthXpIntegrationService {
       const isXpInitialized = await this.isUserXpInitialized(user.uid);
       
       if (!isXpInitialized) {
-        console.log(`⚡ Inicializando sistema XP para usuário: ${user.uid}`);
-        
         // 3. Inicializar sistema XP
         await UserInitializationService.initializeUser(user.uid);
         
         // 4. Marcar como inicializado
         await this.markXpAsInitialized(user.uid);
-        
-        console.log(`✅ Sistema XP inicializado para usuário: ${user.uid}`);
-      } else {
-        console.log(`ℹ️  Usuário ${user.uid} já possui sistema XP inicializado`);
       }
       
       // 5. Atualizar último login

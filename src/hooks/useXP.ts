@@ -58,17 +58,28 @@ export function useXP() {
     type: ActivityType, 
     metadata: any = {}
   ): Promise<{ xpGained: number; leveledUp: boolean; newLevel?: number } | null> => {
-    if (!currentUser) return null;
+    if (!currentUser) {
+      console.warn('🚫 Usuário não autenticado para registrar XP');
+      return null;
+    }
 
     try {
+      console.log('⚡ Iniciando recordActivity:', {
+        userId: currentUser.uid,
+        type,
+        metadata
+      });
+      
       const result = await XPService.recordActivity(currentUser.uid, type, metadata);
+      
+      console.log('⚡ XPService.recordActivity resultado:', result);
       
       // Recarregar dados após registrar atividade
       await loadUserData();
       
       return result;
     } catch (err) {
-      console.error('Erro ao registrar atividade de XP:', err);
+      console.error('❌ Erro ao registrar atividade de XP:', err);
       setError('Erro ao registrar experiência');
       return null;
     }
@@ -81,10 +92,20 @@ export function useXP() {
     timeSpent?: number,
     subject?: string
   ) => {
-    return await recordActivity(
+    console.log('🎓 Hook useXP - recordQuestionAnswer:', {
+      correct,
+      difficulty,
+      timeSpent,
+      subject
+    });
+    
+    const result = await recordActivity(
       correct ? 'question_correct' : 'question_incorrect',
       { difficulty, timeSpent, subject }
     );
+    
+    console.log('🎓 Hook useXP - resultado:', result);
+    return result;
   };
 
   const recordDailyLogin = async () => {

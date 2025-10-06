@@ -1,6 +1,8 @@
 import { createContext, useContext, useReducer } from 'react';
 import type { ReactNode } from 'react';
 import type { FlowStage, FlowContextType, QuestionFlowData } from './types';
+import { XPService } from '../../services/xpService';
+import { auth } from '../../config/firebase';
 
 // ==========================================
 // CONTEXT E REDUCER PARA ESTADO GLOBAL DO FLUXO
@@ -93,6 +95,75 @@ const flowReducer = (state: FlowState, action: FlowAction): FlowState => {
 
     case 'CONFIRM_SELECTION':
       // Finaliza a etapa de Leitura e avança para Contextualização
+      
+      // Registrar XP quando confirma a resposta
+      if (state.selectedAlternative && state.questionData) {
+        const isCorrect = state.isCorrect;
+        
+        // Registrar XP de forma assíncrona (não bloqueia a UI)
+        setTimeout(async () => {
+          try {
+            const user = auth.currentUser;
+            if (user) {
+              const result = await XPService.recordActivity(
+                user.uid, 
+                isCorrect ? 'question_correct' : 'question_incorrect',
+                {
+                  questionId: state.questionId?.toString(),
+                  selectedAlternative: state.selectedAlternative,
+                  isCorrect
+                }
+              );
+              
+              // Mostrar notificação visual
+              const notification = document.createElement('div');
+              notification.innerHTML = `
+                <div style="
+                  position: fixed; 
+                  top: 20px; 
+                  right: 20px; 
+                  background: ${isCorrect ? '#10B981' : '#F59E0B'}; 
+                  color: white; 
+                  padding: 15px 20px; 
+                  border-radius: 8px; 
+                  box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+                  z-index: 9999;
+                  font-weight: bold;
+                  animation: slideIn 0.3s ease-out;
+                ">
+                  ${isCorrect ? '🎉' : '📚'} +${result.xpGained} XP ${isCorrect ? '(Correto!)' : '(Prática!)'}<br>
+                  <small>Questão respondida${result.leveledUp ? ' - LEVEL UP! 🎊' : ''}</small>
+                </div>
+              `;
+              
+              // Adicionar animação CSS se ainda não existir
+              if (!document.getElementById('xp-animation-style')) {
+                const style = document.createElement('style');
+                style.id = 'xp-animation-style';
+                style.textContent = `
+                  @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                  }
+                `;
+                document.head.appendChild(style);
+              }
+              
+              document.body.appendChild(notification);
+              
+              // Remover após 4 segundos
+              setTimeout(() => {
+                if (notification.parentNode) {
+                  notification.parentNode.removeChild(notification);
+                }
+              }, 4000);
+            }
+          } catch (error) {
+            // Erro silencioso para não quebrar a experiência do usuário
+          }
+        }, 100);
+      }
+      
       return {
         ...state,
         hasConfirmedSelection: true,

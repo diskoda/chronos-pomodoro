@@ -10,4 +10,6 @@ export interface Question {
   tags: string[];
   statement?: string;
   alternatives?: string[];
+  answer?: string; // Resposta correta (letra: A, B, C, D, E)
+  correctAnswer?: string; // Alias para compatibilidade
 }

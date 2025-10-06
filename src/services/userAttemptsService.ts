@@ -87,7 +87,6 @@ class UserAttemptsService {
         const timeDiff = Date.now() - lastAttempt.timestamp.toMillis();
         
         if (timeDiff < 5000) { // 5 segundos
-          console.log('⚠️ Tentativa muito recente detectada, ignorando possível duplicata');
           return lastAttempt.id || 'duplicate-ignored';
         }
       }
@@ -103,7 +102,6 @@ class UserAttemptsService {
       };
 
       const docRef = await addDoc(collection(db, this.COLLECTION_NAME), attemptData);
-      console.log('✅ Tentativa salva no Firebase:', docRef.id);
       
       return docRef.id;
     } catch (error) {
@@ -135,7 +133,6 @@ class UserAttemptsService {
         } as UserQuestionAttempt);
       });
 
-      console.log(`✅ ${attempts.length} tentativas carregadas (otimizado com índice)`);
       return attempts;
     } catch (error) {
       console.error('❌ Erro ao buscar tentativas do usuário:', error);
@@ -194,7 +191,6 @@ class UserAttemptsService {
         } as UserQuestionAttempt);
       });
 
-      console.log(`✅ ${attempts.length} tentativas da questão ${questionId} carregadas (otimizado)`);
       return attempts;
     } catch (error) {
       console.error('❌ Erro ao buscar tentativas da questão:', error);

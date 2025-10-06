@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useQuestion } from '../../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../../hooks/useUserQuestionAttempts';
 import { useQuestionCooldown } from '../../hooks/useQuestionCooldown';
+import { useXP } from '../../hooks/useXP';
+import { useAuth } from '../../contexts/AuthContext';
 import { flowDataManager } from '../../data/universalFlowDataManager';
 import { FlowProvider, QuestionFlowManager, FlowProgressIndicator } from '../questionFlow';
 import QuestionSolverHeader from '../questionSolver/QuestionSolverHeader';
@@ -81,6 +83,17 @@ export default function UniversalQuestionSolver({
   // Hooks de dados
   const { question, loading, error } = useQuestion(questionId.toString());
   const flowData = flowDataManager.getFlowData(questionId);
+  
+  // Hooks de autenticação e XP
+  const { currentUser } = useAuth();
+  const { recordQuestionAnswer } = useXP();
+  
+  // Estado para notificações XP
+  const [xpNotification, setXpNotification] = useState<{
+    xpGained: number;
+    newLevel?: number;
+    achievements?: string[];
+  } | null>(null);
   
   // Determinar modo baseado na configuração de fluxo
   const mode = flowConfig.enabled ? 'dr-skoda' : 'exam';
@@ -256,23 +269,18 @@ function IntegratedQuestionInterface({
       await createAttempt(finalSelectedAlternative, isCorrect);
     }
 
+    // Sistema XP: Desabilitado - XP é registrado no FlowContext
+
     // Registrar cooldown de 24h
     try {
       await recordAttempt();
-      console.log('✅ Cooldown de 24h registrado para a questão', question.id);
     } catch (error) {
-      console.error('❌ Erro ao registrar cooldown:', error);
+      // Erro silencioso
     }
 
     // Analytics (se habilitado)
     if (integrationConfig.trackAnalytics) {
       // TODO: Implementar tracking de analytics
-      console.log('📊 Analytics:', {
-        questionId: question.id,
-        selectedAlternative: finalSelectedAlternative,
-        isCorrect,
-        stage: currentStage
-      });
     }
 
     // Chamar callback de finalização (redirecionamento)
@@ -514,6 +522,48 @@ function SimpleQuestionInterface({
 
         </div>
       </div>
+
+      {/* Botão de Teste XP - Debug */}
+      <button
+        onClick={() => {
+          console.log('🧪 Teste de XP clicado no UniversalQuestionSolver');
+          console.log('📍 Contexto atual (sem variáveis)');
+          
+          // Simular notificação XP simples
+          const notification = document.createElement('div');
+          notification.innerHTML = `
+            <div style="
+              position: fixed; 
+              top: 50%; 
+              left: 50%; 
+              transform: translate(-50%, -50%); 
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+              color: white; 
+              padding: 20px; 
+              border-radius: 10px; 
+              box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+              z-index: 9999;
+              text-align: center;
+              font-weight: bold;
+            ">
+              🎉 +1 XP Ganho! 🎉<br>
+              <small>Teste de Sistema XP</small>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          
+          // Remover após 3 segundos
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 3000);
+        }}
+        className="fixed bottom-4 left-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 text-sm font-medium transition-colors"
+      >
+        🧪 Teste XP
+      </button>
+
     </div>
   );
 }

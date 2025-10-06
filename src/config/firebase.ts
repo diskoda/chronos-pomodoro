@@ -30,7 +30,7 @@ export const FIREBASE_CONFIG = {
   USE_FIREBASE: true,
   
   // Habilita logs detalhados
-  ENABLE_LOGGING: true,
+  ENABLE_LOGGING: false,
   
   // Timeout para operações (ms)
   OPERATION_TIMEOUT: 10000,

@@ -29,15 +29,11 @@ export const useExplanations = () => {
       setError(null);
       
       if (useFirebase) {
-        console.log('🔄 Tentando carregar do Firebase...');
         const firebaseExplanations = await loadExplanationsFromFirebase();
         setExplanations(firebaseExplanations);
-        console.log('✅ Explicações carregadas do Firebase');
       } else {
-        console.log('🔄 Carregando explicações locais...');
         const { explanationsDatabase } = await import('../data/explanations');
         setExplanations(explanationsDatabase);
-        console.log('✅ Explicações locais carregadas');
       }
       
       setIsReady(true);
@@ -48,7 +44,6 @@ export const useExplanations = () => {
       
       // Fallback automático para local se Firebase falhar
       if (useFirebase) {
-        console.log('🔄 Fallback para explicações locais...');
         try {
           const { explanationsDatabase } = await import('../data/explanations');
           setExplanations(explanationsDatabase);

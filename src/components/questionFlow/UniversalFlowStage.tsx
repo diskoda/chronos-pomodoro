@@ -70,7 +70,6 @@ export default function UniversalFlowStage({
 
   // Handler padrão ou customizado
   const handleContinue = onContinue || (() => {
-    console.log('🔄 handleContinue chamado no estágio:', activeStage);
     nextStage();
   });
 
