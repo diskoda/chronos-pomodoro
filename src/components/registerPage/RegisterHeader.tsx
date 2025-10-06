@@ -1,10 +1,8 @@
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
-
 export default function RegisterHeader() {
   return (
     <div className="text-center">
       <img 
-        src={logoPenaped} 
+        src="/logos/penaped_shadow.png" 
         alt="PéNaPED Logo" 
         className="mx-auto h-45 w-auto mb-4"
       />

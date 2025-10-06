@@ -1,5 +1,4 @@
 import { Loader2 } from 'lucide-react';
-import logoImage from '../../assets/images/logos/logo_penaped.png';
 
 interface PageLoadingProps {
   message?: string;
@@ -38,7 +37,7 @@ export default function PageLoading({
           <div className="mb-6">
             <div className="mx-auto mb-4 flex items-center justify-center">
               <img 
-                src={logoImage} 
+                src="/logos/penaped_shadow.png" 
                 alt="Logo Pénaped" 
                 className="w-20 h-20 object-contain"
               />
@@ -80,7 +79,7 @@ export default function PageLoading({
           <div className="mb-6">
             <div className="mx-auto mb-3 flex items-center justify-center">
               <img 
-                src={logoImage} 
+                src="/logos/penaped_shadow.png" 
                 alt="Logo Pénaped" 
                 className="w-16 h-16 object-contain"
               />

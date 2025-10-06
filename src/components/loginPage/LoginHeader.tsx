@@ -1,6 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function LoginHeader() {
   return (
@@ -15,7 +14,7 @@ export default function LoginHeader() {
       
       <div className="flex justify-center mb-6">
         <img 
-          src={logoPenaped} 
+          src="/logos/penaped_shadow.png" 
           alt="PéNaPED Logo" 
           className="h-45 w-auto"
         />

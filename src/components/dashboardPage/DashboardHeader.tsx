@@ -1,6 +1,5 @@
 import { Calendar } from 'lucide-react';
 import UserMenu from '../common/UserMenu';
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function DashboardHeader() {
   const formatDate = () => {
@@ -19,7 +18,7 @@ export default function DashboardHeader() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <img 
-              src={logoPenaped} 
+              src="/logos/penaped_shadow.png" 
               alt="PéNaPED Logo" 
               className="h-45 w-auto"
             />

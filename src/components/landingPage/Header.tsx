@@ -2,7 +2,6 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../contexts/LoadingContext';
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,7 +23,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <img 
-              src={logoPenaped} 
+              src="/logos/penaped_shadow.png" 
               alt="PéNaPED Logo" 
               className="h-45 w-auto"
             />

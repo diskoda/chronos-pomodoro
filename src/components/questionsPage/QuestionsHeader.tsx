@@ -1,7 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../contexts/LoadingContext';
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
 export default function QuestionsHeader() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ export default function QuestionsHeader() {
             <div className="h-6 w-px theme-border" />
             <div className="flex items-center space-x-2">
               <img 
-                src={logoPenaped} 
+                src="/logos/penaped_shadow.png" 
                 alt="PéNaPED Logo" 
                 className="h-45 w-auto"
               />

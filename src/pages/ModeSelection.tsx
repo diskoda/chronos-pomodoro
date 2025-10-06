@@ -9,9 +9,6 @@ import { useLoading } from '../contexts/LoadingContext';
 import clinicalImg from '../components/images/clinical_img.png';
 import questionsImg from '../components/images/questions_img.png';
 
-// Import PénaPED logo
-import penaPedLogo from '../assets/images/logos/logo_penaped.png';
-
 export default function ModeSelection() {
   const navigate = useNavigate();
   const { hideLoading } = useLoading();
@@ -88,7 +85,7 @@ export default function ModeSelection() {
           <div className="flex justify-center mb-6">
             <div className="relative">
               <img 
-                src={penaPedLogo} 
+                src="/logos/penaped_shadow.png" 
                 alt="PénaPED Logo"
                 className="h-28 w-auto drop-shadow-lg hover:scale-105 transition-transform duration-300"
               />

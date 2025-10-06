@@ -1,5 +1,4 @@
 import { ArrowLeft } from 'lucide-react';
-import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 import { useLoading } from '../../contexts/LoadingContext';
 
 interface ClinicalCasesHeaderProps {
@@ -29,7 +28,7 @@ export default function ClinicalCasesHeader({ onBack }: ClinicalCasesHeaderProps
           <div className="w-px h-6 bg-gray-600"></div>
           <div className="flex items-center space-x-3">
             <img 
-              src={logoPenaped} 
+              src="/logos/penaped_shadow.png" 
               alt="PéNaPED Logo" 
               className="h-45 w-auto"
             />

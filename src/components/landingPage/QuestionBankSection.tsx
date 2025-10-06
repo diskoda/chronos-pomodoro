@@ -167,17 +167,18 @@ export default function QuestionBankSection() {
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-6 theme-bg-tertiary rounded-xl p-4">
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-orange-400">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-orange-400">
                       <img 
                         src={dravenusImg} 
                         alt="Dra. Vênus" 
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 penaped-bg-green rounded-full border-2 border-blue-900"></div>
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 penaped-bg-green rounded-full border-2 border-blue-900"></div>
                   </div>
                   <div>
                     <div className="theme-text-primary font-bold">Dra. Vênus</div>
+                    <div className="theme-text-secondary text-xs mb-1">Endocrinologista Pediátrica</div>
                     <div className="penaped-text-green text-sm flex items-center gap-1">
                       <div className="w-2 h-2 penaped-bg-green rounded-full"></div>
                       Online
@@ -264,8 +265,12 @@ export default function QuestionBankSection() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {/* SUS-SP */}
             <div className="group penaped-card text-center hover:theme-shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-lg">SUS</span>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden bg-gray-50 border border-gray-200">
+                <img 
+                  src="/logos/sus.png" 
+                  alt="SUS-SP" 
+                  className="w-full h-full object-contain p-2"
+                />
               </div>
               <h4 className="font-bold theme-text-primary mb-2">SUS-SP</h4>
               <p className="text-sm theme-text-secondary">Sistema Único de Saúde - São Paulo</p>
@@ -277,8 +282,12 @@ export default function QuestionBankSection() {
 
             {/* USP-SP */}
             <div className="group penaped-card text-center hover:theme-shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-lg">USP</span>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden bg-gray-50 border border-gray-200">
+                <img 
+                  src="/logos/usp.png" 
+                  alt="USP-SP" 
+                  className="w-full h-full object-contain p-2"
+                />
               </div>
               <h4 className="font-bold theme-text-primary mb-2">USP-SP</h4>
               <p className="text-sm theme-text-secondary">Universidade de São Paulo</p>
@@ -290,8 +299,12 @@ export default function QuestionBankSection() {
 
             {/* UNIFESP */}
             <div className="group penaped-card text-center hover:theme-shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-sm">UNI</span>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden bg-gray-50 border border-gray-200">
+                <img 
+                  src="/logos/unifesp.png" 
+                  alt="UNIFESP" 
+                  className="w-full h-full object-contain p-2"
+                />
               </div>
               <h4 className="font-bold theme-text-primary mb-2">UNIFESP</h4>
               <p className="text-sm theme-text-secondary">Universidade Federal de São Paulo</p>
@@ -303,8 +316,12 @@ export default function QuestionBankSection() {
 
             {/* UNICAMP */}
             <div className="group penaped-card text-center hover:theme-shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-sm">UNC</span>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden bg-gray-50 border border-gray-200">
+                <img 
+                  src="/logos/unicamp.png" 
+                  alt="UNICAMP" 
+                  className="w-full h-full object-contain p-2"
+                />
               </div>
               <h4 className="font-bold theme-text-primary mb-2">UNICAMP</h4>
               <p className="text-sm theme-text-secondary">Universidade Estadual de Campinas</p>
@@ -316,8 +333,12 @@ export default function QuestionBankSection() {
 
             {/* IAMSPE */}
             <div className="group penaped-card text-center hover:theme-shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-sm">IAM</span>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden bg-gray-50 border border-gray-200">
+                <img 
+                  src="/logos/iamspe.png" 
+                  alt="IAMSPE" 
+                  className="w-full h-full object-contain p-2"
+                />
               </div>
               <h4 className="font-bold theme-text-primary mb-2">IAMSPE</h4>
               <p className="text-sm theme-text-secondary">Instituto de Assistência Médica do Servidor Público Estadual</p>
