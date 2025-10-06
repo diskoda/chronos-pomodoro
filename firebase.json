@@ -72,5 +72,16 @@
       "port": 4000
     },
     "singleProjectMode": true
+  },
+  "apphosting": {
+    "backendId": "server-penaped",
+    "rootDir": "dist",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
   }
 }

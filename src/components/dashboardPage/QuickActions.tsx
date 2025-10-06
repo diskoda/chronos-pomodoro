@@ -1,95 +1,17 @@
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Plus, GitBranch, ShoppingBag, LogOut, Brain, Stethoscope, HelpCircle, BookOpen } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, LogOut, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../contexts/LoadingContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { MethodologyXPService } from '../../services/methodologyXPService';
 
 interface QuickActionsProps {
   isCollapsed: boolean;
   onToggle: () => void;
 }
 
-interface MethodologyQuickStat {
-  name: string;
-  icon: React.ReactNode;
-  progress: number;
-  color: string;
-  route: string;
-}
-
 export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProps) {
   const navigate = useNavigate();
   const { showLoading } = useLoading();
-  const { currentUser } = useAuth();
-  const [quickStats, setQuickStats] = useState<MethodologyQuickStat[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadQuickStats = async () => {
-      if (!currentUser) return;
-      
-      try {
-        const userStats = await MethodologyXPService.getUserMethodologyStats(currentUser.uid);
-        
-        const stats: MethodologyQuickStat[] = [
-          {
-            name: 'Casos Clínicos',
-            icon: <Stethoscope className="h-3 w-3" />,
-            progress: Math.min((userStats.methodologyStats.clinical_cases.currentLevel / 10) * 100, 100),
-            color: 'text-purple-600 dark:text-purple-400',
-            route: '/clinical-cases'
-          },
-          {
-            name: 'Questões',
-            icon: <HelpCircle className="h-3 w-3" />,
-            progress: Math.min((userStats.methodologyStats.questions.currentLevel / 10) * 100, 100),
-            color: 'text-yellow-600 dark:text-yellow-400',
-            route: '/questions'
-          },
-          {
-            name: 'Flashcards',
-            icon: <BookOpen className="h-3 w-3" />,
-            progress: Math.min((userStats.methodologyStats.flashcards.currentLevel / 10) * 100, 100),
-            color: 'text-green-600 dark:text-green-400',
-            route: '/flashcards'
-          }
-        ];
-
-        setQuickStats(stats);
-      } catch (error) {
-        console.error('Erro ao carregar stats rápidas:', error);
-        // Fallback com dados estáticos
-        setQuickStats([
-          {
-            name: 'Casos Clínicos',
-            icon: <Stethoscope className="h-3 w-3" />,
-            progress: 25,
-            color: 'text-purple-600 dark:text-purple-400',
-            route: '/clinical-cases'
-          },
-          {
-            name: 'Questões',
-            icon: <HelpCircle className="h-3 w-3" />,
-            progress: 15,
-            color: 'text-yellow-600 dark:text-yellow-400',
-            route: '/questions'
-          },
-          {
-            name: 'Flashcards',
-            icon: <BookOpen className="h-3 w-3" />,
-            progress: 10,
-            color: 'text-green-600 dark:text-green-400',
-            route: '/flashcards'
-          }
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadQuickStats();
-  }, [currentUser]);
+  const { logout } = useAuth();
 
   const handleNavigation = (path: string, message: string) => {
     showLoading(message, 'minimal');
@@ -98,203 +20,177 @@ export default function QuickActions({ isCollapsed, onToggle }: QuickActionsProp
     }, 300);
   };
 
-  const handleMethodologyNavigation = (stat: MethodologyQuickStat) => {
-    handleNavigation(stat.route, `Carregando ${stat.name}...`);
+  const handleLogout = async () => {
+    showLoading('Fazendo logout...', 'minimal');
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
-    <div className={`fixed right-0 top-20 h-full theme-bg-primary theme-shadow-lg theme-border-secondary border-l transition-all duration-300 z-40 ${
+    <div className={`fixed right-0 top-20 h-full transition-all duration-300 z-40 ${
       isCollapsed ? 'w-16' : 'w-80'
     }`}>
+      {/* Background with gradient and blur */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl border-l border-slate-700/50"></div>
+      
+      {/* Animated border */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-sm opacity-50"></div>
+      
       {/* Toggle Button */}
       <button
         onClick={onToggle}
-        className="absolute -left-3 top-4 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors shadow-md"
+        className="absolute -left-4 top-6 w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full flex items-center justify-center hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg border border-blue-400/30 z-10"
       >
         {isCollapsed ? (
-          <ChevronLeft className="h-3 w-3" />
+          <ChevronLeft className="h-4 w-4" />
         ) : (
-          <ChevronRight className="h-3 w-3" />
+          <ChevronRight className="h-4 w-4" />
         )}
       </button>
 
       {/* Content */}
-      <div className="p-4 h-full overflow-y-auto">
+      <div className="relative h-full p-6 overflow-y-auto">
         {!isCollapsed ? (
           // Expanded View
           <>
-            <div className="border-b theme-border pb-4 mb-4">
-              <h3 className="font-semibold theme-text-primary">Ações Rápidas</h3>
-              <p className="text-xs theme-text-tertiary mt-1">Acesso rápido às principais funcionalidades</p>
+            {/* Header */}
+            <div className="mb-8">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <h3 className="font-bold text-white text-lg">Ações Rápidas</h3>
+                <Sparkles className="h-4 w-4 text-yellow-400" />
+              </div>
+              <p className="text-slate-300 text-sm">Seu painel de controle de estudos</p>
             </div>
             
-            <div className="space-y-3">
+            {/* Action Buttons */}
+            <div className="space-y-4">
+              {/* Start Study Button */}
               <button 
                 onClick={() => handleNavigation('/study', 'Iniciando estudos...')}
-                className="w-full theme-button-primary py-3 px-4 rounded-lg font-medium flex items-center space-x-3"
+                className="group relative w-full overflow-hidden rounded-xl transition-all duration-300 hover:scale-105"
               >
-                <Plus className="h-5 w-5" />
-                <span>Iniciar Estudos</span>
+                {/* Button Background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur group-hover:blur-sm"></div>
+                
+                {/* Button Content */}
+                <div className="relative px-6 py-4 flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                    <BookOpen className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="font-semibold text-white">Iniciar Estudos</div>
+                    <div className="text-xs text-blue-100">Banco de questões USP</div>
+                  </div>
+                  <Target className="h-4 w-4 text-white/80 group-hover:text-white transition-colors" />
+                </div>
+                
+                {/* Animated border */}
+                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover:border-white/40 transition-colors"></div>
               </button>
               
-              {/* Methodology Quick Access */}
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium theme-text-primary">Metodologias</h4>
-                {quickStats.map((stat) => (
-                  <button
-                    key={stat.name}
-                    onClick={() => handleMethodologyNavigation(stat)}
-                    className="w-full theme-bg-secondary theme-text-primary py-2 px-3 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center justify-between text-sm"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <span className={stat.color}>{stat.icon}</span>
-                      <span>{stat.name}</span>
-                    </div>
-                    <span className="text-xs theme-text-secondary">
-                      {Math.round(stat.progress)}%
-                    </span>
-                  </button>
-                ))}
-              </div>
-              
+              {/* Logout Button */}
               <button 
-                onClick={() => handleNavigation('/test/flow', 'Carregando teste...')}
-                className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center space-x-3"
+                onClick={handleLogout}
+                className="group relative w-full overflow-hidden rounded-xl transition-all duration-300 hover:scale-105"
               >
-                <Brain className="h-5 w-5" />
-                <span>🧪 Testar Fluxo Dr. Skoda</span>
-              </button>
-              
-              <button 
-                onClick={() => handleNavigation('/question/1', 'Carregando questão...')}
-                className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors flex items-center space-x-3"
-              >
-                <Brain className="h-5 w-5" />
-                <span>🚀 Questão 1 Direta</span>
-              </button>
-              
-              <button className="w-full theme-bg-secondary theme-text-primary py-3 px-4 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center space-x-3">
-                <GitBranch className="h-5 w-5" />
-                <span>Árvore de Conhecimento</span>
-              </button>
-              
-              <button className="w-full theme-bg-secondary theme-text-primary py-3 px-4 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center space-x-3">
-                <ShoppingBag className="h-5 w-5" />
-                <span>Lojinha #PéNaPED</span>
-              </button>
-              
-              <button className="w-full theme-bg-secondary theme-text-primary py-3 px-4 rounded-lg font-medium hover:theme-bg-tertiary transition-colors flex items-center space-x-3">
-                <LogOut className="h-5 w-5" />
-                <span>Logout</span>
+                {/* Button Background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-red-500 to-pink-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 blur group-hover:blur-sm"></div>
+                
+                {/* Button Content */}
+                <div className="relative px-6 py-4 flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                    <LogOut className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="font-semibold text-white">Sair</div>
+                    <div className="text-xs text-red-100">Finalizar sessão</div>
+                  </div>
+                </div>
+                
+                {/* Animated border */}
+                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover:border-white/40 transition-colors"></div>
               </button>
             </div>
 
-            {/* Enhanced Quick Stats */}
-            {!loading && (
-              <div className="mt-6 pt-4 border-t theme-border">
-                <h4 className="font-medium theme-text-primary text-sm mb-3">Progresso por Metodologia</h4>
-                <div className="space-y-3">
-                  {quickStats.map((stat) => (
-                    <div key={stat.name} className="space-y-1">
-                      <div className="flex justify-between items-center text-xs">
-                        <div className="flex items-center space-x-1">
-                          <span className={stat.color}>{stat.icon}</span>
-                          <span className="theme-text-secondary">{stat.name}</span>
-                        </div>
-                        <span className={`font-medium ${stat.color}`}>
-                          {Math.round(stat.progress)}%
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
-                        <div 
-                          className={`h-1 rounded-full transition-all duration-500 ${
-                            stat.color.includes('purple') ? 'bg-purple-500' :
-                            stat.color.includes('yellow') ? 'bg-yellow-500' :
-                            'bg-green-500'
-                          }`}
-                          style={{ width: `${stat.progress}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+            {/* Stats Section */}
+            <div className="mt-8 pt-6 border-t border-slate-600/50">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <Target className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-sm font-semibold text-white">35</div>
+                  <div className="text-xs text-slate-400">Questões</div>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-sm font-semibold text-white">80%</div>
+                  <div className="text-xs text-slate-400">Precisão</div>
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Footer */}
+            <div className="mt-8 pt-4 border-t border-slate-600/50">
+              <div className="text-center">
+                <div className="text-xs text-slate-400 mb-1">Última sessão</div>
+                <div className="text-sm font-medium text-slate-300">Há 2 horas</div>
+              </div>
+            </div>
           </>
         ) : (
           // Collapsed View
-          <div className="flex flex-col items-center space-y-4 pt-4">
+          <div className="flex flex-col items-center space-y-6 pt-4">
+            {/* Start Study Button */}
             <button
               onClick={() => handleNavigation('/study', 'Iniciando estudos...')}
-              className="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+              className="group relative w-12 h-12 overflow-hidden rounded-xl transition-all duration-300 hover:scale-110"
               title="Iniciar Estudos"
             >
-              <Plus className="h-5 w-5" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:from-blue-500 group-hover:to-purple-500"></div>
+              <div className="relative flex items-center justify-center h-full">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
+              <div className="absolute inset-0 rounded-xl border border-white/20 group-hover:border-white/40 transition-colors"></div>
             </button>
             
-            {/* Methodology Quick Icons */}
-            {quickStats.map((stat) => (
-              <button
-                key={stat.name}
-                onClick={() => handleMethodologyNavigation(stat)}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors relative ${
-                  stat.color.includes('purple') ? 'bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/30 dark:hover:bg-purple-900/50' :
-                  stat.color.includes('yellow') ? 'bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:hover:bg-yellow-900/50' :
-                  'bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50'
-                }`}
-                title={`${stat.name} - ${Math.round(stat.progress)}%`}
-              >
-                <span className={stat.color}>{stat.icon}</span>
-                {/* Progress indicator */}
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center text-[8px] font-bold" 
-                     style={{ 
-                       backgroundColor: stat.color.includes('purple') ? '#8b5cf6' :
-                                       stat.color.includes('yellow') ? '#eab308' : '#10b981',
-                       color: 'white'
-                     }}>
-                  {Math.round(stat.progress / 10)}
-                </div>
-              </button>
-            ))}
+            {/* Stats Dots */}
+            <div className="flex flex-col space-y-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="35 questões respondidas"></div>
+              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} title="80% de precisão"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }} title="Última sessão há 2h"></div>
+            </div>
             
+            {/* Logout Button */}
             <button
-              onClick={() => handleNavigation('/test/flow', 'Carregando teste...')}
-              className="w-10 h-10 bg-green-600 text-white rounded-lg flex items-center justify-center hover:bg-green-700 transition-colors"
-              title="🧪 Testar Fluxo Dr. Skoda"
+              onClick={handleLogout}
+              className="group relative w-12 h-12 overflow-hidden rounded-xl transition-all duration-300 hover:scale-110 mt-auto"
+              title="Sair"
             >
-              <Brain className="h-5 w-5" />
-            </button>
-            
-            <button
-              onClick={() => handleNavigation('/question/1', 'Carregando questão...')}
-              className="w-10 h-10 bg-orange-600 text-white rounded-lg flex items-center justify-center hover:bg-orange-700 transition-colors"
-              title="🚀 Questão 1 Direta"
-            >
-              <Brain className="h-5 w-5" />
-            </button>
-            
-            <button
-              className="w-10 h-10 theme-bg-secondary theme-text-primary rounded-lg flex items-center justify-center hover:theme-bg-tertiary transition-colors"
-              title="Árvore de Conhecimento"
-            >
-              <GitBranch className="h-5 w-5" />
-            </button>
-            
-            <button
-              className="w-10 h-10 theme-bg-secondary theme-text-primary rounded-lg flex items-center justify-center hover:theme-bg-tertiary transition-colors"
-              title="Lojinha #PéNaPED"
-            >
-              <ShoppingBag className="h-5 w-5" />
-            </button>
-            
-            <button
-              className="w-10 h-10 theme-bg-secondary theme-text-primary rounded-lg flex items-center justify-center hover:theme-bg-tertiary transition-colors"
-              title="Logout"
-            >
-              <LogOut className="h-5 w-5" />
+              <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 group-hover:from-red-500 group-hover:to-pink-500"></div>
+              <div className="relative flex items-center justify-center h-full">
+                <LogOut className="h-6 w-6 text-white" />
+              </div>
+              <div className="absolute inset-0 rounded-xl border border-white/20 group-hover:border-white/40 transition-colors"></div>
             </button>
           </div>
         )}
+      </div>
+
+      {/* Floating particles effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-blue-400 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-purple-400 rounded-full animate-pulse opacity-60" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-pink-400 rounded-full animate-pulse opacity-60" style={{ animationDelay: '2s' }}></div>
       </div>
     </div>
   );

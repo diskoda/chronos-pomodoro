@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { BookOpen, FileText, Brain, Puzzle } from 'lucide-react';
 import { BackButton } from '../components/common';
 import { StudyModeGrid, StudyTip, type StudyModeOption } from '../components/modeSelection';
@@ -13,18 +14,14 @@ import penaPedLogo from '../assets/images/logos/logo_penaped.png';
 
 export default function ModeSelection() {
   const navigate = useNavigate();
-  const { showLoading } = useLoading();
+  const { hideLoading } = useLoading();
+
+  // Limpar qualquer loading pendente quando o componente montar
+  useEffect(() => {
+    hideLoading();
+  }, [hideLoading]);
 
   const studyModes: StudyModeOption[] = [
-    {
-      id: 'clinical-cases',
-      title: 'Casos Clínicos',
-      description: 'Resolva casos clínicos complexos com cenários realistas',
-      icon: FileText,
-      image: clinicalImg,
-      isActive: true,
-      route: '/clinical-cases'
-    },
     {
       id: 'question-bank',
       title: 'Banco de Questões',
@@ -33,6 +30,15 @@ export default function ModeSelection() {
       image: questionsImg,
       isActive: true,
       route: '/questions'
+    },
+    {
+      id: 'clinical-cases',
+      title: 'Casos Clínicos',
+      description: 'Resolva casos clínicos complexos com cenários realistas',
+      icon: FileText,
+      image: clinicalImg,
+      isActive: false,
+      route: '/clinical-cases'
     },
     {
       id: 'flashcards',
@@ -53,19 +59,18 @@ export default function ModeSelection() {
   ];
 
   const handleModeSelect = (mode: StudyModeOption) => {
-    if (mode.isActive) {
-      showLoading(`Carregando ${mode.title}...`, 'branded');
-      setTimeout(() => {
-        navigate(mode.route);
-      }, 500);
+    if (!mode.isActive) {
+      // Não faz nada se o modo não estiver ativo
+      return;
     }
+    
+    // Navegação direta sem loading para evitar problemas
+    navigate(mode.route);
   };
 
   const handleBackToDashboard = () => {
-    showLoading('Voltando ao Dashboard...', 'minimal');
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 300);
+    // Navegação direta sem loading para evitar problemas
+    navigate('/dashboard');
   };
 
   return (
@@ -107,7 +112,7 @@ export default function ModeSelection() {
         />
 
         <StudyTip 
-          content="Comece com o <strong>Banco de Questões</strong> para avaliar seu conhecimento atual. Em breve, novos modos de estudo estarão disponíveis para uma experiência de aprendizado ainda mais completa!"
+          content="Aproveite o <strong>Banco de Questões</strong> já disponível com centenas de questões de alta qualidade! Os outros modos de estudo estão em desenvolvimento e estarão disponíveis em breve para oferecer uma experiência de aprendizado ainda mais completa."
         />
       </div>
     </div>

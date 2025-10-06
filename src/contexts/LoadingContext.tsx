@@ -44,11 +44,12 @@ export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) =>
     setVariant(loadingVariant);
     setIsLoading(true);
 
-    // Failsafe: automaticamente esconder loading após 10 segundos
+    // Failsafe: automaticamente esconder loading após 5 segundos (reduzido de 10s)
     const newTimeoutId = setTimeout(() => {
-      console.warn('Loading timeout - escondendo automaticamente após 10s');
+      console.warn('Loading timeout - escondendo automaticamente após 5s');
       setIsLoading(false);
-    }, 10000);
+      setTimeoutId(null);
+    }, 5000);
     
     setTimeoutId(newTimeoutId);
   };

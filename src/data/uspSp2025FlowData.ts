@@ -5,6 +5,7 @@ import {
   registerQuestionFlowData,
   initializeFlowDataSystem 
 } from './universalFlowDataManager';
+import { registerEspecialidadesPediatricasFlowData } from './uspSp2025EspecialidadesPediatricasRefactored';
 
 // ==========================================
 // DADOS DE FLUXO MANUAIS PARA QUESTÕES ESPECÍFICAS
@@ -695,6 +696,9 @@ async function initializeUSPSP2025System(): Promise<void> {
     
     // Gerar dados de fluxo para todas as questões
     generateUSPSP2025FlowData();
+    
+    // Registrar questões específicas de Especialidades Pediátricas
+    registerEspecialidadesPediatricasFlowData();
     
     // Inicializar sistema universal
     await initializeFlowDataSystem(uspSp2025Questions);

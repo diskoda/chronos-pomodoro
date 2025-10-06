@@ -1,7 +1,6 @@
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ThemeSelector from '../common/ThemeSelector';
 import { useLoading } from '../../contexts/LoadingContext';
 import logoPenaped from '../../assets/images/logos/logo_penaped.png';
 
@@ -49,7 +48,6 @@ export default function Header() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <ThemeSelector />
             <button 
               onClick={handleNavigateToLogin}
               className="penaped-btn penaped-btn-primary"
@@ -60,7 +58,6 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <ThemeSelector />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-600 hover:text-blue-600 transition-colors"
