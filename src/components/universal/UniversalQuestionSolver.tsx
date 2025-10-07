@@ -14,7 +14,7 @@ import QuestionAlternatives from '../questionSolver/QuestionAlternatives';
 import QuestionActions from '../questionSolver/QuestionActions';
 import QuestionNotFound from '../questionSolver/QuestionNotFound';
 import QuestionCooldownBlocker from './QuestionCooldownBlocker';
-import { useQuestionFlow } from '../questionFlow/FlowContext';
+import { useQuestionFlow } from '../questionFlow';
 
 // ==========================================
 // COMPONENTE UNIVERSAL PARA QUESTÕES

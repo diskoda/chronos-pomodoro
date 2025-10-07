@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 19 - Diagnóstico diferencial de sopro cardíaco em criança
 export const question19FlowData: QuestionFlowData = {

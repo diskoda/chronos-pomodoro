@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 20 - Manejo da bronquiolite viral aguda
 export const question20FlowData: QuestionFlowData = {

@@ -1,54 +1,72 @@
 // ==========================================
-// SISTEMA DE QUESTÕES COMPONENTIZADO - EXPORTS PRINCIPAIS
+// CLEAN QUESTION FLOW SYSTEM - MAIN EXPORTS
 // ==========================================
 
-// Tipos base
+// Core Types
 export type { 
   QuestionFlowData, 
   AlternativeAnalysis, 
   QuestionMetadata,
   FlowStage,
-  FlowStageConfig,
-  FlowContextType
-} from './types';
+  StageConfig,
+  FlowContextType,
+  BaseStageProps,
+  DialogProps,
+  AudioConfig
+} from './core/types';
 
-// Context e Hooks
-export { FlowProvider, useQuestionFlow } from './FlowContext';
+// Context and Hooks
+export { FlowProvider, useQuestionFlow } from './contexts/FlowContext';
 
-// Componentes universais
-export { 
-  default as UniversalFlowStage,
-  QuestionBeginStage,
-  QuestionExplanationStage, 
-  QuestionAnalysisStage,
-  QuestionFlowManager
-} from './UniversalFlowStage';
-
-// Wrappers para uso fácil
+// Main Wrappers
 export { 
   default as QuestionFlowWrapper,
-  SimpleQuestionFlow,
-  useSimpleQuestionFlow
-} from './QuestionFlowWrapper';
+  SimpleQuestionFlow
+} from './wrappers/QuestionFlowWrapper';
 
-// Componente base
-export { default as DrSkodaDialog } from './DrSkodaDialog';
+// Stage Components
+export { default as BeginStage } from './stages/BeginStage';
+export { default as ExplanationStage } from './stages/ExplanationStage';
+export { default as AnalysisStage } from './stages/AnalysisStage';
 
-// Componente de progresso
-export { default as FlowProgressIndicator } from './FlowProgressIndicator';
+// Manager Components
+export { default as StageManager } from './managers/StageManager';
 
-// Configurações e templates
+// UI Components
+export { default as DrSkodaDialog } from './ui/DrSkodaDialog';
+export { default as ProgressIndicator } from './ui/ProgressIndicator';
+export { default as AudioPlayer } from './ui/AudioPlayer';
+export { default as TextContent } from './ui/TextContent';
+export { default as DrSkodaPortrait } from './ui/DrSkodaPortrait';
+
+// Configuration and Utilities
 export { 
-  stageConfigurations,
+  STAGE_CONFIGS,
   processStageContent,
-  generateAlternativesAnalysis
-} from './stageConfigs';
+  generateAlternativesAnalysis,
+  getAudioConfig
+} from './core/stageConfigs';
+
+export {
+  INITIAL_FLOW_STATE,
+  calculateProgress,
+  getNextStage,
+  findSelectedAlternative,
+  shouldIncrementDialogCount
+} from './core/utils';
+
+// Services
+export { recordQuestionXP } from './services/xpService';
 
 // ==========================================
-// COMPONENTES LEGADOS (BACKWARD COMPATIBILITY)
+// BACKWARD COMPATIBILITY EXPORTS
 // ==========================================
 
-// Re-exportar componentes existentes para não quebrar código atual
-export { default as QuestionBegin } from './QuestionBegin';
-export { default as QuestionExplanation } from './QuestionExplanation';
-export { default as QuestionAnalysis } from './QuestionAnalysis';
+// Re-export for existing code compatibility
+export { default as QuestionBegin } from './stages/BeginStage';
+export { default as QuestionExplanation } from './stages/ExplanationStage';
+export { default as QuestionAnalysis } from './stages/AnalysisStage';
+
+// Legacy names
+export { default as QuestionFlowManager } from './managers/StageManager';
+export { default as FlowProgressIndicator } from './ui/ProgressIndicator';

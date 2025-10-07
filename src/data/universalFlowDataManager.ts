@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../components/questionFlow/types';
+import type { QuestionFlowData } from '../components/questionFlow/core/types';
 
 // ==========================================
 // SISTEMA DE GERENCIAMENTO DE DADOS DE FLUXO UNIVERSAL

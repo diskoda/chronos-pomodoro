@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Template para nova questão USP-SP 2025 Especialidades Pediátricas
 // 

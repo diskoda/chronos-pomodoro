@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 25 - Infecção do trato urinário em lactente
 export const question25FlowData: QuestionFlowData = {

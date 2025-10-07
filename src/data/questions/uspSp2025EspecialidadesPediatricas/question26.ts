@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 26 - Diabetes mellitus tipo 1 em escolar
 export const question26FlowData: QuestionFlowData = {

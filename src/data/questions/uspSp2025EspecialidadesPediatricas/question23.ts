@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 23 - Asma aguda em escolar
 export const question23FlowData: QuestionFlowData = {

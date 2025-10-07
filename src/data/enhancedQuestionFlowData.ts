@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../components/questionFlow/types';
+import type { QuestionFlowData } from '../components/questionFlow/core/types';
 
 // ==========================================
 // DADOS DA QUESTÃO 1 - TABAGISMO/ENTREVISTA MOTIVACIONAL

@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 18 - Desenvolvimento neuromotor
 export const question18FlowData: QuestionFlowData = {

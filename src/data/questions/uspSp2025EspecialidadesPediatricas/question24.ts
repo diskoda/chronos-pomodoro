@@ -1,4 +1,4 @@
-import type { QuestionFlowData } from '../../../components/questionFlow/types';
+import type { QuestionFlowData } from '../../../components/questionFlow/core/types';
 
 // Questão 24 - Anemia ferropriva em pré-escolar
 export const question24FlowData: QuestionFlowData = {

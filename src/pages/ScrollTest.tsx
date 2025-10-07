@@ -1,4 +1,4 @@
-import DrSkodaDialog from '../components/questionFlow/DrSkodaDialog';
+import { DrSkodaDialog } from '../components/questionFlow';
 
 const longContent = `**Protocolo de Reanimação Neonatal Avançada:**
 
