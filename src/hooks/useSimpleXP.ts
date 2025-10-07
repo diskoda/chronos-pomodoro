@@ -33,6 +33,12 @@ export function useSimpleXP(): UseSimpleXPReturn {
         if (result.leveledUp) {
           console.log(`🎊 Level Up! New level: ${result.newLevel}`);
         }
+        
+        // Garantir que evento é disparado mesmo que o serviço não dispare
+        window.dispatchEvent(new CustomEvent('xpGained', { 
+          detail: result 
+        }));
+        
         return true;
       }
       
@@ -61,6 +67,11 @@ export async function giveXPForQuestionCompletion(questionId: number): Promise<v
       const result = await giveQuestionCompletionXP(questionId);
       if (result) {
         console.log(`✅ Question ${questionId} completed: +${result.xpGained} XP`);
+        
+        // Disparar evento para atualizar UI
+        window.dispatchEvent(new CustomEvent('xpGained', { 
+          detail: result 
+        }));
       }
     }
   } catch (error) {

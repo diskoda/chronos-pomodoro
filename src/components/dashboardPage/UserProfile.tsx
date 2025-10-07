@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react';
-import { User, Mail, Calendar, Award, Clock, Star, Trophy, Stethoscope, HelpCircle, BookOpen } from 'lucide-react';
+import { User, Mail, Calendar, Award, Clock, Star, Trophy } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { MethodologyXPService } from '../../services/methodologyXPService';
-import type { StudyMethodology } from '../../types/xpMethodologies';
+import { XPService } from '../../services/xpService';
+import type { UserLevel } from '../../types/xp';
 
 interface UserProfileData {
-  overallLevel: number;
+  currentLevel: number;
   totalXP: number;
+  xpToNextLevel: number;
   totalActivities: number;
   studyTimeMinutes: number;
   memberSince: Date;
-  favoriteMethodology: StudyMethodology;
   completedAchievements: number;
-  methodologyStats: {
-    clinical_cases: { level: number; xp: number; activities: number };
-    questions: { level: number; xp: number; activities: number };
-    flashcards: { level: number; xp: number; activities: number };
-  };
+  recentActivitiesCount: number;
 }
 
 export default function UserProfile() {
@@ -26,58 +22,46 @@ export default function UserProfile() {
 
   useEffect(() => {
     const loadProfileData = async () => {
-      if (!currentUser) return;
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
       
       try {
-        const [userStats, overallLevel] = await Promise.all([
-          MethodologyXPService.getUserMethodologyStats(currentUser.uid),
-          MethodologyXPService.getUserOverallLevel(currentUser.uid)
-        ]);
+        console.log('👤 Carregando perfil do usuário:', currentUser.uid);
+        
+        // Carregar dados do sistema XP simples
+        const userLevel: UserLevel = await XPService.getUserLevel(currentUser.uid);
+        const userHistory = await XPService.getUserXPHistory(currentUser.uid, 50);
+        const userStats = await XPService.getUserXPStats(currentUser.uid);
+        
+        console.log('✅ Dados do perfil carregados:', { userLevel, userHistory, userStats });
 
         const profileData: UserProfileData = {
-          overallLevel: overallLevel.overallLevel,
-          totalXP: overallLevel.totalXP,
-          totalActivities: userStats.overallStats.totalActivities,
-          studyTimeMinutes: userStats.overallStats.totalTimeSpent,
+          currentLevel: userLevel.currentLevel,
+          totalXP: userLevel.totalXP,
+          xpToNextLevel: userLevel.xpToNextLevel,
+          totalActivities: userStats.totalActivities,
+          studyTimeMinutes: userStats.xpThisMonth * 2, // Estimativa: 2 min por XP
           memberSince: currentUser.metadata.creationTime ? new Date(currentUser.metadata.creationTime) : new Date(),
-          favoriteMethodology: userStats.overallStats.favoriteMethodology,
-          completedAchievements: 3, // Mock - TODO: calcular conquistas reais
-          methodologyStats: {
-            clinical_cases: {
-              level: userStats.methodologyStats.clinical_cases.currentLevel,
-              xp: userStats.methodologyStats.clinical_cases.totalXP,
-              activities: userStats.methodologyStats.clinical_cases.totalActivities
-            },
-            questions: {
-              level: userStats.methodologyStats.questions.currentLevel,
-              xp: userStats.methodologyStats.questions.totalXP,
-              activities: userStats.methodologyStats.questions.totalActivities
-            },
-            flashcards: {
-              level: userStats.methodologyStats.flashcards.currentLevel,
-              xp: userStats.methodologyStats.flashcards.totalXP,
-              activities: userStats.methodologyStats.flashcards.totalActivities
-            }
-          }
+          completedAchievements: Math.floor(userLevel.currentLevel / 2), // 1 achievement por 2 níveis
+          recentActivitiesCount: userHistory.length
         };
 
         setProfileData(profileData);
+        
       } catch (error) {
-        console.error('Erro ao carregar dados do perfil:', error);
+        console.error('❌ Erro ao carregar dados do perfil:', error);
         // Fallback com dados básicos do usuário
         setProfileData({
-          overallLevel: 1,
-          totalXP: 100,
-          totalActivities: 5,
-          studyTimeMinutes: 120,
+          currentLevel: 1,
+          totalXP: 0,
+          xpToNextLevel: 100,
+          totalActivities: 0,
+          studyTimeMinutes: 0,
           memberSince: currentUser?.metadata.creationTime ? new Date(currentUser.metadata.creationTime) : new Date(),
-          favoriteMethodology: 'clinical_cases',
-          completedAchievements: 1,
-          methodologyStats: {
-            clinical_cases: { level: 1, xp: 50, activities: 2 },
-            questions: { level: 1, xp: 30, activities: 2 },
-            flashcards: { level: 1, xp: 20, activities: 1 }
-          }
+          completedAchievements: 0,
+          recentActivitiesCount: 0
         });
       } finally {
         setLoading(false);
@@ -85,29 +69,19 @@ export default function UserProfile() {
     };
 
     loadProfileData();
+    
+    // Escutar eventos de XP para atualizar em tempo real
+    const handleXPGained = () => {
+      console.log('🎉 Perfil detectou XP ganho - recarregando...');
+      loadProfileData();
+    };
+
+    window.addEventListener('xpGained', handleXPGained);
+    
+    return () => {
+      window.removeEventListener('xpGained', handleXPGained);
+    };
   }, [currentUser]);
-
-  const getMethodologyIcon = (methodology: StudyMethodology) => {
-    switch (methodology) {
-      case 'clinical_cases':
-        return <Stethoscope className="h-4 w-4 text-purple-500" />;
-      case 'questions':
-        return <HelpCircle className="h-4 w-4 text-yellow-500" />;
-      case 'flashcards':
-        return <BookOpen className="h-4 w-4 text-green-500" />;
-    }
-  };
-
-  const getMethodologyName = (methodology: StudyMethodology) => {
-    switch (methodology) {
-      case 'clinical_cases':
-        return 'Casos Clínicos';
-      case 'questions':
-        return 'Questões';
-      case 'flashcards':
-        return 'Flashcards';
-    }
-  };
 
   const formatStudyTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
@@ -159,17 +133,17 @@ export default function UserProfile() {
             <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             {/* Level badge */}
             <div className="absolute -bottom-1 -right-1 bg-yellow-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-              {profileData?.overallLevel}
+              {profileData?.currentLevel}
             </div>
           </div>
           <div>
             <h4 className="text-lg font-semibold theme-text-primary">
-              {currentUser?.displayName || 'Usuário'}
+              {currentUser?.displayName || 'Samuel Pereira da Silva'}
             </h4>
             <div className="flex items-center space-x-2">
               <Star className="h-4 w-4 text-yellow-500" />
               <span className="text-sm theme-text-secondary">
-                Nível {profileData?.overallLevel} • {profileData?.totalXP} XP
+                Nível {profileData?.currentLevel} • {profileData?.totalXP} XP
               </span>
             </div>
           </div>
@@ -180,7 +154,7 @@ export default function UserProfile() {
           <div className="flex items-center space-x-3">
             <Mail className="w-4 h-4 theme-text-tertiary" />
             <span className="text-sm theme-text-secondary">
-              {currentUser?.email || 'email@exemplo.com'}
+              {currentUser?.email || 'samuel20.ps@gmail.com'}
             </span>
           </div>
           <div className="flex items-center space-x-3">
@@ -189,14 +163,6 @@ export default function UserProfile() {
               Membro desde {profileData && formatMemberSince(profileData.memberSince)}
             </span>
           </div>
-          {profileData && (
-            <div className="flex items-center space-x-3">
-              {getMethodologyIcon(profileData.favoriteMethodology)}
-              <span className="text-sm theme-text-secondary">
-                Metodologia favorita: {getMethodologyName(profileData.favoriteMethodology)}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Stats */}
@@ -221,47 +187,35 @@ export default function UserProfile() {
           </div>
         </div>
 
-        {/* Methodology Progress */}
+        {/* Progresso XP */}
         {profileData && (
           <div className="space-y-4 mb-6">
             <h5 className="font-medium theme-text-primary text-sm flex items-center">
               <Trophy className="h-4 w-4 mr-2 text-blue-500" />
-              Progresso por Metodologia
+              Progresso XP
             </h5>
             
-            {Object.entries(profileData.methodologyStats).map(([methodology, stats]) => {
-              const methodologyKey = methodology as StudyMethodology;
-              return (
-                <div key={methodology} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                      {getMethodologyIcon(methodologyKey)}
-                      <span className="text-xs theme-text-secondary">
-                        {getMethodologyName(methodologyKey)}
-                      </span>
-                    </div>
-                    <span className="text-xs font-medium theme-text-primary">
-                      Nível {stats.level} • {stats.xp} XP
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                      <div 
-                        className={`h-1.5 rounded-full ${
-                          methodologyKey === 'clinical_cases' ? 'bg-purple-500' :
-                          methodologyKey === 'questions' ? 'bg-yellow-500' :
-                          'bg-green-500'
-                        }`}
-                        style={{ width: `${Math.min((stats.level / 10) * 100, 100)}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-xs theme-text-tertiary">
-                      {stats.activities} atividades
-                    </span>
-                  </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs theme-text-secondary">
+                  Progresso para Nível {profileData.currentLevel + 1}
+                </span>
+                <span className="text-xs font-medium theme-text-primary">
+                  {profileData.totalXP % 100}/{profileData.xpToNextLevel} XP
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div 
+                    className="h-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
+                    style={{ width: `${Math.min(((profileData.totalXP % 100) / profileData.xpToNextLevel) * 100, 100)}%` }}
+                  ></div>
                 </div>
-              );
-            })}
+              </div>
+              <div className="text-xs theme-text-tertiary text-center">
+                {profileData.recentActivitiesCount} atividades recentes
+              </div>
+            </div>
           </div>
         )}
 

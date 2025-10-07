@@ -34,6 +34,7 @@ import XPSystemExample from './examples/XPSystemExample';
 import MethodologyXPSystemExample from './pages/MethodologyXPSystemExample';
 import AdminInitialization from './pages/AdminInitialization';
 import XPSetupPage from './pages/XPSetupPage';
+import XPTestPage from './pages/XPTestPage';
 import './styles/themes.css';
 
 export default function App() {
@@ -68,6 +69,9 @@ export default function App() {
             
             {/* Página Temporária - Setup XP (REMOVER APÓS USO) */}
             <Route path="/setup/xp" element={<XPSetupPage />} />
+            
+            {/* Página de Teste XP */}
+            <Route path="/test/xp" element={<XPTestPage />} />
             
             <Route path="/test/explanations" element={<ExplanationTest />} />
             <Route path="/test/tooltips" element={<TestTooltips />} />

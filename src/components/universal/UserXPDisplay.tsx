@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { XPService } from '../../services/xpService';
+import type { UserLevel } from '../../types/xp';
 
 interface UserXPDisplayProps {
   className?: string;
@@ -16,38 +17,69 @@ export default function UserXPDisplay({
   variant = 'compact'
 }: UserXPDisplayProps) {
   const { currentUser } = useAuth();
-  const [userLevel, setUserLevel] = useState<{
-    currentLevel: number;
-    totalXP: number;
-    xpToNextLevel: number;
-    currentXP: number;
-  } | null>(null);
+  const [userLevel, setUserLevel] = useState<UserLevel | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Função para carregar dados XP do usuário
+  const loadUserXP = async () => {
+    if (!currentUser) {
+      console.log('🚫 Usuário não logado - não carregando XP');
+      setUserLevel(null);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('🔍 Carregando XP do usuário:', currentUser.uid);
+      
+      const levelData = await XPService.getUserLevel(currentUser.uid);
+      console.log('✅ XP carregado do Firebase:', levelData);
+      
+      setUserLevel(levelData);
+      
+    } catch (err) {
+      console.error('❌ Erro ao carregar XP:', err);
+      setError('Erro ao carregar XP');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Carregar XP quando usuário muda
   useEffect(() => {
-    const loadUserXP = async () => {
-      if (!currentUser) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const levelData = await XPService.getUserLevel(currentUser.uid);
-        setUserLevel(levelData);
-      } catch (error) {
-        console.error('Erro ao carregar XP do usuário:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadUserXP();
   }, [currentUser]);
 
+  // Escutar eventos de XP ganho para atualizar em tempo real
+  useEffect(() => {
+    const handleXPGained = () => {
+      console.log('🎉 XP ganho detectado - recarregando...');
+      loadUserXP();
+    };
+
+    window.addEventListener('xpGained', handleXPGained);
+    
+    return () => {
+      window.removeEventListener('xpGained', handleXPGained);
+    };
+  }, [currentUser]);
+
+  // Estados de carregamento e erro
   if (loading) {
     return (
       <div className={`animate-pulse ${className}`}>
         <div className="bg-gray-300 dark:bg-gray-600 h-6 w-20 rounded"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`text-red-500 text-sm ${className}`}>
+        ⚠️ {error}
       </div>
     );
   }
@@ -62,6 +94,7 @@ export default function UserXPDisplay({
     );
   }
 
+  // Calcular progresso para próximo nível
   const progressPercentage = userLevel.xpToNextLevel > 0 
     ? Math.min((userLevel.currentXP / userLevel.xpToNextLevel) * 100, 100)
     : 100;

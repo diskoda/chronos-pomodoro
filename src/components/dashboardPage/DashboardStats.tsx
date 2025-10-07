@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Clock, HelpCircle, Star, Zap, Trophy } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { MethodologyXPService } from '../../services/methodologyXPService';
+import { XPService } from '../../services/xpService';
+import type { UserLevel } from '../../types/xp';
 
 interface DashboardStatsData {
-  overallLevel: number;
+  currentLevel: number;
   totalXP: number;
-  questionsLevel: number;
-  questionsXP: number;
+  xpToNextLevel: number;
   studyStreak: number;
   achievements: number;
   questionsAnswered: number;
@@ -20,30 +20,37 @@ export default function DashboardStats() {
 
   useEffect(() => {
     const loadStats = async () => {
-      if (!currentUser) return;
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
       
       try {
-        // Carregar dados do usuário
-        const overallLevel = await MethodologyXPService.getUserOverallLevel(currentUser.uid);
-        const questionsLevels = await MethodologyXPService.getMethodologyLevel(currentUser.uid, 'questions');
+        console.log('📊 Carregando estatísticas do dashboard para:', currentUser.uid);
+        
+        // Carregar dados do sistema XP simples
+        const userLevel: UserLevel = await XPService.getUserLevel(currentUser.uid);
+        const userHistory = await XPService.getUserXPHistory(currentUser.uid, 50);
+        const userStats = await XPService.getUserXPStats(currentUser.uid);
+        
+        console.log('✅ Dados carregados:', { userLevel, userHistory, userStats });
         
         setStats({
-          overallLevel: overallLevel.overallLevel,
-          totalXP: overallLevel.totalXP,
-          questionsLevel: questionsLevels.currentLevel,
-          questionsXP: questionsLevels.totalXP,
-          studyStreak: 7, // TODO: Implementar sistema de streaks
+          currentLevel: userLevel.currentLevel,
+          totalXP: userLevel.totalXP,
+          xpToNextLevel: userLevel.xpToNextLevel,
+          studyStreak: 7, // TODO: Implementar sistema de streaks baseado no histórico
           achievements: 15, // TODO: Contar achievements reais
-          questionsAnswered: questionsLevels.totalXP / 10, // Estimativa baseada no XP
+          questionsAnswered: userHistory.length, // Baseado no histórico de atividades
         });
+        
       } catch (error) {
-        console.error('Erro ao carregar estatísticas:', error);
+        console.error('❌ Erro ao carregar estatísticas:', error);
         // Se houver erro, usar valores padrão
         setStats({
-          overallLevel: 1,
+          currentLevel: 1,
           totalXP: 0,
-          questionsLevel: 1,
-          questionsXP: 0,
+          xpToNextLevel: 100,
           studyStreak: 0,
           achievements: 0,
           questionsAnswered: 0,
@@ -54,6 +61,18 @@ export default function DashboardStats() {
     };
 
     loadStats();
+    
+    // Escutar eventos de XP para atualizar em tempo real
+    const handleXPGained = () => {
+      console.log('🎉 Dashboard detectou XP ganho - recarregando stats...');
+      loadStats();
+    };
+
+    window.addEventListener('xpGained', handleXPGained);
+    
+    return () => {
+      window.removeEventListener('xpGained', handleXPGained);
+    };
   }, [currentUser]);
 
   if (loading) {
@@ -90,7 +109,7 @@ export default function DashboardStats() {
               <div className="flex items-center space-x-1 mt-1">
                 <Star className="h-3 w-3 text-yellow-400" />
                 <span className="text-xs font-medium text-purple-400">
-                  Nível {stats.overallLevel}
+                  Nível {stats.currentLevel}
                 </span>
               </div>
             </div>
@@ -113,11 +132,11 @@ export default function DashboardStats() {
                   {Math.floor(stats.questionsAnswered)}
                 </p>
                 <span className="text-xs font-medium text-orange-400">
-                  Nv.{stats.questionsLevel}
+                  Nv.{stats.currentLevel}
                 </span>
               </div>
               <p className="text-xs text-orange-400 mt-1">
-                {stats.questionsXP} XP
+                {stats.totalXP} XP
               </p>
             </div>
             <div className="bg-orange-500/20 rounded-lg p-2">

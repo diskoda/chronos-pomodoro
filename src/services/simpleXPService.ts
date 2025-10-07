@@ -19,9 +19,11 @@ export async function giveQuestionCompletionXP(questionId: number): Promise<XPRe
   try {
     const user = auth.currentUser;
     if (!user) {
-      console.warn('No user logged in for XP reward');
+      console.warn('❌ No user logged in for XP reward');
       return null;
     }
+
+    console.log('🎯 Dando XP para questão:', { userId: user.uid, questionId });
 
     // Always give XP for question completion (regardless of correctness)
     const result = await XPService.recordActivity(
@@ -29,9 +31,22 @@ export async function giveQuestionCompletionXP(questionId: number): Promise<XPRe
       'quiz_completed', // Use existing activity type
       {
         questionId: questionId.toString(),
+        source: 'question_completion',
         timestamp: new Date().toISOString()
       }
     );
+    
+    console.log('✅ XP registrado com sucesso:', result);
+    
+    // Disparar evento para atualizar UI em tempo real
+    window.dispatchEvent(new CustomEvent('xpGained', { 
+      detail: {
+        xpGained: result.xpGained,
+        leveledUp: result.leveledUp,
+        newLevel: result.newLevel,
+        totalXP: result.totalXP
+      }
+    }));
     
     // Show visual notification
     showXPNotification(result.xpGained, result.leveledUp, result.newLevel);
@@ -43,7 +58,7 @@ export async function giveQuestionCompletionXP(questionId: number): Promise<XPRe
     };
     
   } catch (error) {
-    console.error('Error giving question completion XP:', error);
+    console.error('❌ Error giving question completion XP:', error);
     return null;
   }
 }
