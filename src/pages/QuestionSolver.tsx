@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuestion } from '../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../hooks/useUserQuestionAttempts';
 import { usePageLoading } from '../hooks/usePageLoading';
-import { useMethodologyXP, useSpecificMethodologyXP } from '../hooks/useMethodologyXP';
+import { giveXPForQuestionCompletion } from '../hooks/useSimpleXP';
 import QuestionSolverHeader from '../components/questionSolver/QuestionSolverHeader';
 import QuestionInfo from '../components/common/QuestionInfo';
 import QuestionStatement from '../components/questionSolver/QuestionStatement';
@@ -67,10 +67,6 @@ export default function QuestionSolver() {
   // Hook que automaticamente esconde loading quando a página carrega
   usePageLoading();
   
-  // Hooks para XP por metodologia
-  const { recordQuestionActivity } = useMethodologyXP();
-  const { currentStreak } = useSpecificMethodologyXP('questions');
-  
   // Estado para notificações de level up
   const [levelUpNotification, setLevelUpNotification] = useState<{
     newLevel: number;
@@ -91,39 +87,16 @@ export default function QuestionSolver() {
     navigate('/questions');
   };
 
-  // Função para registrar atividade XP
-  const handleRecordXP = async (isCorrect: boolean, metadata: any = {}) => {
+  // Função para registrar atividade XP (simplificada)
+  const handleRecordXP = async (_isCorrect: boolean, _metadata: any = {}) => {
     try {
-      const activityType = isCorrect ? 'question_correct' : 'question_incorrect';
-      
-      const result = await recordQuestionActivity(activityType, {
-        questionId: questionId.toString(),
-        difficulty: question?.difficulty || 'medium',
-        subject: 'Geral',
-        timeSpent: metadata.timeSpent || 0,
-        accuracy: isCorrect ? 100 : 0,
-        ...metadata
-      });
-      
-      // Mostrar notificação de level up se necessário
-      if (result?.leveledUp && result.newLevel) {
-        setLevelUpNotification({
-          newLevel: result.newLevel,
-          newTitle: `Nível ${result.newLevel}`
-        });
+      // Sistema XP simplificado - sempre dá XP por completar questão
+      // Não importa se está correto ou não
+      if (questionId) {
+        await giveXPForQuestionCompletion(questionId);
       }
-      
-      // Registrar bonus de streak se aplicável
-      if (isCorrect && currentStreak > 0 && (currentStreak + 1) % 5 === 0) {
-        await recordQuestionActivity('question_streak', {
-          streakCount: currentStreak + 1
-        });
-      }
-      
-      return result;
     } catch (error) {
       console.error('Erro ao registrar XP:', error);
-      return null;
     }
   };
 
@@ -229,13 +202,11 @@ function IntegratedQuestionInterface({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [startTime] = useState<Date>(new Date());
   
-  // Dados de XP para questões
-  const { 
-    level: questionsLevel,
-    title: questionsTitle,
-    currentXP,
-    xpToNextLevel
-  } = useSpecificMethodologyXP('questions');
+  // Dados de XP simplificados (sem contexto)
+  const questionsLevel = 1;
+  const questionsTitle = "Iniciante";
+  const currentXP = 0;
+  const xpToNextLevel = 100;
   
   const { 
     currentStage, 
@@ -441,13 +412,11 @@ function SimpleQuestionInterface({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [startTime] = useState<Date>(new Date());
   
-  // Dados de XP para questões
-  const { 
-    level: questionsLevel,
-    title: questionsTitle,
-    currentXP,
-    xpToNextLevel
-  } = useSpecificMethodologyXP('questions');
+  // Dados de XP simplificados (sem contexto)
+  const questionsLevel = 1;
+  const questionsTitle = "Iniciante";
+  const currentXP = 0;
+  const xpToNextLevel = 100;
 
   const handleAlternativeSelect = (alternative: string) => {
     if (!isSubmitted) {

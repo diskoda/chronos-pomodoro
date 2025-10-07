@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuestion } from '../../hooks/useQuestions';
 import { useUserQuestionAttempt } from '../../hooks/useUserQuestionAttempts';
 import { useQuestionCooldown } from '../../hooks/useQuestionCooldown';
-import { useXP } from '../../hooks/useXP';
-import { useAuth } from '../../contexts/AuthContext';
+import { giveXPForQuestionCompletion } from '../../hooks/useSimpleXP';
 import { flowDataManager } from '../../data/universalFlowDataManager';
 import { FlowProvider, QuestionFlowManager, FlowProgressIndicator } from '../questionFlow';
 import QuestionSolverHeader from '../questionSolver/QuestionSolverHeader';
@@ -15,6 +14,7 @@ import QuestionActions from '../questionSolver/QuestionActions';
 import QuestionNotFound from '../questionSolver/QuestionNotFound';
 import QuestionCooldownBlocker from './QuestionCooldownBlocker';
 import { useQuestionFlow } from '../questionFlow';
+import UserXPDisplay from './UserXPDisplay';
 
 // ==========================================
 // COMPONENTE UNIVERSAL PARA QUESTÕES
@@ -84,17 +84,6 @@ export default function UniversalQuestionSolver({
   const { question, loading, error } = useQuestion(questionId.toString());
   const flowData = flowDataManager.getFlowData(questionId);
   
-  // Hooks de autenticação e XP
-  const { currentUser } = useAuth();
-  const { recordQuestionAnswer } = useXP();
-  
-  // Estado para notificações XP
-  const [xpNotification, setXpNotification] = useState<{
-    xpGained: number;
-    newLevel?: number;
-    achievements?: string[];
-  } | null>(null);
-  
   // Determinar modo baseado na configuração de fluxo
   const mode = flowConfig.enabled ? 'dr-skoda' : 'exam';
   
@@ -117,13 +106,21 @@ export default function UniversalQuestionSolver({
     }
   }, [onBack, navigate, backUrl]);
   
-  const handleFinish = useCallback(() => {
+  const handleFinish = useCallback(async () => {
+    // Give XP for question completion (simple system)
+    try {
+      await giveXPForQuestionCompletion(questionId);
+    } catch (error) {
+      console.error('Error giving XP on question finish:', error);
+      // Don't block the finish flow if XP fails
+    }
+    
     if (onFinish) {
       onFinish();
     } else {
       navigate(finishUrl);
     }
-  }, [onFinish, navigate, finishUrl]);
+  }, [onFinish, navigate, finishUrl, questionId]);
 
   // Estados de loading e erro
   if (loading || cooldownLoading) {
@@ -295,6 +292,12 @@ function IntegratedQuestionInterface({
       )}
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Barra de XP do Usuário - Fixo no Topo */}
+        <div className="max-w-4xl mx-auto mb-6">
+          <UserXPDisplay variant="full" />
+        </div>
+
         <div className={`max-w-4xl mx-auto transition-opacity duration-300 ${
           (currentStage === 'begin' || currentStage === 'explanation' || currentStage === 'analysis')
             ? 'pointer-events-none opacity-50'
@@ -454,6 +457,12 @@ function SimpleQuestionInterface({
   return (
     <div className={`dashboard-background min-h-screen ${uiConfig.className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Barra de XP do Usuário */}
+        <div className="max-w-4xl mx-auto mb-6">
+          <UserXPDisplay variant="full" />
+        </div>
+
         <div className="max-w-4xl mx-auto">
 
           <QuestionSolverHeader

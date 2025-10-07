@@ -33,6 +33,7 @@ import {
 import XPSystemExample from './examples/XPSystemExample';
 import MethodologyXPSystemExample from './pages/MethodologyXPSystemExample';
 import AdminInitialization from './pages/AdminInitialization';
+import XPSetupPage from './pages/XPSetupPage';
 import './styles/themes.css';
 
 export default function App() {
@@ -64,6 +65,10 @@ export default function App() {
               <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/questions" element={<QuestionsAdmin />} />
             <Route path="/admin/initialization" element={<AdminInitialization />} />
+            
+            {/* Página Temporária - Setup XP (REMOVER APÓS USO) */}
+            <Route path="/setup/xp" element={<XPSetupPage />} />
+            
             <Route path="/test/explanations" element={<ExplanationTest />} />
             <Route path="/test/tooltips" element={<TestTooltips />} />
             <Route path="/test/simple" element={<SimpleTooltipTest />} />
