@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { BookOpen, FileText, Brain, Puzzle } from 'lucide-react';
-import { BackButton } from '../components/common';
-import { StudyModeGrid, StudyTip, type StudyModeOption } from '../components/modeSelection';
-import { useLoading } from '../contexts/LoadingContext';
+import { BackButton } from '../../components/common';
+import { StudyModeGrid, StudyTip, type StudyModeOption } from '../../components/modeSelection';
+import { useLoading } from '../../contexts/LoadingContext';
 
 // Import mode images
-import clinicalImg from '../components/images/clinical_img.png';
-import questionsImg from '../components/images/questions_img.png';
+import clinicalImg from '../../components/images/clinical_img.png';
+import questionsImg from '../../components/images/questions_img.png';
 
 export default function ModeSelection() {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function ModeSelection() {
       description: 'Resolva casos clínicos complexos com cenários realistas',
       icon: FileText,
       image: clinicalImg,
-      isActive: false,
+      isActive: true,
       route: '/clinical-cases'
     },
     {

@@ -1,0 +1,14 @@
+export { default as BioeticaModule } from './BioeticaModule';
+export { default as FundamentosModule } from './FundamentosModule';
+export { default as EmergenciasModule } from './EmergenciasModule';
+export { default as DesenvolvimentoModule } from './DesenvolvimentoModule';
+export { default as SaudeEscolarModule } from './SaudeEscolarModule';
+export { default as AcidentesViolenciasModule } from './AcidentesViolenciasModule';
+export { default as ToxicologiaModule } from './ToxicologiaModule';
+export { default as DrogasViolenciasModule } from './DrogasViolenciasModule';
+export { default as AleitamentoModule } from './AleitamentoModule';
+export { default as NeonatologiaModule } from './NeonatologiaModule';
+export { default as AdolescenciaModule } from './AdolescenciaModule';
+export { default as AlergiaModule } from './AlergiaModule';
+export { default as ImunologiaModule } from './ImunologiaModule';
+export { default as CardiologiaModule } from './CardiologiaModule';

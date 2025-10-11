@@ -1,30 +1,32 @@
 import { useState, useMemo } from 'react';
-import QuestionsHeader from '../components/questionsPage/QuestionsHeader';
-import QuestionsStats from '../components/questionsPage/QuestionsStats';
-import QuestionsFilters from '../components/questionsPage/QuestionsFilters';
-import QuestionsList from '../components/questionsPage/QuestionsList';
-import AttemptsStats from '../components/questionsPage/AttemptsStats';
-import { useQuestions } from '../hooks/useQuestions';
-import { FIREBASE_CONFIG } from '../config/firebase';
+import {
+  QuestionsHeader,
+  QuestionsStats,
+  QuestionsFilters,
+  QuestionsList,
+  AttemptsStats
+} from './components';
+import { useQuestions } from '../../hooks/useQuestions';
+import { FIREBASE_CONFIG } from '../../config/firebase';
 import { 
   allQuestions,
   availableCategories,
   availableDifficulties, 
   availableExams
-} from '../data/questions';
+} from '../../data/questions';
 
 export default function QuestionsBank() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [selectedDifficulty, setSelectedDifficulty] = useState('Todas');
   const [selectedExam, setSelectedExam] = useState('Todas');
-  const [useFirebase, setUseFirebase] = useState(FIREBASE_CONFIG.USE_FIREBASE);
+  const [useFirebase] = useState(FIREBASE_CONFIG.USE_FIREBASE);
 
   // Tentar usar Firebase primeiro, fallback para dados locais
-  const { questions: firebaseQuestions, loading, error } = useQuestions();
+  const { questions: firebaseQuestions, error } = useQuestions();
 
   // Determinar qual fonte de dados usar
-  const { questions, categories, difficulties, exams, isUsingFirebase } = useMemo(() => {
+  const { questions, categories, difficulties, exams } = useMemo(() => {
     if (useFirebase && !error && firebaseQuestions && firebaseQuestions.length > 0) {
       // Usar dados do Firebase
       const categoriesSet = new Set<string>();
@@ -51,8 +53,7 @@ export default function QuestionsBank() {
         questions: firebaseQuestions,
         categories: ['Todas', ...Array.from(categoriesSet).sort()],
         difficulties: ['Todas', 'Fácil', 'Médio', 'Difícil'],
-        exams: ['Todas', ...Array.from(examsSet).sort()],
-        isUsingFirebase: true
+        exams: ['Todas', ...Array.from(examsSet).sort()]
       };
     } else {
       // Fallback para dados locais
@@ -60,8 +61,7 @@ export default function QuestionsBank() {
         questions: allQuestions || [],
         categories: availableCategories || ['Todas'],
         difficulties: availableDifficulties || ['Todas'],
-        exams: availableExams || ['Todas'],
-        isUsingFirebase: false
+        exams: availableExams || ['Todas']
       };
     }
   }, [useFirebase, firebaseQuestions, error]);
@@ -106,60 +106,11 @@ export default function QuestionsBank() {
     return { total, completed, avgCorrectRate };
   }, [questions]);
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Fácil': return 'text-green-600 bg-green-100';
-      case 'Médio': return 'text-yellow-600 bg-yellow-100';
-      case 'Difícil': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
   return (
     <div className="dashboard-background">
       <QuestionsHeader />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* Status do Sistema */}
-        <div className="mb-6">
-          <div className={`p-3 rounded-lg border ${
-            isUsingFirebase 
-              ? 'bg-green-50 border-green-200' 
-              : 'bg-yellow-50 border-yellow-200'
-          }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-2 ${
-                  isUsingFirebase ? 'bg-green-500' : 'bg-yellow-500'
-                }`}></div>
-                <span className={`text-sm font-medium ${
-                  isUsingFirebase ? 'text-green-800' : 'text-yellow-800'
-                }`}>
-                  {isUsingFirebase ? 'Conectado ao Firebase' : 'Usando dados locais'}
-                </span>
-                {loading && (
-                  <div className="ml-2 animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                )}
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                {error && (
-                  <span className="text-sm text-red-600">
-                    Erro Firebase: {error}
-                  </span>
-                )}
-                <button
-                  onClick={() => setUseFirebase(!useFirebase)}
-                  className="text-sm text-blue-600 hover:text-blue-800 underline"
-                >
-                  {useFirebase ? 'Usar Local' : 'Tentar Firebase'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <QuestionsStats stats={stats} />
         
         {/* Estatísticas das tentativas */}
@@ -187,7 +138,6 @@ export default function QuestionsBank() {
           <div className="lg:col-span-3">
             <QuestionsList 
               filteredQuestions={filteredQuestions}
-              getDifficultyColor={getDifficultyColor}
             />
           </div>
         </div>
